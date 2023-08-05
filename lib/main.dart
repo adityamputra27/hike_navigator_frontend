@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hike_navigator/cubit/page_cubit.dart';
 import 'package:hike_navigator/ui/pages/my_destination_page.dart';
 import 'package:hike_navigator/ui/pages/splash_page.dart';
 
@@ -13,8 +15,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: SplashPage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => PageCubit(),
+        ),
+      ],
+      child: const MaterialApp(
+        home: SplashPage(),
+      ),
     );
   }
 }

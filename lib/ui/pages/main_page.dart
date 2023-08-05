@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hike_navigator/cubit/page_cubit.dart';
 import 'package:hike_navigator/ui/pages/home_page.dart';
+import 'package:hike_navigator/ui/pages/my_destination_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/navigation_item.dart';
 
@@ -12,6 +15,8 @@ class MainPage extends StatelessWidget {
       switch (index) {
         case 0:
           return const HomePage();
+        case 1:
+          return const MyDestinationPage();
         default:
           return const HomePage();
       }
@@ -58,38 +63,42 @@ class MainPage extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: Stack(
-        children: [
-          content(0),
-          navigation(0),
-        ],
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 90),
-        child: SizedBox(
-          width: 65,
-          height: 65,
-          child: FittedBox(
-            child: FloatingActionButton(
-              onPressed: () {},
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    17.5,
+    return BlocBuilder<PageCubit, int>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: backgroundColor,
+          body: Stack(
+            children: [
+              content(state),
+              navigation(state),
+            ],
+          ),
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: 90),
+            child: SizedBox(
+              width: 65,
+              height: 65,
+              child: FittedBox(
+                child: FloatingActionButton(
+                  onPressed: () {},
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(
+                        17.5,
+                      ),
+                    ),
+                  ),
+                  backgroundColor: primaryColor,
+                  child: const Icon(
+                    Icons.add,
+                    size: 30,
                   ),
                 ),
               ),
-              backgroundColor: primaryColor,
-              child: const Icon(
-                Icons.add,
-                size: 30,
-              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
