@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/ui/pages/forgot_password_page.dart';
 import 'package:hike_navigator/ui/pages/home_page.dart';
+import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/pages/sign_up_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/text_form_field_auth.dart';
@@ -134,7 +135,7 @@ class SignInPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  MaterialPageRoute(builder: (context) => const MainPage()),
                 );
               },
               style: TextButton.styleFrom(

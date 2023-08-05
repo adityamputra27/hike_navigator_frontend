@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
               height: 7.5,
             ),
             Text(
-              'Where would you like to go?',
+              'List of your destination',
               style: GoogleFonts.inter(
                 fontSize: 18,
                 fontWeight: FontWeight.normal,
@@ -158,7 +158,7 @@ class HomePage extends StatelessWidget {
             ),
             DestinationCard(),
             SizedBox(
-              height: 35,
+              height: 125,
             ),
           ],
         ),
