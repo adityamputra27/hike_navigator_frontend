@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hike_navigator/cubit/page_cubit.dart';
-import 'package:hike_navigator/ui/pages/my_destination_page.dart';
 import 'package:hike_navigator/ui/pages/splash_page.dart';
 
 void main() {

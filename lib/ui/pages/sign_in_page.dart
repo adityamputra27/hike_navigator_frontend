@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/ui/pages/forgot_password_page.dart';
-import 'package:hike_navigator/ui/pages/home_page.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/pages/sign_up_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
