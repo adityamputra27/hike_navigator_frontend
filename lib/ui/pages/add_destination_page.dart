@@ -3,8 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/destination_card.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class AddDestinationPage extends StatelessWidget {
+  const AddDestinationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,34 +13,63 @@ class HomePage extends StatelessWidget {
         margin: EdgeInsets.only(
           left: defaultSpace,
           right: defaultSpace,
+          bottom: 40,
           top: 20,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 5,
-            ),
-            Text(
-              'Hello, Aditya!',
-              style: GoogleFonts.inter(
-                fontSize: 28,
-                fontWeight: black,
-              ),
-            ),
-            const SizedBox(
-              height: 7.5,
-            ),
-            Text(
-              'List of your destination',
-              style: GoogleFonts.inter(
-                fontSize: 18,
-                fontWeight: FontWeight.normal,
-                color: greyColor,
-              ),
-            ),
-            const SizedBox(
-              height: 30,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: redAccentColor,
+                      borderRadius: BorderRadius.circular(defaultRadius),
+                    ),
+                    child: Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      color: whiteColor,
+                    ),
+                  ),
+                ),
+                Column(
+                  children: [
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      'Add Destination',
+                      style: GoogleFonts.inter(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: blackColor,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 7.5,
+                    ),
+                    Text(
+                      'Choose your destination',
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        color: greyColor,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  width: 50,
+                  height: 50,
+                ),
+              ],
             ),
           ],
         ),
@@ -159,7 +188,7 @@ class HomePage extends StatelessWidget {
             ),
             DestinationCard(),
             SizedBox(
-              height: 125,
+              height: 35,
             ),
           ],
         ),

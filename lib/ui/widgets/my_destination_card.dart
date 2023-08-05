@@ -223,7 +223,7 @@ class MyDestinationCard extends StatelessWidget {
                       TextSpan(
                         text: ' Tomorrow',
                         style: GoogleFonts.inter(
-                          fontSize: 18,
+                          fontSize: 16,
                           color: whiteColor,
                           fontWeight: bold,
                         ),

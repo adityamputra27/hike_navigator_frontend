@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hike_navigator/cubit/page_cubit.dart';
+import 'package:hike_navigator/ui/pages/add_destination_page.dart';
 import 'package:hike_navigator/ui/pages/home_page.dart';
 import 'package:hike_navigator/ui/pages/my_destination_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
@@ -73,30 +74,39 @@ class MainPage extends StatelessWidget {
               navigation(state),
             ],
           ),
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 90),
-            child: SizedBox(
-              width: 65,
-              height: 65,
-              child: FittedBox(
-                child: FloatingActionButton(
-                  onPressed: () {},
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(
-                        17.5,
+          floatingActionButton: state == 0
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 90),
+                  child: SizedBox(
+                    width: 65,
+                    height: 65,
+                    child: FittedBox(
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const AddDestinationPage()),
+                          );
+                        },
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(
+                              17.5,
+                            ),
+                          ),
+                        ),
+                        backgroundColor: primaryColor,
+                        child: const Icon(
+                          Icons.add,
+                          size: 30,
+                        ),
                       ),
                     ),
                   ),
-                  backgroundColor: primaryColor,
-                  child: const Icon(
-                    Icons.add,
-                    size: 30,
-                  ),
-                ),
-              ),
-            ),
-          ),
+                )
+              : const SizedBox(),
         );
       },
     );

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/destination_card.dart';
 import 'package:hike_navigator/ui/widgets/my_destination_card.dart';
+import 'package:hike_navigator/ui/widgets/my_saved_destination_card.dart';
 
 class MyDestinationPage extends StatelessWidget {
   const MyDestinationPage({super.key});
@@ -14,6 +15,7 @@ class MyDestinationPage extends StatelessWidget {
         margin: EdgeInsets.only(
           left: defaultSpace,
           right: defaultSpace,
+          top: 20,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,8 +67,71 @@ class MyDestinationPage extends StatelessWidget {
                 width: 30,
               ),
               MyDestinationCard(),
+              SizedBox(
+                width: 20,
+              ),
             ],
           ),
+        ),
+      );
+    }
+
+    Widget bookmark() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: 30,
+          left: defaultSpace,
+          right: defaultSpace,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 5,
+            ),
+            Text(
+              'Saved Destination',
+              style: GoogleFonts.inter(
+                fontSize: 28,
+                fontWeight: black,
+              ),
+            ),
+            const SizedBox(
+              height: 7.5,
+            ),
+            Text(
+              'List of your saved destinations',
+              style: GoogleFonts.inter(
+                fontSize: 18,
+                fontWeight: FontWeight.normal,
+                color: greyColor,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Container(
+              margin: const EdgeInsets.only(
+                bottom: 125,
+              ),
+              child: const SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    MySavedDestinationCard(),
+                    SizedBox(
+                      width: 30,
+                    ),
+                    MySavedDestinationCard(),
+                    SizedBox(
+                      width: 30,
+                    ),
+                    MySavedDestinationCard(),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       );
     }
@@ -74,37 +139,12 @@ class MyDestinationPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SafeArea(
-        child: Container(
-          margin: const EdgeInsets.only(
-            top: 20,
-          ),
-          child: ListView(
-            children: [
-              header(),
-              destination(),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: SizedBox(
-        width: 65,
-        height: 65,
-        child: FittedBox(
-          child: FloatingActionButton(
-            onPressed: () {},
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  17.5,
-                ),
-              ),
-            ),
-            backgroundColor: primaryColor,
-            child: const Icon(
-              Icons.add,
-              size: 30,
-            ),
-          ),
+        child: ListView(
+          children: [
+            header(),
+            destination(),
+            bookmark(),
+          ],
         ),
       ),
     );
