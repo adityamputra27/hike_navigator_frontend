@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
+import 'package:hike_navigator/ui/widgets/add_destination_card.dart';
 import 'package:hike_navigator/ui/widgets/destination_card.dart';
 
 class AddDestinationPage extends StatelessWidget {
@@ -48,7 +49,7 @@ class AddDestinationPage extends StatelessWidget {
                       'Add Destination',
                       style: GoogleFonts.inter(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: black,
                         color: blackColor,
                       ),
                     ),
@@ -56,7 +57,7 @@ class AddDestinationPage extends StatelessWidget {
                       height: 7.5,
                     ),
                     Text(
-                      'Choose your destination',
+                      'Choose your new destination',
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         fontWeight: FontWeight.normal,
@@ -178,15 +179,15 @@ class AddDestinationPage extends StatelessWidget {
         ),
         child: const Column(
           children: [
-            DestinationCard(),
+            AddDestinationCard(),
             SizedBox(
               height: 35,
             ),
-            DestinationCard(),
+            AddDestinationCard(),
             SizedBox(
               height: 35,
             ),
-            DestinationCard(),
+            AddDestinationCard(),
             SizedBox(
               height: 35,
             ),
