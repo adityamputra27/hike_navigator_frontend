@@ -11,6 +11,7 @@ Color redAccentColor = const Color(0xffCF1929);
 Color greyColor = const Color(0xff4D5560);
 Color greenColor = const Color(0xff079D43);
 Color redColor = const Color(0xffA81521);
+Color redGreyColor = const Color(0xffFCD7DB);
 Color transparentColor = Colors.transparent;
 
 FontWeight light = FontWeight.w300;
