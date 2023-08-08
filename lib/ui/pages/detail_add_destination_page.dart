@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
-import 'package:hike_navigator/ui/widgets/add_destination_card.dart';
-import 'package:hike_navigator/ui/widgets/destination_card.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:hike_navigator/ui/widgets/detail_destination_item.dart';
 import 'package:hike_navigator/ui/widgets/detail_mountain_item.dart';
