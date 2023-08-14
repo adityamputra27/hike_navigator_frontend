@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/ui/pages/detail/detail_add_destination_date_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:hike_navigator/ui/widgets/detail_destination_item.dart';
@@ -282,19 +283,16 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
     Widget action() {
       return Align(
         alignment: Alignment.bottomCenter,
-        child: Container(
+        child: SizedBox(
           width: double.infinity,
-          height: 95,
-          decoration: BoxDecoration(
-            color: whiteColor,
-          ),
+          height: 110,
           child: Row(
             children: [
               Expanded(
                 flex: 2,
                 child: Container(
-                  margin: const EdgeInsets.only(
-                    left: 10,
+                  margin: EdgeInsets.only(
+                    left: defaultSpace,
                     right: 10,
                     bottom: 10,
                     top: 10,
@@ -319,8 +317,8 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
               Expanded(
                 flex: 7,
                 child: Container(
-                  margin: const EdgeInsets.only(
-                    right: 10,
+                  margin: EdgeInsets.only(
+                    right: defaultSpace,
                     bottom: 10,
                     top: 10,
                   ),
@@ -332,7 +330,13 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                         borderRadius: BorderRadius.circular(defaultRadius),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const DetailAddDestinationDatePage()));
+                    },
                     child: Text(
                       'Add journey',
                       style: GoogleFonts.inter(
@@ -353,18 +357,19 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SafeArea(
-          child: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: [
-                header(),
-              ],
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: [
+                  header(),
+                ],
+              ),
             ),
-          ),
-          action(),
-        ],
-      )),
+            action(),
+          ],
+        ),
+      ),
     );
   }
 }
