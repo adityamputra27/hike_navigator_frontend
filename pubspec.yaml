@@ -73,6 +73,7 @@ flutter:
     - assets/images/home.png
     - assets/images/destination.png
     - assets/images/profile.png
+    - assets/images/camp.png
     - assets/images/water_fall_round.png
     - assets/images/mountain_round.png
     - assets/images/camp_round.png
@@ -80,6 +81,7 @@ flutter:
     - assets/images/water_springs_round.png
     - assets/images/mountain_round.png
     - assets/images/track_round.png
+    - assets/images/check_icon.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

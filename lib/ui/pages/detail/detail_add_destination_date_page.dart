@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/ui/pages/detail/detail_add_destination_route_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -114,7 +115,7 @@ class _DetailAddDestinationDatePageState
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            const DetailAddDestinationDatePage()));
+                            const DetailAddDestinationRoutePage()));
               },
               child: Text(
                 'Apply',
