@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/ui/pages/detail/detail_add_destination_download_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/select_peak_item.dart';
 import 'package:hike_navigator/ui/widgets/select_route_item.dart';
@@ -102,7 +103,7 @@ class _DetailAddDestinationRoutePageState
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            const DetailAddDestinationRoutePage()));
+                            const DetailAddDestinationDownloadPage()));
               },
               child: Text(
                 'Create Plan',
@@ -243,7 +244,7 @@ class _DetailAddDestinationRoutePageState
     }
 
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: whiteColor,
       body: SafeArea(
         child: Column(
           children: [
