@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/ui/pages/sign_in_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
 class MyProfilePage extends StatelessWidget {
@@ -96,7 +97,12 @@ class MyProfilePage extends StatelessWidget {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignInPage()),
+              );
+            },
             child: Column(
               children: [
                 ListTile(

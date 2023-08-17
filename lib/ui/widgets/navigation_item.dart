@@ -17,21 +17,25 @@ class NavigationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.read<PageCubit>().setPage(index);
-      },
-      child: Container(
-        width: 75,
-        height: 55,
-        padding: const EdgeInsets.all(11.5),
-        decoration: BoxDecoration(
-          color: currentIndex == index ? primaryColor : transparentColor,
-          borderRadius: BorderRadius.circular(defaultRadius),
-        ),
-        child: Image.asset(
-          imageUrl,
-          color: currentIndex == index ? whiteColor : greyColor,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          context.read<PageCubit>().setPage(index);
+        },
+        borderRadius: BorderRadius.circular(defaultRadius),
+        child: Container(
+          width: 75,
+          height: 55,
+          padding: const EdgeInsets.all(11.5),
+          decoration: BoxDecoration(
+            color: currentIndex == index ? primaryColor : transparentColor,
+            borderRadius: BorderRadius.circular(defaultRadius),
+          ),
+          child: Image.asset(
+            imageUrl,
+            color: currentIndex == index ? whiteColor : greyColor,
+          ),
         ),
       ),
     );
