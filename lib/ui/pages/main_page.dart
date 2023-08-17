@@ -4,6 +4,7 @@ import 'package:hike_navigator/cubit/page_cubit.dart';
 import 'package:hike_navigator/ui/pages/add_destination_page.dart';
 import 'package:hike_navigator/ui/pages/home_page.dart';
 import 'package:hike_navigator/ui/pages/my_destination_page.dart';
+import 'package:hike_navigator/ui/pages/my_profile_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/navigation_item.dart';
 
@@ -18,6 +19,8 @@ class MainPage extends StatelessWidget {
           return const HomePage();
         case 1:
           return const MyDestinationPage();
+        case 2:
+          return const MyProfilePage();
         default:
           return const HomePage();
       }

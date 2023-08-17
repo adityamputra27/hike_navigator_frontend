@@ -83,6 +83,7 @@ flutter:
     - assets/images/track_round.png
     - assets/images/check_icon.png
     - assets/images/download_illustration.png
+    - assets/images/ten_hag.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

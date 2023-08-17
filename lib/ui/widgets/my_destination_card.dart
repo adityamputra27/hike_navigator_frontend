@@ -106,7 +106,9 @@ class MyDestinationCard extends StatelessWidget {
                   top: 20,
                 ),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   style: TextButton.styleFrom(
                     backgroundColor: greyColor,
                     shape: RoundedRectangleBorder(
