@@ -10,81 +10,97 @@ class SelectRouteItem extends StatefulWidget {
 }
 
 class _SelectRouteItemState extends State<SelectRouteItem> {
+  bool active = false;
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        width: double.infinity,
-        margin: EdgeInsets.only(
-          top: 30,
-        ),
-        padding: EdgeInsets.only(
-          top: 15,
-          left: 35,
-          right: 35,
-          bottom: 15,
-        ),
-        decoration: BoxDecoration(
-          color: primaryColor,
-          borderRadius: BorderRadius.circular(defaultRadius),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Jalur Cibodas',
-                  style: GoogleFonts.inter(
-                    fontSize: 18,
-                    color: whiteColor,
-                    fontWeight: semiBold,
-                  ),
-                ),
-                SizedBox(
-                  height: 7,
-                ),
-                Text(
-                  '8-9 hours hiking time',
-                  style: GoogleFonts.inter(
-                    fontSize: 15,
-                    color: greyColor,
-                    fontWeight: medium,
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      'Camps available',
-                      style: GoogleFonts.inter(
-                        fontSize: 16,
-                        color: blackColor,
-                        fontWeight: medium,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Image.asset(
-                      'assets/images/camp.png',
-                      width: 30,
-                      height: 30,
-                    ),
-                  ],
-                ),
-              ],
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(
+        top: 30,
+      ),
+      child: ElevatedButton(
+        style: TextButton.styleFrom(
+          backgroundColor: active ? primaryColor : lightGreyColor,
+          elevation: 5,
+          shadowColor: Colors.grey.shade200,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              defaultRadius,
             ),
-            Image.asset(
-              'assets/images/check_icon.png',
-              width: 30,
-              height: 30,
-            ),
-          ],
+          ),
+        ),
+        onPressed: () {
+          setState(() {
+            active = !active;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.only(
+            top: 15,
+            left: 5,
+            right: 5,
+            bottom: 15,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Jalur Cibodas',
+                    style: GoogleFonts.inter(
+                      fontSize: 18,
+                      color: active ? whiteColor : blackColor,
+                      fontWeight: semiBold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 7,
+                  ),
+                  Text(
+                    '8-9 hours hiking time',
+                    style: GoogleFonts.inter(
+                      fontSize: 15,
+                      color: greyColor,
+                      fontWeight: medium,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  if (active)
+                    Row(
+                      children: [
+                        Text(
+                          'Camps available',
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            color: blackColor,
+                            fontWeight: medium,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Image.asset(
+                          'assets/images/camp.png',
+                          width: 30,
+                          height: 30,
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+              if (active)
+                Image.asset(
+                  'assets/images/check_icon.png',
+                  width: 30,
+                  height: 30,
+                ),
+            ],
+          ),
         ),
       ),
     );

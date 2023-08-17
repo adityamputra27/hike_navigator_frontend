@@ -213,7 +213,7 @@ class _DetailAddDestinationRoutePageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Text(
@@ -226,7 +226,7 @@ class _DetailAddDestinationRoutePageState
             ),
             SelectPeakItem(),
             SelectPeakItem(),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Text(
@@ -237,6 +237,7 @@ class _DetailAddDestinationRoutePageState
                 fontWeight: bold,
               ),
             ),
+            SelectRouteItem(),
             SelectRouteItem(),
           ],
         ),
