@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
-import 'package:hike_navigator/ui/pages/my_destination_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
-import 'package:hike_navigator/ui/widgets/select_peak_item.dart';
-import 'package:hike_navigator/ui/widgets/select_route_item.dart';
 
 class DetailAddDestinationDownloadPage extends StatefulWidget {
   const DetailAddDestinationDownloadPage({super.key});
