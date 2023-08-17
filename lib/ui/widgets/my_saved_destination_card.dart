@@ -33,7 +33,7 @@ class MySavedDestinationCard extends StatelessWidget {
                 Text(
                   'Gunung Semeru',
                   style: GoogleFonts.inter(
-                    fontSize: 26,
+                    fontSize: 24,
                     color: blackColor,
                     fontWeight: bold,
                   ),
@@ -58,13 +58,13 @@ class MySavedDestinationCard extends StatelessWidget {
                     child: Icon(
                       Icons.location_on,
                       color: whiteColor,
-                      size: 20,
+                      size: 18,
                     ),
                   ),
                   TextSpan(
                     text: 'Jawa Timur',
                     style: GoogleFonts.inter(
-                      fontSize: 18,
+                      fontSize: 16,
                       color: whiteColor,
                       fontWeight: bold,
                     ),

@@ -130,7 +130,7 @@ class SignInPage extends StatelessWidget {
               left: defaultSpace,
               right: defaultSpace,
             ),
-            child: TextButton(
+            child: ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,

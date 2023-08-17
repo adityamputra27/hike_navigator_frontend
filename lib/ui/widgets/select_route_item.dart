@@ -23,7 +23,7 @@ class _SelectRouteItemState extends State<SelectRouteItem> {
           top: 15,
           left: 35,
           right: 35,
-          bottom: 20,
+          bottom: 15,
         ),
         decoration: BoxDecoration(
           color: primaryColor,
@@ -81,8 +81,8 @@ class _SelectRouteItemState extends State<SelectRouteItem> {
             ),
             Image.asset(
               'assets/images/check_icon.png',
-              width: 35,
-              height: 35,
+              width: 30,
+              height: 30,
             ),
           ],
         ),

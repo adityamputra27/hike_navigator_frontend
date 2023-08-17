@@ -67,8 +67,8 @@ class HomePage extends StatelessWidget {
                       color: greyColor.withOpacity(
                         0.25,
                       ),
-                      offset: const Offset(0, 7.5),
-                      blurRadius: 5,
+                      offset: const Offset(0, 5),
+                      blurRadius: 2.5,
                     )
                   ],
                 ),

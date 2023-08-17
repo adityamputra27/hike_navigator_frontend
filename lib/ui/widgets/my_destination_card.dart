@@ -155,7 +155,7 @@ class MyDestinationCard extends StatelessWidget {
                 Text(
                   'Gunung Semeru',
                   style: GoogleFonts.inter(
-                    fontSize: 26,
+                    fontSize: 24,
                     color: blackColor,
                     fontWeight: bold,
                   ),
@@ -217,13 +217,13 @@ class MyDestinationCard extends StatelessWidget {
                         child: Icon(
                           Icons.date_range_outlined,
                           color: whiteColor,
-                          size: 20,
+                          size: 18,
                         ),
                       ),
                       TextSpan(
                         text: ' Tomorrow',
                         style: GoogleFonts.inter(
-                          fontSize: 16,
+                          fontSize: 14,
                           color: whiteColor,
                           fontWeight: bold,
                         ),

@@ -26,7 +26,7 @@ class _SelectPeakItemState extends State<SelectPeakItem> {
           bottom: 20,
         ),
         decoration: BoxDecoration(
-          color: whiteColor,
+          color: lightGreyColor,
           borderRadius: BorderRadius.circular(defaultRadius),
         ),
         child: Row(
@@ -58,8 +58,8 @@ class _SelectPeakItemState extends State<SelectPeakItem> {
             ),
             Image.asset(
               'assets/images/check_icon.png',
-              width: 35,
-              height: 35,
+              width: 30,
+              height: 30,
             ),
           ],
         ),

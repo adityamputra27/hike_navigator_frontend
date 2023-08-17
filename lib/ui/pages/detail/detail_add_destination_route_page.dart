@@ -128,7 +128,7 @@ class _DetailAddDestinationRoutePageState
           right: defaultSpace,
         ),
         decoration: BoxDecoration(
-          color: whiteColor,
+          color: lightGreyColor,
           borderRadius: BorderRadius.circular(defaultRadius),
         ),
         child: Padding(

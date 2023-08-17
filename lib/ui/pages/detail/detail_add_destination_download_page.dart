@@ -121,7 +121,7 @@ class _DetailAddDestinationDownloadPageState
       return Container(
         width: double.infinity,
         margin: EdgeInsets.only(
-          top: defaultSpace,
+          top: 30,
           left: defaultSpace,
           right: defaultSpace,
         ),
