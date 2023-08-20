@@ -65,7 +65,7 @@ class MyProfilePage extends StatelessWidget {
                 ),
                 Container(
                   height: 0.5,
-                  color: blackColor,
+                  color: greyColor,
                 ),
               ],
             ),
