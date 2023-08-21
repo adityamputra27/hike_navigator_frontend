@@ -47,6 +47,8 @@ dependencies:
   flutter_svg: ^2.0.7
   latlong2: ^0.9.0
   compass_icon: ^1.0.4
+  http: ^1.1.0
+  shared_preferences: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -86,6 +88,7 @@ flutter:
     - assets/images/mountain_round.png
     - assets/images/track_round.png
     - assets/images/check_icon.png
+    - assets/images/failed_icon.png
     - assets/images/download_illustration.png
     - assets/images/ten_hag.jpg
   #   - images/a_dot_ham.jpeg
