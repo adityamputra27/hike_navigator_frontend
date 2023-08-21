@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/ui/pages/detail/detail_add_destination_map_page.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
@@ -97,8 +98,12 @@ class _DetailAddDestinationDownloadPageState
                 ),
               ),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const MainPage()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DetailAddDestinationMapPage(),
+                  ),
+                );
               },
               child: Text(
                 'Download Map',
