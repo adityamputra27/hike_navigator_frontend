@@ -1,17 +1,122 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/ui/pages/forgot_password_page.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/pages/sign_up_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/text_form_field_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SignInPage extends StatelessWidget {
-  SignInPage({Key? key}) : super(key: key);
+class SignInPage extends StatefulWidget {
+  const SignInPage({Key? key}) : super(key: key);
 
+  @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
   final TextEditingController emailController = TextEditingController(text: '');
+
   final TextEditingController passwordController =
       TextEditingController(text: '');
+
+  void login() async {
+    final payload = {
+      'email': emailController.text.toString(),
+      'password': passwordController.text.toString(),
+    };
+    final result = await API().postRequest(
+      route: '/login',
+      payload: payload,
+    );
+    final response = jsonDecode(result.body);
+
+    if (response['status'] == 200) {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.setInt('user_id', response['user']['id']);
+      await preferences.setString('name', response['user']['name']);
+      await preferences.setString('email', response['user']['email']);
+      await preferences.setString('token', response['token']);
+
+      _showDialog(
+        response['message'],
+        'success',
+        () {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => MainPage(
+                preferences: preferences,
+              ),
+            ),
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> _showDialog(
+      String text, String status, Function() onPressed) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              defaultRadius,
+            ),
+          ),
+          icon: Image.asset(
+            status == 'success'
+                ? 'assets/images/check_icon.png'
+                : 'assets/images/failed_icon.png',
+            width: 45,
+            height: 45,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                text.toString(),
+                style: GoogleFonts.inter(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: blackColor,
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              TextButton(
+                onPressed: onPressed,
+                style: TextButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      10,
+                    ),
+                  ),
+                ),
+                child: Text(
+                  'OK',
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w700,
+                    color: whiteColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +191,7 @@ class SignInPage extends StatelessWidget {
               size: 25,
             ),
             hintText: 'Password',
-            controller: emailController,
+            controller: passwordController,
             obsecureText: true,
             margin: EdgeInsets.only(
               left: defaultSpace,
@@ -132,10 +237,7 @@ class SignInPage extends StatelessWidget {
             ),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MainPage()),
-                );
+                login();
               },
               style: TextButton.styleFrom(
                 backgroundColor: primaryColor,

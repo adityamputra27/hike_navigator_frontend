@@ -1,17 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:hike_navigator/ui/pages/sign_in_page.dart';
+import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+class SecondSplashPage extends StatefulWidget {
+  final SharedPreferences? preferences;
+
+  const SecondSplashPage({Key? key, required this.preferences})
+      : super(key: key);
 
   @override
-  State<SplashPage> createState() => _SplashPageState();
+  State<SecondSplashPage> createState() => _SecondSplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> {
+class _SecondSplashPageState extends State<SecondSplashPage> {
   @override
   void initState() {
     Timer(
@@ -20,7 +24,11 @@ class _SplashPageState extends State<SplashPage> {
         ), () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => SignInPage()),
+        MaterialPageRoute(
+          builder: (context) => MainPage(
+            preferences: widget.preferences,
+          ),
+        ),
       );
     });
     super.initState();

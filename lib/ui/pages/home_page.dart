@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/destination_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final SharedPreferences? preferences;
+  const HomePage({Key? key, required this.preferences}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class HomePage extends StatelessWidget {
               height: 5,
             ),
             Text(
-              'Hello, Aditya!',
+              'Hello, ${preferences?.getString('name').toString()}!',
               style: GoogleFonts.inter(
                 fontSize: 28,
                 fontWeight: black,

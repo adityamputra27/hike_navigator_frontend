@@ -7,22 +7,36 @@ import 'package:hike_navigator/ui/pages/my_destination_page.dart';
 import 'package:hike_navigator/ui/pages/my_profile_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/navigation_item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MainPage extends StatelessWidget {
-  const MainPage({super.key});
+class MainPage extends StatefulWidget {
+  final SharedPreferences? preferences;
 
+  const MainPage({Key? key, required this.preferences}) : super(key: key);
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     Widget content(int index) {
       switch (index) {
         case 0:
-          return const HomePage();
+          return HomePage(
+            preferences: widget.preferences,
+          );
         case 1:
           return const MyDestinationPage();
         case 2:
-          return const MyProfilePage();
+          return MyProfilePage(
+            preferences: widget.preferences,
+          );
         default:
-          return const HomePage();
+          return HomePage(
+            preferences: widget.preferences,
+          );
       }
     }
 

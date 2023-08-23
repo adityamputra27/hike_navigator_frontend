@@ -2,9 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/ui/pages/sign_in_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MyProfilePage extends StatelessWidget {
-  const MyProfilePage({super.key});
+class MyProfilePage extends StatefulWidget {
+  final SharedPreferences? preferences;
+
+  const MyProfilePage({Key? key, required this.preferences}) : super(key: key);
+
+  @override
+  State<MyProfilePage> createState() => _MyProfilePageState();
+}
+
+class _MyProfilePageState extends State<MyProfilePage> {
+  void logout() {
+    widget.preferences!.clear();
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const SignInPage()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +44,7 @@ class MyProfilePage extends StatelessWidget {
               height: 20,
             ),
             Text(
-              'Aditya Muhamad Putra P., S.T',
+              widget.preferences!.getString('name').toString(),
               style: GoogleFonts.inter(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -98,10 +112,7 @@ class MyProfilePage extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SignInPage()),
-              );
+              logout();
             },
             child: Column(
               children: [
