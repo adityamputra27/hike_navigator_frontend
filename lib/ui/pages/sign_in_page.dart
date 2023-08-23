@@ -57,6 +57,8 @@ class _SignInPageState extends State<SignInPage> {
           );
         },
       );
+    } else {
+      _showDialog(response['message'], 'error', () => Navigator.pop(context));
     }
   }
 
@@ -88,7 +90,7 @@ class _SignInPageState extends State<SignInPage> {
               Text(
                 text.toString(),
                 style: GoogleFonts.inter(
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: blackColor,
                 ),
@@ -201,7 +203,7 @@ class _SignInPageState extends State<SignInPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
-            errorText: emailValidate ? 'Password harus diisi' : null,
+            errorText: passwordValidate ? 'Password harus diisi' : null,
           ),
           GestureDetector(
             onTap: () {
@@ -246,7 +248,9 @@ class _SignInPageState extends State<SignInPage> {
                   emailController.text.isEmpty
                       ? emailValidate = true
                       : emailValidate = false;
+                });
 
+                setState(() {
                   passwordController.text.isEmpty
                       ? passwordValidate = true
                       : passwordValidate = false;

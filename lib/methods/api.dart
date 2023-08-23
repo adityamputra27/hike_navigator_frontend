@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class API {
-  String baseURL = 'http://10.0.2.2:8000/api';
+  String baseURL = 'https://hike-navigator.dittmptrr27.com/api';
 
   Future postRequest(
       {required String route, required Map<String, String> payload}) async {

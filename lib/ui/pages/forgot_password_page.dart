@@ -3,12 +3,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/text_form_field_auth.dart';
 
-class ForgotPassword extends StatelessWidget {
-  ForgotPassword({Key? key}) : super(key: key);
+class ForgotPassword extends StatefulWidget {
+  const ForgotPassword({Key? key}) : super(key: key);
 
+  @override
+  State<ForgotPassword> createState() => _ForgotPasswordState();
+}
+
+class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController emailController = TextEditingController(text: '');
-  final TextEditingController passwordController =
-      TextEditingController(text: '');
+
+  bool emailValidate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +99,7 @@ class ForgotPassword extends StatelessWidget {
               left: defaultSpace,
               right: defaultSpace,
             ),
-            errorText: null,
+            errorText: emailValidate ? 'Email harus diisi' : null,
           ),
         ],
       );
@@ -112,7 +117,13 @@ class ForgotPassword extends StatelessWidget {
               right: defaultSpace,
             ),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  emailController.text.isEmpty
+                      ? emailValidate = true
+                      : emailValidate = false;
+                });
+              },
               style: TextButton.styleFrom(
                 backgroundColor: primaryColor,
                 shadowColor: Colors.grey.shade400,

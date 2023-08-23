@@ -25,6 +25,11 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController confirmationPasswordController =
       TextEditingController(text: '');
 
+  bool nameValidate = false;
+  bool emailValidate = false;
+  bool passwordValidate = false;
+  bool confirmationPasswordValidate = false;
+
   void register() async {
     final payload = {
       'email': emailController.text.toString(),
@@ -42,10 +47,12 @@ class _SignUpPageState extends State<SignUpPage> {
         () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SignInPage()),
+            MaterialPageRoute(builder: (context) => const SignInPage()),
           );
         },
       );
+    } else {
+      _showDialog(response['message'], 'error', () => Navigator.pop(context));
     }
   }
 
@@ -77,7 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Text(
                 text.toString(),
                 style: GoogleFonts.inter(
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: blackColor,
                 ),
@@ -164,7 +171,7 @@ class _SignUpPageState extends State<SignUpPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
-            errorText: null,
+            errorText: nameValidate ? 'Full name harus diisi' : null,
           ),
           TextFormFieldAuth(
             icon: Icon(
@@ -178,7 +185,7 @@ class _SignUpPageState extends State<SignUpPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
-            errorText: null,
+            errorText: emailValidate ? 'Email harus diisi' : null,
           ),
           TextFormFieldAuth(
             icon: Icon(
@@ -193,7 +200,7 @@ class _SignUpPageState extends State<SignUpPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
-            errorText: null,
+            errorText: passwordValidate ? 'Password harus diisi' : null,
           ),
           TextFormFieldAuth(
             icon: Icon(
@@ -208,7 +215,9 @@ class _SignUpPageState extends State<SignUpPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
-            errorText: null,
+            errorText: confirmationPasswordValidate
+                ? 'Password confirmation harus diisi'
+                : null,
           ),
         ],
       );
@@ -227,7 +236,36 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             child: TextButton(
               onPressed: () {
-                register();
+                setState(() {
+                  nameController.text.isEmpty
+                      ? nameValidate = true
+                      : nameValidate = false;
+                });
+
+                setState(() {
+                  emailController.text.isEmpty
+                      ? emailValidate = true
+                      : emailValidate = false;
+                });
+
+                setState(() {
+                  passwordController.text.isEmpty
+                      ? passwordValidate = true
+                      : passwordValidate = false;
+                });
+
+                setState(() {
+                  confirmationPasswordController.text.isEmpty
+                      ? confirmationPasswordValidate = true
+                      : confirmationPasswordValidate = false;
+                });
+
+                if (!nameValidate &&
+                    !emailValidate &&
+                    !passwordValidate &&
+                    !confirmationPasswordValidate) {
+                  register();
+                }
               },
               style: TextButton.styleFrom(
                 backgroundColor: primaryColor,
