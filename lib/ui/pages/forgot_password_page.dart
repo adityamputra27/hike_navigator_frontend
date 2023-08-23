@@ -94,6 +94,7 @@ class ForgotPassword extends StatelessWidget {
               left: defaultSpace,
               right: defaultSpace,
             ),
+            errorText: null,
           ),
         ],
       );

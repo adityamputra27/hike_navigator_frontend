@@ -164,6 +164,7 @@ class _SignUpPageState extends State<SignUpPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
+            errorText: null,
           ),
           TextFormFieldAuth(
             icon: Icon(
@@ -177,6 +178,7 @@ class _SignUpPageState extends State<SignUpPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
+            errorText: null,
           ),
           TextFormFieldAuth(
             icon: Icon(
@@ -191,6 +193,7 @@ class _SignUpPageState extends State<SignUpPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
+            errorText: null,
           ),
           TextFormFieldAuth(
             icon: Icon(
@@ -205,6 +208,7 @@ class _SignUpPageState extends State<SignUpPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
+            errorText: null,
           ),
         ],
       );

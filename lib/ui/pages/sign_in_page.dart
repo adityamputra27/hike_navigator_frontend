@@ -23,6 +23,9 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController passwordController =
       TextEditingController(text: '');
 
+  bool emailValidate = false;
+  bool passwordValidate = false;
+
   void login() async {
     final payload = {
       'email': emailController.text.toString(),
@@ -183,6 +186,7 @@ class _SignInPageState extends State<SignInPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
+            errorText: emailValidate ? 'Email harus diisi' : null,
           ),
           TextFormFieldAuth(
             icon: Icon(
@@ -197,6 +201,7 @@ class _SignInPageState extends State<SignInPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
+            errorText: emailValidate ? 'Password harus diisi' : null,
           ),
           GestureDetector(
             onTap: () {
@@ -237,7 +242,19 @@ class _SignInPageState extends State<SignInPage> {
             ),
             child: ElevatedButton(
               onPressed: () {
-                login();
+                setState(() {
+                  emailController.text.isEmpty
+                      ? emailValidate = true
+                      : emailValidate = false;
+
+                  passwordController.text.isEmpty
+                      ? passwordValidate = true
+                      : passwordValidate = false;
+                });
+
+                if (!emailValidate && !passwordValidate) {
+                  login();
+                }
               },
               style: TextButton.styleFrom(
                 backgroundColor: primaryColor,
