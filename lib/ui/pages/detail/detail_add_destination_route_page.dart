@@ -165,7 +165,7 @@ class _DetailAddDestinationRoutePageState
                     ),
                   ],
                 ),
-                content: SizedBox.shrink(),
+                content: const SizedBox.shrink(),
               ),
               Step(
                 title: Column(
@@ -192,7 +192,7 @@ class _DetailAddDestinationRoutePageState
                     ),
                   ],
                 ),
-                content: SizedBox.shrink(),
+                content: const SizedBox.shrink(),
               ),
             ],
             controlsBuilder: (context, details) {
@@ -224,8 +224,8 @@ class _DetailAddDestinationRoutePageState
                 fontWeight: bold,
               ),
             ),
-            SelectPeakItem(),
-            SelectPeakItem(),
+            const SelectPeakItem(),
+            const SelectPeakItem(),
             const SizedBox(
               height: 30,
             ),
@@ -237,8 +237,8 @@ class _DetailAddDestinationRoutePageState
                 fontWeight: bold,
               ),
             ),
-            SelectRouteItem(),
-            SelectRouteItem(),
+            const SelectRouteItem(),
+            const SelectRouteItem(),
           ],
         ),
       );

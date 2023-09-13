@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/cubit/mountains_cubit.dart';
+import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/destination_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final SharedPreferences? preferences;
   const HomePage({Key? key, required this.preferences}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    context.read<MountainsCubit>().fetchMountains();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +39,7 @@ class HomePage extends StatelessWidget {
               height: 5,
             ),
             Text(
-              'Hello, ${preferences?.getString('name').toString()}!',
+              'Hello, ${widget.preferences?.getString('name').toString()}!',
               style: GoogleFonts.inter(
                 fontSize: 28,
                 fontWeight: black,
@@ -143,28 +158,48 @@ class HomePage extends StatelessWidget {
     }
 
     Widget destination() {
-      return Container(
-        margin: EdgeInsets.only(
-          top: 40,
-          left: defaultSpace,
-          right: defaultSpace,
-        ),
-        child: const Column(
-          children: [
-            DestinationCard(),
-            SizedBox(
-              height: 35,
+      return BlocConsumer<MountainsCubit, MountainsState>(
+        builder: (context, state) {
+          if (state is MountainsSuccess) {
+            return Container(
+              margin: EdgeInsets.only(
+                top: 40,
+                left: defaultSpace,
+                right: defaultSpace,
+              ),
+              child: Column(
+                children: state.mountains.map((MountainsModel mountain) {
+                  return Column(
+                    children: [
+                      DestinationCard(mountain),
+                      const SizedBox(
+                        height: 35,
+                      ),
+                    ],
+                  );
+                }).toList(),
+              ),
+            );
+          }
+          return Center(
+            child: Container(
+              margin: const EdgeInsets.only(
+                top: 50,
+              ),
+              child: const CircularProgressIndicator(),
             ),
-            DestinationCard(),
-            SizedBox(
-              height: 35,
-            ),
-            DestinationCard(),
-            SizedBox(
-              height: 125,
-            ),
-          ],
-        ),
+          );
+        },
+        listener: (context, state) {
+          if (state is MountainsFailed) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.redAccent,
+                content: Text(state.error),
+              ),
+            );
+          }
+        },
       );
     }
 
@@ -176,6 +211,9 @@ class HomePage extends StatelessWidget {
             header(),
             filter(),
             destination(),
+            const SizedBox(
+              height: 90,
+            ),
           ],
         ),
       ),

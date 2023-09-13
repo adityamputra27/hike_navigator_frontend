@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hike_navigator/cubit/mountains_cubit.dart';
 import 'package:hike_navigator/cubit/page_cubit.dart';
 import 'package:hike_navigator/ui/pages/main_splash_page.dart';
 import 'package:hike_navigator/ui/pages/second_splash_page.dart';
@@ -34,6 +35,9 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(
           create: (context) => PageCubit(),
+        ),
+        BlocProvider(
+          create: (context) => MountainsCubit(),
         ),
       ],
       child: MaterialApp(

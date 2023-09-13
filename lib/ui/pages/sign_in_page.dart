@@ -209,7 +209,7 @@ class _SignInPageState extends State<SignInPage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ForgotPassword()),
+                MaterialPageRoute(builder: (context) => const ForgotPassword()),
               );
             },
             child: Container(
@@ -332,7 +332,7 @@ class _SignInPageState extends State<SignInPage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SignUpPage()),
+                MaterialPageRoute(builder: (context) => const SignUpPage()),
               );
             },
             child: Container(

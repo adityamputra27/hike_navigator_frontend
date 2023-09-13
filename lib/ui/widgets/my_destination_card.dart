@@ -26,10 +26,10 @@ class MyDestinationCard extends StatelessWidget {
               Container(
                 width: 140,
                 height: 140,
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 20,
                 ),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(
                       'assets/images/date.png',
@@ -40,7 +40,7 @@ class MyDestinationCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 35,
                   ),
                   Text(
@@ -51,7 +51,7 @@ class MyDestinationCard extends StatelessWidget {
                       color: blackColor,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Text(
@@ -62,7 +62,7 @@ class MyDestinationCard extends StatelessWidget {
                       color: greyColor,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 25,
                   ),
                   Text(
@@ -78,7 +78,7 @@ class MyDestinationCard extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: 55,
-                margin: EdgeInsets.only(
+                margin: const EdgeInsets.only(
                   top: 35,
                 ),
                 child: TextButton(
@@ -102,7 +102,7 @@ class MyDestinationCard extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: 55,
-                margin: EdgeInsets.only(
+                margin: const EdgeInsets.only(
                   top: 20,
                 ),
                 child: TextButton(

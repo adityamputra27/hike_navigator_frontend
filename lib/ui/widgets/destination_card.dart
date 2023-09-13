@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
 class DestinationCard extends StatelessWidget {
-  const DestinationCard({super.key});
+  final MountainsModel mountain;
+  const DestinationCard(this.mountain, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class DestinationCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Gunung Semeru',
+                  mountain.name,
                   style: GoogleFonts.inter(
                     fontSize: 24,
                     color: blackColor,
@@ -42,7 +44,7 @@ class DestinationCard extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  '3676 mdpl',
+                  mountain.height,
                   style: GoogleFonts.inter(
                     fontSize: 18,
                     color: blackColor,
@@ -62,7 +64,7 @@ class DestinationCard extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: 'Jawa Timur',
+                    text: mountain.province.name.toString(),
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       color: whiteColor,

@@ -56,7 +56,7 @@ class _SelectRouteItemState extends State<SelectRouteItem> {
                       fontWeight: semiBold,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 7,
                   ),
                   Text(
@@ -67,7 +67,7 @@ class _SelectRouteItemState extends State<SelectRouteItem> {
                       fontWeight: medium,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   if (active)
@@ -81,7 +81,7 @@ class _SelectRouteItemState extends State<SelectRouteItem> {
                             fontWeight: medium,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Image.asset(
