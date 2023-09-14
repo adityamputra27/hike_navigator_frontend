@@ -4,10 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class API {
-  String baseURL = 'https://hike-navigator.dittmptrr27.com/api';
+  String baseURL = 'https://hike-navigator.dittmptrr27.com';
 
   String getURL() {
-    return baseURL;
+    return '$baseURL/api';
   }
 
   getToken() async {

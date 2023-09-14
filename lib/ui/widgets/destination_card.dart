@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
@@ -9,14 +10,16 @@ class DestinationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String imageURL = mountain.mountainImages.isNotEmpty
+        ? API().baseURL + mountain.mountainImages[0].url
+        : 'https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/3/0/7/5/235703-6-eng-GB/CEM-CORP-SIC-Food-20142.jpg';
+    print(imageURL);
     return Container(
       width: double.infinity,
       height: 200,
       decoration: BoxDecoration(
-        image: const DecorationImage(
-          image: NetworkImage(
-            'https://asset.kompas.com/crops/Vod4oaUnv0UCNEPqpmUbnMufLcA=/0x0:1800x1200/750x500/data/photo/2021/03/30/6062c10e95b4d.jpg',
-          ),
+        image: DecorationImage(
+          image: NetworkImage(imageURL),
           fit: BoxFit.cover,
         ),
         borderRadius: BorderRadius.circular(

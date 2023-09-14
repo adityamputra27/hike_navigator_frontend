@@ -19,7 +19,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     context.read<MountainsCubit>().fetchMountains();
-
     super.initState();
   }
 
