@@ -13,7 +13,7 @@ class DestinationCard extends StatelessWidget {
     String imageURL = mountain.mountainImages.isNotEmpty
         ? API().baseURL + mountain.mountainImages[0].url
         : 'https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/3/0/7/5/235703-6-eng-GB/CEM-CORP-SIC-Food-20142.jpg';
-    print(imageURL);
+
     return Container(
       width: double.infinity,
       height: 200,

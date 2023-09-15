@@ -1,28 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/methods/api.dart';
+import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
 class AddDestinationCard extends StatelessWidget {
-  const AddDestinationCard({super.key});
+  final MountainsModel mountain;
+  const AddDestinationCard({required this.mountain, super.key});
 
   @override
   Widget build(BuildContext context) {
+    String imageURL = mountain.mountainImages.isNotEmpty
+        ? API().baseURL + mountain.mountainImages[0].url
+        : 'https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/3/0/7/5/235703-6-eng-GB/CEM-CORP-SIC-Food-20142.jpg';
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const DetailAddDestinationPage()));
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailAddDestinationPage(
+              mountain: mountain,
+            ),
+          ),
+        );
       },
       child: Container(
         width: double.infinity,
         height: 200,
         decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: NetworkImage(
-              'https://asset.kompas.com/crops/Vod4oaUnv0UCNEPqpmUbnMufLcA=/0x0:1800x1200/750x500/data/photo/2021/03/30/6062c10e95b4d.jpg',
-            ),
+          image: DecorationImage(
+            image: NetworkImage(imageURL),
             fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.circular(
@@ -39,7 +48,7 @@ class AddDestinationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Gunung Semeru',
+                    mountain.name,
                     style: GoogleFonts.inter(
                       fontSize: 24,
                       color: blackColor,
@@ -50,7 +59,7 @@ class AddDestinationCard extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    '3676 mdpl',
+                    mountain.height,
                     style: GoogleFonts.inter(
                       fontSize: 18,
                       color: blackColor,
@@ -70,7 +79,7 @@ class AddDestinationCard extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: 'Jawa Timur',
+                      text: mountain.province.name,
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         color: whiteColor,

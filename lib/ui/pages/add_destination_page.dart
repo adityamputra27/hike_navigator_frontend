@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/cubit/mountains_cubit.dart';
+import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/add_destination_card.dart';
 
-class AddDestinationPage extends StatelessWidget {
+class AddDestinationPage extends StatefulWidget {
   const AddDestinationPage({super.key});
+
+  @override
+  State<AddDestinationPage> createState() => _AddDestinationPageState();
+}
+
+class _AddDestinationPageState extends State<AddDestinationPage> {
+  @override
+  void initState() {
+    context.read<MountainsCubit>().fetchMountains();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,28 +184,50 @@ class AddDestinationPage extends StatelessWidget {
     }
 
     Widget destination() {
-      return Container(
-        margin: EdgeInsets.only(
-          top: 40,
-          left: defaultSpace,
-          right: defaultSpace,
-        ),
-        child: const Column(
-          children: [
-            AddDestinationCard(),
-            SizedBox(
-              height: 35,
+      return BlocConsumer<MountainsCubit, MountainsState>(
+        builder: (context, state) {
+          if (state is MountainsSuccess) {
+            return Container(
+              margin: EdgeInsets.only(
+                top: 40,
+                left: defaultSpace,
+                right: defaultSpace,
+              ),
+              child: Column(
+                children: state.mountains.map((MountainsModel mountain) {
+                  return Column(
+                    children: [
+                      AddDestinationCard(
+                        mountain: mountain,
+                      ),
+                      const SizedBox(
+                        height: 35,
+                      ),
+                    ],
+                  );
+                }).toList(),
+              ),
+            );
+          }
+          return Center(
+            child: Container(
+              margin: const EdgeInsets.only(
+                top: 50,
+              ),
+              child: const CircularProgressIndicator(),
             ),
-            AddDestinationCard(),
-            SizedBox(
-              height: 35,
-            ),
-            AddDestinationCard(),
-            SizedBox(
-              height: 35,
-            ),
-          ],
-        ),
+          );
+        },
+        listener: (context, state) {
+          if (state is MountainsFailed) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.redAccent,
+                content: Text(state.error),
+              ),
+            );
+          }
+        },
       );
     }
 

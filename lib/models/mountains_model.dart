@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:hike_navigator/models/city_model.dart';
 import 'package:hike_navigator/models/mountain_images_model.dart';
 import 'package:hike_navigator/models/province_model.dart';
 
@@ -7,7 +8,7 @@ class MountainsModel extends Equatable {
   final String name;
   final String latitude;
   final String longitude;
-  final String city;
+  final CityModel city;
   final ProvinceModel province;
   final String height;
   final String status;
@@ -19,7 +20,7 @@ class MountainsModel extends Equatable {
     this.name = '',
     this.latitude = '',
     this.longitude = '',
-    this.city = '',
+    required this.city,
     required this.province,
     this.height = '',
     this.status = '',
@@ -32,7 +33,7 @@ class MountainsModel extends Equatable {
       name: json['name'],
       latitude: json['latitude'],
       longitude: json['longitude'],
-      city: json['city'].toString(),
+      city: CityModel.fromJson(json['city']['id'].toString(), json['city']),
       province: ProvinceModel.fromJson(
           json['province']['id'].toString(), json['province']),
       height: json['height'],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/methods/api.dart';
+import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_date_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -9,7 +11,8 @@ import 'package:hike_navigator/ui/widgets/detail_track_item.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class DetailAddDestinationPage extends StatefulWidget {
-  const DetailAddDestinationPage({super.key});
+  final MountainsModel mountain;
+  const DetailAddDestinationPage({required this.mountain, super.key});
 
   @override
   State<DetailAddDestinationPage> createState() =>
@@ -17,13 +20,16 @@ class DetailAddDestinationPage extends StatefulWidget {
 }
 
 class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
-  final List urlImages = [
-    'https://images.unsplash.com/photo-1565942443747-031188e6e56c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-    'https://images.unsplash.com/photo-1542692847287-8432313be7a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1062&q=80',
-    'https://images.unsplash.com/photo-1610375229632-c7158c35a537?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80',
-  ];
-
+  final List urlImages = [];
   int activeIndex = 0;
+
+  @override
+  void initState() {
+    for (var image in widget.mountain.mountainImages) {
+      urlImages.add(API().baseURL + image.url);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +50,15 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
 
     Widget buildCarouselIndicator() {
       return AnimatedSmoothIndicator(
-          effect: ExpandingDotsEffect(
-            dotWidth: 15,
-            dotHeight: 10,
-            dotColor: redGreyColor,
-            activeDotColor: redColor,
-          ),
-          activeIndex: activeIndex,
-          count: urlImages.length);
+        effect: ExpandingDotsEffect(
+          dotWidth: 15,
+          dotHeight: 10,
+          dotColor: redGreyColor,
+          activeDotColor: redColor,
+        ),
+        activeIndex: activeIndex,
+        count: urlImages.length,
+      );
     }
 
     Widget header() {
@@ -91,7 +98,7 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                       height: 5,
                     ),
                     Text(
-                      'Gunung Gede',
+                      widget.mountain.name,
                       style: GoogleFonts.inter(
                         fontSize: 24,
                         fontWeight: black,
@@ -102,7 +109,7 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                       height: 7.5,
                     ),
                     Text(
-                      'Cianjur, Jawa Barat',
+                      '${widget.mountain.city.name}, ${widget.mountain.province.name}',
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         fontWeight: FontWeight.normal,
@@ -153,7 +160,7 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Gunung Gede',
+                  widget.mountain.name,
                   style: GoogleFonts.inter(
                     fontSize: 22,
                     fontWeight: bold,
@@ -164,7 +171,7 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                   height: 5,
                 ),
                 Text(
-                  '2958 - 3019 mdpl',
+                  widget.mountain.height,
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.normal,
@@ -186,7 +193,7 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                   height: 15,
                 ),
                 Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec auctor ligula. Phasellus placerat, urna et dignissim posuere, dui leo eleifend orci, vitae hendrerit nibh magna ac eros. Ut arcu dolor, fermentum quis dictum a, lobortis sit amet massa. Nunc accumsan ex quis posuere fermentum.',
+                  widget.mountain.description,
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.normal,
