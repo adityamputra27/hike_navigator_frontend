@@ -67,7 +67,7 @@ class DestinationCard extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: mountain.province.name.toString(),
+                    text: mountain.name.toString(),
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       color: whiteColor,

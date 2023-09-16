@@ -38,7 +38,8 @@ class _HomePageState extends State<HomePage> {
               height: 5,
             ),
             Text(
-              'Hello, ${widget.preferences?.getString('name').toString()}!',
+              // 'Hello, ${widget.preferences?.getString('name').toString()}!',
+              'Hello!',
               style: GoogleFonts.inter(
                 fontSize: 28,
                 fontWeight: black,
@@ -159,6 +160,7 @@ class _HomePageState extends State<HomePage> {
     Widget destination() {
       return BlocConsumer<MountainsCubit, MountainsState>(
         builder: (context, state) {
+          print(state);
           if (state is MountainsSuccess) {
             return Container(
               margin: EdgeInsets.only(

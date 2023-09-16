@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:hike_navigator/models/city_model.dart';
 import 'package:hike_navigator/models/mountain_images_model.dart';
+import 'package:hike_navigator/models/mountain_peaks_model.dart';
 import 'package:hike_navigator/models/province_model.dart';
 
 class MountainsModel extends Equatable {
@@ -14,6 +15,7 @@ class MountainsModel extends Equatable {
   final String status;
   final String description;
   final List<MountainImagesModel> mountainImages;
+  final List<MountainPeaksModel> mountainPeaks;
 
   const MountainsModel({
     required this.id,
@@ -26,22 +28,27 @@ class MountainsModel extends Equatable {
     this.status = '',
     this.description = '',
     required this.mountainImages,
+    required this.mountainPeaks,
   });
 
   factory MountainsModel.fromJson(Map<String, dynamic> json) => MountainsModel(
-      id: json['id'].toString(),
-      name: json['name'],
-      latitude: json['latitude'],
-      longitude: json['longitude'],
-      city: CityModel.fromJson(json['city']['id'].toString(), json['city']),
-      province: ProvinceModel.fromJson(
-          json['province']['id'].toString(), json['province']),
-      height: json['height'],
-      status: json['status'],
-      description: json['description'],
-      mountainImages: (json['mountain_images'] as List)
-          .map((image) => MountainImagesModel.fromJson(image))
-          .toList());
+        id: json['id'].toString(),
+        name: json['name'].toString(),
+        latitude: json['latitude'].toString(),
+        longitude: json['longitude'].toString(),
+        city: CityModel.fromJson(json['city']['id'].toString(), json['city']),
+        province: ProvinceModel.fromJson(
+            json['province']['id'].toString(), json['province']),
+        height: json['height'].toString(),
+        status: json['status'].toString(),
+        description: json['description'].toString(),
+        mountainImages: (json['mountain_images'] as List)
+            .map((image) => MountainImagesModel.fromJson(image))
+            .toList(),
+        mountainPeaks: (json['mountain_peaks'] as List)
+            .map((peaks) => MountainPeaksModel.fromJson(peaks))
+            .toList(),
+      );
 
   @override
   List<Object?> get props => [
@@ -54,5 +61,7 @@ class MountainsModel extends Equatable {
         height,
         status,
         description,
+        mountainImages,
+        mountainPeaks,
       ];
 }

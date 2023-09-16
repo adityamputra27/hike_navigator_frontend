@@ -19,7 +19,7 @@ class MountainsService {
         },
       );
       List<dynamic> result = jsonDecode(response.body)['data'];
-      List<dynamic> mountains = result
+      List<MountainsModel> mountains = result
           .map((e) => MountainsModel.fromJson(e as Map<String, dynamic>))
           .toList();
 

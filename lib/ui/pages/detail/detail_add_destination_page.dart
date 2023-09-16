@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
+import 'package:hike_navigator/models/mountain_peaks_model.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_date_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
@@ -33,6 +34,9 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<MountainPeaksModel> mountainPeaks =
+        widget.mountain.mountainPeaks;
+
     Widget buildCarousel(String url, int index) {
       return Container(
         margin: const EdgeInsets.symmetric(
@@ -243,16 +247,14 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Column(
-                  children: [
-                    DetailMountainItem(
-                      name: 'Puncak Gede  2958mdpl',
-                    ),
-                    DetailMountainItem(
-                      name: 'Puncak Pangrango  3019mdpl',
-                    ),
-                  ],
-                ),
+                if (mountainPeaks.isNotEmpty)
+                  Column(
+                    children: mountainPeaks.map((peak) {
+                      return DetailMountainItem(
+                        name: '${peak.peak.name} ${peak.peak.height}',
+                      );
+                    }).toList(),
+                  ),
                 const SizedBox(
                   height: 30,
                 ),
