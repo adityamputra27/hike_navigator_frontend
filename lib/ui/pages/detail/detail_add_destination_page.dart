@@ -23,11 +23,31 @@ class DetailAddDestinationPage extends StatefulWidget {
 class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
   final List urlImages = [];
   int activeIndex = 0;
+  int waterfallTotal = 0;
+  int riverTotal = 0;
+  int campTotal = 0;
+  int waterspringTotal = 0;
 
   @override
   void initState() {
     for (var image in widget.mountain.mountainImages) {
       urlImages.add(API().baseURL + image.url);
+    }
+    for (var mountainPeak in widget.mountain.mountainPeaks) {
+      for (var track in mountainPeak.tracks) {
+        if (track.waterfalls.isNotEmpty) {
+          waterfallTotal += track.waterfalls.length;
+        }
+        if (track.rivers.isNotEmpty) {
+          riverTotal += track.rivers.length;
+        }
+        if (track.posts.isNotEmpty) {
+          campTotal += track.posts.length;
+        }
+        if (track.watersprings.isNotEmpty) {
+          waterspringTotal += track.watersprings.length;
+        }
+      }
     }
     super.initState();
   }
@@ -208,28 +228,28 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     DetailDestinationItem(
                       image: 'assets/images/water_fall_round.png',
                       name: 'Water Fall',
-                      total: 4,
+                      total: waterfallTotal,
                     ),
                     DetailDestinationItem(
                       image: 'assets/images/river_round.png',
                       name: 'River',
-                      total: 4,
+                      total: riverTotal,
                     ),
                     DetailDestinationItem(
                       image: 'assets/images/camp_round.png',
                       name: 'Camp',
-                      total: 4,
+                      total: campTotal,
                     ),
                     DetailDestinationItem(
                       image: 'assets/images/water_springs_round.png',
                       name: 'Water Springs',
-                      total: 4,
+                      total: waterfallTotal,
                     ),
                   ],
                 ),
@@ -249,9 +269,10 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                 ),
                 if (mountainPeaks.isNotEmpty)
                   Column(
-                    children: mountainPeaks.map((peak) {
+                    children: mountainPeaks.map((mountainPeak) {
                       return DetailMountainItem(
-                        name: '${peak.peak.name} ${peak.peak.height}',
+                        name:
+                            '${mountainPeak.peak.name} ${mountainPeak.peak.height}',
                       );
                     }).toList(),
                   ),
@@ -269,19 +290,24 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Column(
-                  children: [
-                    DetailTrackItem(
-                      name: 'Jalur Cibodas',
-                    ),
-                    DetailTrackItem(
-                      name: 'Jalur Selabintana',
-                    ),
-                    DetailTrackItem(
-                      name: 'Jalur Gunung Putri',
-                    ),
-                  ],
-                )
+                if (mountainPeaks.isNotEmpty)
+                  Column(
+                    children: mountainPeaks.map((mountainPeak) {
+                      List<Widget> trackWidgets = [];
+                      if (mountainPeak.tracks != null &&
+                          mountainPeak.tracks.length > 0 &&
+                          mountainPeak.tracks.isNotEmpty) {
+                        trackWidgets = mountainPeak.tracks.map((track) {
+                          return DetailTrackItem(
+                            name: track.title,
+                          );
+                        }).toList();
+                      }
+                      return Column(
+                        children: trackWidgets,
+                      );
+                    }).toList(),
+                  ),
               ],
             ),
           ],
