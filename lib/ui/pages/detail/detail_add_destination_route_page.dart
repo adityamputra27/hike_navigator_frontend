@@ -9,8 +9,8 @@ import 'package:hike_navigator/ui/widgets/select_route_item.dart';
 
 class DetailAddDestinationRoutePage extends StatefulWidget {
   final List<MountainPeaksModel> mountainPeaks;
-  String scheduleDate;
-  DetailAddDestinationRoutePage({
+  final String scheduleDate;
+  const DetailAddDestinationRoutePage({
     Key? key,
     required this.mountainPeaks,
     required this.scheduleDate,
@@ -24,13 +24,25 @@ class DetailAddDestinationRoutePage extends StatefulWidget {
 class _DetailAddDestinationRoutePageState
     extends State<DetailAddDestinationRoutePage> {
   int activePeakIndex = -1;
-  bool isPeakSelected = false;
+  int activeTrackIndex = -1;
+
   List<TracksModel> trackLists = [];
+
+  String peakNameSelected = '-';
+  String pointNameSelected = '-';
 
   void setActivePeakIndex(int index) {
     setState(() {
       activePeakIndex = index;
       trackLists = widget.mountainPeaks[index].tracks;
+      peakNameSelected = widget.mountainPeaks[index].peak.name;
+    });
+  }
+
+  void setActiveTrackIndex(int index) {
+    setState(() {
+      activeTrackIndex = index;
+      pointNameSelected = trackLists[index].title;
     });
   }
 
@@ -125,7 +137,7 @@ class _DetailAddDestinationRoutePageState
                             const DetailAddDestinationDownloadPage()));
               },
               child: Text(
-                'Create Plan',
+                'Select Route',
                 style: GoogleFonts.inter(
                   fontSize: 26,
                   color: whiteColor,
@@ -175,7 +187,7 @@ class _DetailAddDestinationRoutePageState
                       height: 5,
                     ),
                     Text(
-                      'Jalur Cibodas',
+                      pointNameSelected,
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         color: blackColor,
@@ -202,7 +214,7 @@ class _DetailAddDestinationRoutePageState
                       height: 5,
                     ),
                     Text(
-                      'Puncak Pangrango',
+                      peakNameSelected,
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         color: blackColor,
@@ -270,9 +282,14 @@ class _DetailAddDestinationRoutePageState
             if (activePeakIndex >= 0)
               if (trackLists.isNotEmpty)
                 Column(
-                  children: trackLists.map((track) {
+                  children: trackLists.asMap().entries.map((entry) {
+                    int index = entry.key;
                     return SelectRouteItem(
-                      name: track.title,
+                      name: entry.value.title,
+                      widgetIndex: index,
+                      isActive: index == activeTrackIndex,
+                      setActiveIndex: setActiveTrackIndex,
+                      posts: entry.value.posts,
                     );
                   }).toList(),
                 ),

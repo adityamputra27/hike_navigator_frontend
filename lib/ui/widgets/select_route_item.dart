@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/models/posts_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
 class SelectRouteItem extends StatefulWidget {
   final String name;
-  const SelectRouteItem({required this.name, super.key});
+  final int widgetIndex;
+  final bool isActive;
+  final Function(int) setActiveIndex;
+  final List<PostsModel> posts;
+
+  const SelectRouteItem({
+    required this.name,
+    required this.widgetIndex,
+    required this.isActive,
+    required this.setActiveIndex,
+    required this.posts,
+    super.key,
+  });
 
   @override
   State<SelectRouteItem> createState() => _SelectRouteItemState();
 }
 
 class _SelectRouteItemState extends State<SelectRouteItem> {
-  bool active = false;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,7 +33,7 @@ class _SelectRouteItemState extends State<SelectRouteItem> {
       ),
       child: ElevatedButton(
         style: TextButton.styleFrom(
-          backgroundColor: active ? primaryColor : lightGreyColor,
+          backgroundColor: widget.isActive ? primaryColor : lightGreyColor,
           elevation: 5,
           shadowColor: Colors.grey.shade200,
           shape: RoundedRectangleBorder(
@@ -33,7 +44,9 @@ class _SelectRouteItemState extends State<SelectRouteItem> {
         ),
         onPressed: () {
           setState(() {
-            active = !active;
+            if (!widget.isActive) {
+              widget.setActiveIndex(widget.widgetIndex);
+            }
           });
         },
         child: Container(
@@ -53,7 +66,7 @@ class _SelectRouteItemState extends State<SelectRouteItem> {
                     widget.name,
                     style: GoogleFonts.inter(
                       fontSize: 18,
-                      color: active ? whiteColor : blackColor,
+                      color: widget.isActive ? whiteColor : blackColor,
                       fontWeight: semiBold,
                     ),
                   ),
@@ -71,11 +84,13 @@ class _SelectRouteItemState extends State<SelectRouteItem> {
                   const SizedBox(
                     height: 5,
                   ),
-                  if (active)
+                  if (widget.isActive)
                     Row(
                       children: [
                         Text(
-                          'Camps available',
+                          widget.posts.isNotEmpty
+                              ? 'Camps available'
+                              : 'Camps not available',
                           style: GoogleFonts.inter(
                             fontSize: 16,
                             color: blackColor,
@@ -94,7 +109,7 @@ class _SelectRouteItemState extends State<SelectRouteItem> {
                     ),
                 ],
               ),
-              if (active)
+              if (widget.isActive)
                 Image.asset(
                   'assets/images/check_icon.png',
                   width: 30,
