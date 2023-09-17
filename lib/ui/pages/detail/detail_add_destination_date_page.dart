@@ -114,14 +114,12 @@ class _DetailAddDestinationDatePageState
                 ),
               ),
               onPressed: () {
-                final formattedDate =
-                    DateFormat('yyyy-MM-dd').format(selectedDate);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => DetailAddDestinationRoutePage(
                       mountainPeaks: widget.mountainPeaks,
-                      scheduleDate: formattedDate,
+                      scheduleDate: selectedDate,
                     ),
                   ),
                 );

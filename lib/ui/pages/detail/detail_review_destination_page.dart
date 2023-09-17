@@ -1,117 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hike_navigator/models/mountain_peaks_model.dart';
-import 'package:hike_navigator/models/tracks_model.dart';
+import 'package:hike_navigator/models/mountain_model.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_download_page.dart';
-import 'package:hike_navigator/ui/pages/detail/detail_review_destination_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
-import 'package:hike_navigator/ui/widgets/select_peak_item.dart';
-import 'package:hike_navigator/ui/widgets/select_route_item.dart';
+import 'package:intl/intl.dart';
 
-class DetailAddDestinationRoutePage extends StatefulWidget {
-  final List<MountainPeaksModel> mountainPeaks;
+class DetailReviewDestinationPage extends StatefulWidget {
   final DateTime scheduleDate;
-  const DetailAddDestinationRoutePage({
+  final MountainModel mountain;
+
+  final String peakId;
+  final String trackId;
+  final String peakName;
+  final String trackName;
+
+  const DetailReviewDestinationPage({
     Key? key,
-    required this.mountainPeaks,
+    required this.mountain,
     required this.scheduleDate,
+    required this.peakId,
+    required this.peakName,
+    required this.trackId,
+    required this.trackName,
   }) : super(key: key);
 
   @override
-  State<DetailAddDestinationRoutePage> createState() =>
-      _DetailAddDestinationRoutePageState();
+  State<DetailReviewDestinationPage> createState() =>
+      _DetailReviewDestinationPageState();
 }
 
-class _DetailAddDestinationRoutePageState
-    extends State<DetailAddDestinationRoutePage> {
-  int activePeakIndex = -1;
-  int activeTrackIndex = -1;
-
-  List<TracksModel> trackLists = [];
-
-  String? peakId;
-  String? trackId;
-  String peakNameSelected = '-';
-  String pointNameSelected = '-';
-
-  void setActivePeakIndex(int index) {
-    setState(() {
-      activePeakIndex = index;
-      trackLists = widget.mountainPeaks[index].tracks;
-      peakNameSelected = widget.mountainPeaks[index].peak.name;
-      peakId = widget.mountainPeaks[index].peak.id;
-    });
-  }
-
-  void setActiveTrackIndex(int index) {
-    setState(() {
-      activeTrackIndex = index;
-      pointNameSelected = trackLists[index].title;
-      trackId = trackLists[index].id;
-    });
-  }
-
-  Future<void> _showDialog(
-      String text, String status, Function() onPressed) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              defaultRadius,
-            ),
-          ),
-          icon: Image.asset(
-            status == 'success'
-                ? 'assets/images/check_icon.png'
-                : 'assets/images/failed_icon.png',
-            width: 45,
-            height: 45,
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(
-                height: 5,
-              ),
-              Text(
-                text.toString(),
-                style: GoogleFonts.inter(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: blackColor,
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              TextButton(
-                onPressed: onPressed,
-                style: TextButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      10,
-                    ),
-                  ),
-                ),
-                child: Text(
-                  'OK',
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w700,
-                    color: whiteColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
+class _DetailReviewDestinationPageState
+    extends State<DetailReviewDestinationPage> {
   @override
   Widget build(BuildContext context) {
     Widget header() {
@@ -151,7 +70,7 @@ class _DetailAddDestinationRoutePageState
                       height: 5,
                     ),
                     Text(
-                      'Select Route',
+                      'Review',
                       style: GoogleFonts.inter(
                         fontSize: 24,
                         fontWeight: black,
@@ -196,33 +115,16 @@ class _DetailAddDestinationRoutePageState
                 ),
               ),
               onPressed: () {
-                if (peakId == null || trackId == null) {
-                  _showDialog(
-                    'Please select peak and route!',
-                    'failed',
-                    () => {
-                      Navigator.pop(context),
-                    },
-                  );
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailReviewDestinationPage(
-                        scheduleDate: widget.scheduleDate,
-                        mountain:
-                            widget.mountainPeaks[activePeakIndex].mountain,
-                        peakId: peakId.toString(),
-                        peakName: peakNameSelected,
-                        trackId: trackId.toString(),
-                        trackName: pointNameSelected,
-                      ),
-                    ),
-                  );
-                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const DetailAddDestinationDownloadPage(),
+                  ),
+                );
               },
               child: Text(
-                'Select Route',
+                'Create My Plan',
                 style: GoogleFonts.inter(
                   fontSize: 26,
                   color: whiteColor,
@@ -239,7 +141,6 @@ class _DetailAddDestinationRoutePageState
       return Container(
         width: double.infinity,
         margin: EdgeInsets.only(
-          top: defaultSpace,
           left: defaultSpace,
           right: defaultSpace,
         ),
@@ -272,7 +173,7 @@ class _DetailAddDestinationRoutePageState
                       height: 5,
                     ),
                     Text(
-                      pointNameSelected,
+                      widget.trackName,
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         color: blackColor,
@@ -299,7 +200,7 @@ class _DetailAddDestinationRoutePageState
                       height: 5,
                     ),
                     Text(
-                      peakNameSelected,
+                      widget.peakName,
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         color: blackColor,
@@ -319,7 +220,44 @@ class _DetailAddDestinationRoutePageState
       );
     }
 
-    Widget selectPeaks() {
+    Widget destination() {
+      return Container(
+        margin: EdgeInsets.only(
+          left: defaultSpace,
+          right: defaultSpace,
+          bottom: 30,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              'Destination',
+              style: GoogleFonts.inter(
+                fontSize: 22,
+                color: blackColor,
+                fontWeight: bold,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              widget.mountain.name,
+              style: GoogleFonts.inter(
+                fontSize: 22,
+                color: blackColor,
+                fontWeight: medium,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget detail() {
       return Container(
         margin: EdgeInsets.only(
           left: defaultSpace,
@@ -333,51 +271,46 @@ class _DetailAddDestinationRoutePageState
               height: 30,
             ),
             Text(
-              'Which peak do you want?',
+              'Date',
               style: GoogleFonts.inter(
                 fontSize: 22,
                 color: blackColor,
                 fontWeight: bold,
               ),
             ),
-            if (widget.mountainPeaks.isNotEmpty)
-              Column(
-                children: widget.mountainPeaks.asMap().entries.map((entry) {
-                  int index = entry.key;
-                  return SelectPeakItem(
-                    name: entry.value.peak.name,
-                    height: entry.value.peak.height,
-                    widgetIndex: index,
-                    isActive: index == activePeakIndex,
-                    setActiveIndex: setActivePeakIndex,
-                  );
-                }).toList(),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              DateFormat('EEEEE, dd MMMM y').format(widget.scheduleDate),
+              style: GoogleFonts.inter(
+                fontSize: 20,
+                color: blackColor,
+                fontWeight: medium,
               ),
+            ),
             const SizedBox(
               height: 30,
             ),
             Text(
-              'Which route do you want?',
+              'Offline Map',
               style: GoogleFonts.inter(
                 fontSize: 22,
                 color: blackColor,
                 fontWeight: bold,
               ),
             ),
-            if (activePeakIndex >= 0)
-              if (trackLists.isNotEmpty)
-                Column(
-                  children: trackLists.asMap().entries.map((entry) {
-                    int index = entry.key;
-                    return SelectRouteItem(
-                      name: entry.value.title,
-                      widgetIndex: index,
-                      isActive: index == activeTrackIndex,
-                      setActiveIndex: setActiveTrackIndex,
-                      posts: entry.value.posts,
-                    );
-                  }).toList(),
-                ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              widget.mountain.isMapOffline,
+              style: GoogleFonts.inter(
+                fontSize: 20,
+                color: blackColor,
+                fontWeight: medium,
+              ),
+            ),
           ],
         ),
       );
@@ -392,8 +325,9 @@ class _DetailAddDestinationRoutePageState
               child: ListView(
                 children: [
                   header(),
+                  destination(),
                   stepper(),
-                  selectPeaks(),
+                  detail(),
                 ],
               ),
             ),
