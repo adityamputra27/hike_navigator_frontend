@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/models/mountain_peaks_model.dart';
 import 'package:hike_navigator/models/tracks_model.dart';
-import 'package:hike_navigator/ui/pages/detail/detail_add_destination_download_page.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_review_destination_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/select_peak_item.dart';
