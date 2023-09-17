@@ -3,15 +3,26 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
 class SelectPeakItem extends StatefulWidget {
-  const SelectPeakItem({Key? key}) : super(key: key);
+  final String name;
+  final String height;
+  final int widgetIndex;
+  final bool isActive;
+  final Function(int) setActiveIndex;
+
+  const SelectPeakItem({
+    Key? key,
+    required this.name,
+    required this.height,
+    required this.widgetIndex,
+    required this.isActive,
+    required this.setActiveIndex,
+  }) : super(key: key);
 
   @override
   State<SelectPeakItem> createState() => _SelectPeakItemState();
 }
 
 class _SelectPeakItemState extends State<SelectPeakItem> {
-  bool active = false;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,7 +32,7 @@ class _SelectPeakItemState extends State<SelectPeakItem> {
       ),
       child: ElevatedButton(
         style: TextButton.styleFrom(
-          backgroundColor: active ? primaryColor : lightGreyColor,
+          backgroundColor: widget.isActive ? primaryColor : lightGreyColor,
           elevation: 5,
           shadowColor: Colors.grey.shade200,
           shape: RoundedRectangleBorder(
@@ -32,7 +43,9 @@ class _SelectPeakItemState extends State<SelectPeakItem> {
         ),
         onPressed: () {
           setState(() {
-            active = !active;
+            if (!widget.isActive) {
+              widget.setActiveIndex(widget.widgetIndex);
+            }
           });
         },
         child: Container(
@@ -49,10 +62,10 @@ class _SelectPeakItemState extends State<SelectPeakItem> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Puncak Gede',
+                    widget.name,
                     style: GoogleFonts.inter(
                       fontSize: 18,
-                      color: active ? whiteColor : blackColor,
+                      color: widget.isActive ? whiteColor : blackColor,
                       fontWeight: semiBold,
                     ),
                   ),
@@ -60,7 +73,7 @@ class _SelectPeakItemState extends State<SelectPeakItem> {
                     height: 3,
                   ),
                   Text(
-                    '2958 mdpl',
+                    widget.height,
                     style: GoogleFonts.inter(
                       fontSize: 15,
                       color: greyColor,
@@ -69,7 +82,7 @@ class _SelectPeakItemState extends State<SelectPeakItem> {
                   ),
                 ],
               ),
-              if (active)
+              if (widget.isActive)
                 Image.asset(
                   'assets/images/check_icon.png',
                   width: 30,

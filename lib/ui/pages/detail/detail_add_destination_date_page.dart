@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/models/mountain_peaks_model.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_route_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class DetailAddDestinationDatePage extends StatefulWidget {
-  const DetailAddDestinationDatePage({super.key});
+  final List<MountainPeaksModel> mountainPeaks;
+  const DetailAddDestinationDatePage({required this.mountainPeaks, super.key});
 
   @override
   State<DetailAddDestinationDatePage> createState() =>
@@ -26,6 +28,7 @@ class _DetailAddDestinationDatePageState
     void onlyDaySelected(DateTime day, DateTime focusedDay) {
       setState(() {
         now = day;
+        selectedDate = day;
       });
     }
 
@@ -111,11 +114,17 @@ class _DetailAddDestinationDatePageState
                 ),
               ),
               onPressed: () {
+                final formattedDate =
+                    DateFormat('yyyy-MM-dd').format(selectedDate);
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const DetailAddDestinationRoutePage()));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailAddDestinationRoutePage(
+                      mountainPeaks: widget.mountainPeaks,
+                      scheduleDate: formattedDate,
+                    ),
+                  ),
+                );
               },
               child: Text(
                 'Apply',

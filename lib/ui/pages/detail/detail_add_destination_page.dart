@@ -366,10 +366,13 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                     ),
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const DetailAddDestinationDatePage()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailAddDestinationDatePage(
+                            mountainPeaks: widget.mountain.mountainPeaks,
+                          ),
+                        ),
+                      );
                     },
                     child: Text(
                       'Add journey',

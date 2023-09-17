@@ -3,7 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
 class SelectRouteItem extends StatefulWidget {
-  const SelectRouteItem({super.key});
+  final String name;
+  const SelectRouteItem({required this.name, super.key});
 
   @override
   State<SelectRouteItem> createState() => _SelectRouteItemState();
@@ -49,7 +50,7 @@ class _SelectRouteItemState extends State<SelectRouteItem> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Jalur Cibodas',
+                    widget.name,
                     style: GoogleFonts.inter(
                       fontSize: 18,
                       color: active ? whiteColor : blackColor,

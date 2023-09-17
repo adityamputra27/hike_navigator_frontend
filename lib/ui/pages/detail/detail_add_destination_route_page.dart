@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/models/mountain_peaks_model.dart';
+import 'package:hike_navigator/models/tracks_model.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_download_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/select_peak_item.dart';
 import 'package:hike_navigator/ui/widgets/select_route_item.dart';
 
 class DetailAddDestinationRoutePage extends StatefulWidget {
-  const DetailAddDestinationRoutePage({super.key});
+  final List<MountainPeaksModel> mountainPeaks;
+  String scheduleDate;
+  DetailAddDestinationRoutePage({
+    Key? key,
+    required this.mountainPeaks,
+    required this.scheduleDate,
+  }) : super(key: key);
 
   @override
   State<DetailAddDestinationRoutePage> createState() =>
@@ -15,6 +23,17 @@ class DetailAddDestinationRoutePage extends StatefulWidget {
 
 class _DetailAddDestinationRoutePageState
     extends State<DetailAddDestinationRoutePage> {
+  int activePeakIndex = -1;
+  bool isPeakSelected = false;
+  List<TracksModel> trackLists = [];
+
+  void setActivePeakIndex(int index) {
+    setState(() {
+      activePeakIndex = index;
+      trackLists = widget.mountainPeaks[index].tracks;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget header() {
@@ -224,8 +243,19 @@ class _DetailAddDestinationRoutePageState
                 fontWeight: bold,
               ),
             ),
-            const SelectPeakItem(),
-            const SelectPeakItem(),
+            if (widget.mountainPeaks.isNotEmpty)
+              Column(
+                children: widget.mountainPeaks.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  return SelectPeakItem(
+                    name: entry.value.peak.name,
+                    height: entry.value.peak.height,
+                    widgetIndex: index,
+                    isActive: index == activePeakIndex,
+                    setActiveIndex: setActivePeakIndex,
+                  );
+                }).toList(),
+              ),
             const SizedBox(
               height: 30,
             ),
@@ -237,8 +267,15 @@ class _DetailAddDestinationRoutePageState
                 fontWeight: bold,
               ),
             ),
-            const SelectRouteItem(),
-            const SelectRouteItem(),
+            if (activePeakIndex >= 0)
+              if (trackLists.isNotEmpty)
+                Column(
+                  children: trackLists.map((track) {
+                    return SelectRouteItem(
+                      name: track.title,
+                    );
+                  }).toList(),
+                ),
           ],
         ),
       );
