@@ -16,8 +16,7 @@ class DestinationsModel extends Equatable {
       DestinationsModel(
         id: json['id'].toString(),
         scheduleDate: json['schedule_date'].toString(),
-        mountain: MountainModel.fromJson(
-            json['mountain']['id'].toString(), json['mountain']),
+        mountain: MountainModel.fromJson(json['mountain']),
       );
 
   @override

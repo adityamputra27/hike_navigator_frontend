@@ -9,10 +9,12 @@ class CityModel extends Equatable {
     this.name = '',
   });
 
-  factory CityModel.fromJson(String id, Map<String, dynamic> json) => CityModel(
-        id: id,
-        name: json['name'],
-      );
+  factory CityModel.fromJson(Map<String, dynamic> json) {
+    return CityModel(
+      id: json['id'].toString(),
+      name: json['name'],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         'id': id,

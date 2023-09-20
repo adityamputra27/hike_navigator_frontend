@@ -10,6 +10,7 @@ class MountainModel extends Equatable {
   final String latitude;
   final String longitude;
   final String isMapOffline;
+  final String description;
   final CityModel city;
   final ProvinceModel province;
   final List<MountainImagesModel> mountainImages;
@@ -21,26 +22,28 @@ class MountainModel extends Equatable {
     this.latitude = '',
     this.longitude = '',
     this.isMapOffline = '',
+    this.description = '',
     required this.city,
     required this.province,
     required this.mountainImages,
   });
 
-  factory MountainModel.fromJson(String id, Map<String, dynamic> json) =>
-      MountainModel(
-        id: id,
-        name: json['name'],
-        height: json['height'],
-        latitude: json['latitude'],
-        longitude: json['longitude'],
-        isMapOffline: json['is_map_offline'],
-        city: CityModel.fromJson(json['city']['id'].toString(), json['city']),
-        province: ProvinceModel.fromJson(
-            json['province']['id'].toString(), json['province']),
-        mountainImages: (json['mountain_images'] as List)
-            .map((image) => MountainImagesModel.fromJson(image))
-            .toList(),
-      );
+  factory MountainModel.fromJson(Map<String, dynamic> json) {
+    return MountainModel(
+      id: json['id'].toString(),
+      name: json['name'],
+      height: json['height'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+      isMapOffline: json['is_map_offline'],
+      description: json['description'],
+      city: CityModel.fromJson(json['city']),
+      province: ProvinceModel.fromJson(json['province']),
+      mountainImages: (json['mountain_images'] as List)
+          .map((image) => MountainImagesModel.fromJson(image))
+          .toList(),
+    );
+  }
 
   @override
   List<Object?> get props => [
@@ -50,6 +53,7 @@ class MountainModel extends Equatable {
         latitude,
         longitude,
         isMapOffline,
+        description,
         city,
         province,
         mountainImages,

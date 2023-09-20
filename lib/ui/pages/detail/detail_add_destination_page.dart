@@ -369,6 +369,7 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => DetailAddDestinationDatePage(
+                            mountain: widget.mountain,
                             mountainPeaks: widget.mountain.mountainPeaks,
                           ),
                         ),

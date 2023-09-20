@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hike_navigator/models/mountain_model.dart';
+import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_download_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
 
 class DetailReviewDestinationPage extends StatefulWidget {
   final DateTime scheduleDate;
-  final MountainModel mountain;
+  final MountainsModel mountain;
 
   final String peakId;
   final String trackId;

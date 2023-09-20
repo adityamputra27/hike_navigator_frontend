@@ -11,8 +11,8 @@ class PeakModel extends Equatable {
     this.height = '',
   });
 
-  factory PeakModel.fromJson(String id, Map<String, dynamic> json) => PeakModel(
-        id: id,
+  factory PeakModel.fromJson(Map<String, dynamic> json) => PeakModel(
+        id: json['id'].toString(),
         name: json['name'],
         height: json['height'],
       );

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hike_navigator/cubit/mountains_cubit.dart';
-import 'package:hike_navigator/models/mountains_model.dart';
+import 'package:hike_navigator/cubit/destinations_cubit.dart';
+import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/destination_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    context.read<MountainsCubit>().fetchMountains();
+    context.read<DestinationsCubit>().fetchDestinations();
     super.initState();
   }
 
@@ -157,28 +157,47 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget destination() {
-      return BlocConsumer<MountainsCubit, MountainsState>(
+      return BlocConsumer<DestinationsCubit, DestinationsState>(
         builder: (context, state) {
-          if (state is MountainsSuccess) {
-            return Container(
-              margin: EdgeInsets.only(
-                top: 40,
-                left: defaultSpace,
-                right: defaultSpace,
-              ),
-              child: Column(
-                children: state.mountains.map((MountainsModel mountain) {
-                  return Column(
-                    children: [
-                      DestinationCard(mountain),
-                      const SizedBox(
-                        height: 35,
-                      ),
-                    ],
-                  );
-                }).toList(),
-              ),
-            );
+          if (state is DestinationsSuccess) {
+            if (state.destinations.isNotEmpty) {
+              return Container(
+                margin: EdgeInsets.only(
+                  top: 40,
+                  left: defaultSpace,
+                  right: defaultSpace,
+                ),
+                child: Column(
+                  children:
+                      state.destinations.map((DestinationsModel destination) {
+                    return Column(
+                      children: [
+                        DestinationCard(destination.mountain),
+                        const SizedBox(
+                          height: 35,
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              );
+            } else {
+              return Container(
+                margin: EdgeInsets.only(
+                  top: 50,
+                  left: defaultSpace,
+                  right: defaultSpace,
+                ),
+                child: Text(
+                  "Oopps... you don't have any destination!",
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    fontWeight: semiBold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              );
+            }
           }
           return Center(
             child: Container(
@@ -190,7 +209,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
         listener: (context, state) {
-          if (state is MountainsFailed) {
+          if (state is DestinationsFailed) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: Colors.redAccent,

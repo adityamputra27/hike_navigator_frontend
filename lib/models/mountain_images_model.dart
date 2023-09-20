@@ -9,11 +9,12 @@ class MountainImagesModel extends Equatable {
     this.url = '',
   });
 
-  factory MountainImagesModel.fromJson(Map<String, dynamic> json) =>
-      MountainImagesModel(
-        id: json['id'].toString(),
-        url: json['url'],
-      );
+  factory MountainImagesModel.fromJson(Map<String, dynamic> json) {
+    return MountainImagesModel(
+      id: json['id'].toString(),
+      url: json['url'],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         'id': id,

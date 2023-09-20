@@ -3,17 +3,20 @@ import 'dart:convert';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DestinationsService {
   String url = API().getURL();
 
   fetchDestinations() async {
     var token = API().getToken();
-    var userId = API().getUserId();
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    int? userId = preferences.getInt('user_id');
 
     try {
       var response = await http.get(
-        Uri.parse("$url/getActiveUser/$userId"),
+        Uri.parse("$url/climbing-plans/getActiveUser/$userId"),
         headers: {
           "Content-Type": "application/json",
           'Authorization': 'Bearer $token',

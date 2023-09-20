@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
-import 'package:hike_navigator/models/mountains_model.dart';
+import 'package:hike_navigator/models/mountain_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
 class DestinationCard extends StatelessWidget {
-  final MountainsModel mountain;
+  final MountainModel mountain;
   const DestinationCard(this.mountain, {super.key});
 
   @override

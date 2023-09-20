@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/models/mountain_peaks_model.dart';
+import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/models/tracks_model.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_review_destination_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
@@ -8,10 +9,12 @@ import 'package:hike_navigator/ui/widgets/select_peak_item.dart';
 import 'package:hike_navigator/ui/widgets/select_route_item.dart';
 
 class DetailAddDestinationRoutePage extends StatefulWidget {
+  final MountainsModel mountain;
   final List<MountainPeaksModel> mountainPeaks;
   final DateTime scheduleDate;
   const DetailAddDestinationRoutePage({
     Key? key,
+    required this.mountain,
     required this.mountainPeaks,
     required this.scheduleDate,
   }) : super(key: key);
@@ -209,8 +212,7 @@ class _DetailAddDestinationRoutePageState
                     MaterialPageRoute(
                       builder: (context) => DetailReviewDestinationPage(
                         scheduleDate: widget.scheduleDate,
-                        mountain:
-                            widget.mountainPeaks[activePeakIndex].mountain,
+                        mountain: widget.mountain,
                         peakId: peakId.toString(),
                         peakName: peakNameSelected,
                         trackId: trackId.toString(),

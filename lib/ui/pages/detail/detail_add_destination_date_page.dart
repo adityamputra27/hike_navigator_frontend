@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/models/mountain_peaks_model.dart';
+import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_route_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class DetailAddDestinationDatePage extends StatefulWidget {
+  final MountainsModel mountain;
   final List<MountainPeaksModel> mountainPeaks;
-  const DetailAddDestinationDatePage({required this.mountainPeaks, super.key});
+  const DetailAddDestinationDatePage(
+      {required this.mountain, required this.mountainPeaks, super.key});
 
   @override
   State<DetailAddDestinationDatePage> createState() =>
@@ -118,6 +121,7 @@ class _DetailAddDestinationDatePageState
                   context,
                   MaterialPageRoute(
                     builder: (context) => DetailAddDestinationRoutePage(
+                      mountain: widget.mountain,
                       mountainPeaks: widget.mountainPeaks,
                       scheduleDate: selectedDate,
                     ),
