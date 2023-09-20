@@ -91,7 +91,7 @@ flutter:
     - assets/images/check_icon.png
     - assets/images/failed_icon.png
     - assets/images/download_illustration.png
-    - assets/images/ten_hag.jpg
+    - assets/images/default.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

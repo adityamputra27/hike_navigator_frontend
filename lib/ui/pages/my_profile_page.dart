@@ -35,7 +35,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               backgroundColor: Colors.white,
               child: CircleAvatar(
                 backgroundImage: AssetImage(
-                  'assets/images/ten_hag.jpg',
+                  'assets/images/default.jpg',
                 ),
                 radius: 65,
               ),
