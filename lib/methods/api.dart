@@ -16,6 +16,12 @@ class API {
     return token;
   }
 
+  getUserId() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    int? userId = preferences.getInt('user_id');
+    return userId;
+  }
+
   Future postRequest(
       {required String route, required Map<String, String> payload}) async {
     String url = getURL() + route;
