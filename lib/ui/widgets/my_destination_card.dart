@@ -5,7 +5,6 @@ import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/models/mountain_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 class MyDestinationCard extends StatelessWidget {
   final DestinationsModel destination;
