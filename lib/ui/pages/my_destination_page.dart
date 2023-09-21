@@ -198,27 +198,6 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
               height: 30,
             ),
             bookmarkDestination(),
-            // Container(
-            //   margin: const EdgeInsets.only(
-            //     bottom: 125,
-            //   ),
-            //   child: const SingleChildScrollView(
-            //     scrollDirection: Axis.horizontal,
-            //     child: Row(
-            //       children: [
-            //         MySavedDestinationCard(),
-            //         SizedBox(
-            //           width: 30,
-            //         ),
-            //         MySavedDestinationCard(),
-            //         SizedBox(
-            //           width: 30,
-            //         ),
-            //         MySavedDestinationCard(),
-            //       ],
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       );
