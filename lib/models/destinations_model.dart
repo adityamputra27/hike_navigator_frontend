@@ -5,11 +5,13 @@ class DestinationsModel extends Equatable {
   final String id;
   final String scheduleDate;
   final MountainModel mountain;
+  final String status;
 
   const DestinationsModel({
     required this.id,
     this.scheduleDate = '',
     required this.mountain,
+    this.status = '',
   });
 
   factory DestinationsModel.fromJson(Map<String, dynamic> json) =>
@@ -17,6 +19,7 @@ class DestinationsModel extends Equatable {
         id: json['id'].toString(),
         scheduleDate: json['schedule_date'].toString(),
         mountain: MountainModel.fromJson(json['mountain']),
+        status: json['status'],
       );
 
   @override
@@ -24,5 +27,6 @@ class DestinationsModel extends Equatable {
         id,
         scheduleDate,
         mountain,
+        status,
       ];
 }

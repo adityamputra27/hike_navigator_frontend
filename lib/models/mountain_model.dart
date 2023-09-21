@@ -29,6 +29,13 @@ class MountainModel extends Equatable {
   });
 
   factory MountainModel.fromJson(Map<String, dynamic> json) {
+    List<MountainImagesModel> mountainImages = [];
+    if (json['mountain_images'] != null) {
+      mountainImages = (json['mountain_images'] as List)
+          .map((image) => MountainImagesModel.fromJson(image))
+          .toList();
+    }
+
     return MountainModel(
       id: json['id'].toString(),
       name: json['name'],
@@ -39,9 +46,7 @@ class MountainModel extends Equatable {
       description: json['description'],
       city: CityModel.fromJson(json['city']),
       province: ProvinceModel.fromJson(json['province']),
-      mountainImages: (json['mountain_images'] as List)
-          .map((image) => MountainImagesModel.fromJson(image))
-          .toList(),
+      mountainImages: mountainImages,
     );
   }
 

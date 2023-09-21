@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/methods/api.dart';
+import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
 class MySavedDestinationCard extends StatelessWidget {
-  const MySavedDestinationCard({super.key});
+  final DestinationsModel destination;
+  const MySavedDestinationCard({required this.destination, super.key});
 
   @override
   Widget build(BuildContext context) {
+    String imageURL = destination.mountain.mountainImages.isNotEmpty
+        ? API().baseURL + destination.mountain.mountainImages[0].url
+        : 'https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/3/0/7/5/235703-6-eng-GB/CEM-CORP-SIC-Food-20142.jpg';
+
     return Container(
       width: 300,
       height: 450,
       decoration: BoxDecoration(
-        image: const DecorationImage(
-          image: NetworkImage(
-            'https://asset.kompas.com/crops/Vod4oaUnv0UCNEPqpmUbnMufLcA=/0x0:1800x1200/750x500/data/photo/2021/03/30/6062c10e95b4d.jpg',
-          ),
+        image: DecorationImage(
+          image: NetworkImage(imageURL),
           fit: BoxFit.cover,
         ),
         borderRadius: BorderRadius.circular(
@@ -31,7 +36,7 @@ class MySavedDestinationCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Gunung Semeru',
+                  destination.mountain.name,
                   style: GoogleFonts.inter(
                     fontSize: 24,
                     color: blackColor,
@@ -42,7 +47,7 @@ class MySavedDestinationCard extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  '3676 mdpl',
+                  destination.mountain.height,
                   style: GoogleFonts.inter(
                     fontSize: 18,
                     color: blackColor,
@@ -62,7 +67,7 @@ class MySavedDestinationCard extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: 'Jawa Timur',
+                    text: destination.mountain.province.name,
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       color: whiteColor,

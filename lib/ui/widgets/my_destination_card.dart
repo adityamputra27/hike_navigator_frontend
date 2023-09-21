@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
-import 'package:hike_navigator/models/mountain_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
 
 class MyDestinationCard extends StatelessWidget {
   final DestinationsModel destination;
-  final MountainModel mountain;
-  const MyDestinationCard(
-      {required this.destination, required this.mountain, super.key});
+  const MyDestinationCard({required this.destination, super.key});
 
   @override
   Widget build(BuildContext context) {
-    String imageURL = mountain.mountainImages.isNotEmpty
-        ? API().baseURL + mountain.mountainImages[0].url
+    String imageURL = destination.mountain.mountainImages.isNotEmpty
+        ? API().baseURL + destination.mountain.mountainImages[0].url
         : 'https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/3/0/7/5/235703-6-eng-GB/CEM-CORP-SIC-Food-20142.jpg';
 
     void showBottomModal() {
@@ -55,7 +52,7 @@ class MyDestinationCard extends StatelessWidget {
                     height: 35,
                   ),
                   Text(
-                    '${mountain.name} - ${mountain.province.name}',
+                    '${destination.mountain.name} - ${destination.mountain.province.name}',
                     style: GoogleFonts.inter(
                       fontSize: 22,
                       fontWeight: bold,
@@ -165,7 +162,7 @@ class MyDestinationCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  mountain.name,
+                  destination.mountain.name,
                   style: GoogleFonts.inter(
                     fontSize: 24,
                     color: blackColor,
@@ -176,7 +173,7 @@ class MyDestinationCard extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  mountain.height,
+                  destination.mountain.height,
                   style: GoogleFonts.inter(
                     fontSize: 18,
                     color: blackColor,

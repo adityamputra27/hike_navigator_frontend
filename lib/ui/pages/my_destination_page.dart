@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/cubit/destinations_cubit.dart';
+import 'package:hike_navigator/cubit/destinations_saved_cubit.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/my_destination_card.dart';
@@ -18,6 +19,7 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
   @override
   void initState() {
     context.read<DestinationsCubit>().fetchDestinations();
+    context.read<DestinationsSavedCubit>().fetchDestinationsSaved();
     super.initState();
   }
 
@@ -79,7 +81,6 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
                       children: [
                         MyDestinationCard(
                           destination: destination,
-                          mountain: destination.mountain,
                         ),
                         const SizedBox(
                           width: 30,
@@ -103,6 +104,54 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
         },
         listener: (context, state) {
           if (state is DestinationsFailed) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.redAccent,
+                content: Text(state.error),
+              ),
+            );
+          }
+        },
+      );
+    }
+
+    Widget bookmarkDestination() {
+      return BlocConsumer<DestinationsSavedCubit, DestinationsSavedState>(
+        builder: (context, state) {
+          if (state is DestinationsSavedSuccess) {
+            return Container(
+              margin: const EdgeInsets.only(
+                bottom: 125,
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: state.destinationsSaved.map(
+                    (DestinationsModel destination) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 30),
+                        child: MySavedDestinationCard(
+                          destination: destination,
+                        ),
+                      );
+                    },
+                  ).toList(),
+                ),
+              ),
+            );
+          }
+          return Center(
+            child: Container(
+              margin: const EdgeInsets.only(
+                top: 20,
+                bottom: 20,
+              ),
+              child: const CircularProgressIndicator(),
+            ),
+          );
+        },
+        listener: (context, state) {
+          if (state is DestinationsSavedFailed) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: Colors.redAccent,
@@ -148,27 +197,28 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
             const SizedBox(
               height: 30,
             ),
-            Container(
-              margin: const EdgeInsets.only(
-                bottom: 125,
-              ),
-              child: const SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    MySavedDestinationCard(),
-                    SizedBox(
-                      width: 30,
-                    ),
-                    MySavedDestinationCard(),
-                    SizedBox(
-                      width: 30,
-                    ),
-                    MySavedDestinationCard(),
-                  ],
-                ),
-              ),
-            ),
+            bookmarkDestination(),
+            // Container(
+            //   margin: const EdgeInsets.only(
+            //     bottom: 125,
+            //   ),
+            //   child: const SingleChildScrollView(
+            //     scrollDirection: Axis.horizontal,
+            //     child: Row(
+            //       children: [
+            //         MySavedDestinationCard(),
+            //         SizedBox(
+            //           width: 30,
+            //         ),
+            //         MySavedDestinationCard(),
+            //         SizedBox(
+            //           width: 30,
+            //         ),
+            //         MySavedDestinationCard(),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       );
