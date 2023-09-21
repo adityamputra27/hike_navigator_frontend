@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/cubit/destinations_cubit.dart';
+import 'package:hike_navigator/models/destinations_model.dart';
+import 'package:hike_navigator/models/mountain_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/my_destination_card.dart';
 import 'package:hike_navigator/ui/widgets/my_saved_destination_card.dart';
 
-class MyDestinationPage extends StatelessWidget {
+class MyDestinationPage extends StatefulWidget {
   const MyDestinationPage({super.key});
+
+  @override
+  State<MyDestinationPage> createState() => _MyDestinationPageState();
+}
+
+class _MyDestinationPageState extends State<MyDestinationPage> {
+  @override
+  void initState() {
+    context.read<DestinationsCubit>().fetchDestinations();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,29 +64,54 @@ class MyDestinationPage extends StatelessWidget {
     }
 
     Widget destination() {
-      return Container(
-        margin: EdgeInsets.only(
-          left: defaultSpace,
-        ),
-        child: const SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              MyDestinationCard(),
-              SizedBox(
-                width: 30,
+      return BlocConsumer<DestinationsCubit, DestinationsState>(
+        builder: (context, state) {
+          if (state is DestinationsSuccess) {
+            return Container(
+              margin: EdgeInsets.only(
+                left: defaultSpace,
               ),
-              MyDestinationCard(),
-              SizedBox(
-                width: 30,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children:
+                      state.destinations.map((DestinationsModel destination) {
+                    return Column(
+                      children: [
+                        MyDestinationCard(
+                          destination: destination,
+                          mountain: destination.mountain,
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
               ),
-              MyDestinationCard(),
-              SizedBox(
-                width: 20,
+            );
+          }
+          return Center(
+            child: Container(
+              margin: const EdgeInsets.only(
+                top: 20,
+                bottom: 20,
               ),
-            ],
-          ),
-        ),
+              child: const CircularProgressIndicator(),
+            ),
+          );
+        },
+        listener: (context, state) {
+          if (state is DestinationsFailed) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.redAccent,
+                content: Text(state.error),
+              ),
+            );
+          }
+        },
       );
     }
 
