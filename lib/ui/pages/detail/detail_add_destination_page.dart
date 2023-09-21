@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
@@ -9,6 +11,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:hike_navigator/ui/widgets/detail_destination_item.dart';
 import 'package:hike_navigator/ui/widgets/detail_mountain_item.dart';
 import 'package:hike_navigator/ui/widgets/detail_track_item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class DetailAddDestinationPage extends StatefulWidget {
@@ -50,6 +53,90 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
       }
     }
     super.initState();
+  }
+
+  void saveDestination() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    int userId = preferences.getInt('user_id')!;
+    final payload = {
+      "user_id": userId,
+      "mountain_id": widget.mountain.id,
+      "status": "SAVED"
+    };
+    final result = await API().postRequestWithToken(
+      route: '/climbing-plans/create',
+      payload: payload,
+    );
+
+    final response = jsonDecode(result.body);
+    if (response['status'] == 400) {
+      _showDialog(
+          'Success saved destination', 'success', () => Navigator.pop(context));
+    } else {
+      _showDialog(
+          'Destination already saved', 'success', () => Navigator.pop(context));
+    }
+  }
+
+  Future<void> _showDialog(
+      String text, String status, Function() onPressed) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              defaultRadius,
+            ),
+          ),
+          icon: Image.asset(
+            status == 'success'
+                ? 'assets/images/check_icon.png'
+                : 'assets/images/failed_icon.png',
+            width: 45,
+            height: 45,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                text.toString(),
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: blackColor,
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              TextButton(
+                onPressed: onPressed,
+                style: TextButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      10,
+                    ),
+                  ),
+                ),
+                child: Text(
+                  'OK',
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w700,
+                    color: whiteColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -339,7 +426,9 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                         borderRadius: BorderRadius.circular(defaultRadius),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      saveDestination();
+                    },
                     child: Icon(
                       Icons.bookmark,
                       color: whiteColor,
