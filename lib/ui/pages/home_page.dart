@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/cubit/destinations_cubit.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
+import 'package:hike_navigator/ui/widgets/chip_filter_item.dart';
 import 'package:hike_navigator/ui/widgets/destination_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,6 +17,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isChipFilterItemClicked = false;
+
   @override
   void initState() {
     context.read<DestinationsCubit>().fetchDestinations();
@@ -24,6 +27,84 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    void showModalFilterProvince() {
+      showModalBottomSheet(
+        isScrollControlled: true,
+        elevation: 2,
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
+        builder: (_) {
+          return Stack(
+            alignment: AlignmentDirectional.topCenter,
+            clipBehavior: Clip.none,
+            children: [
+              Positioned(
+                top: 10,
+                child: Container(
+                  width: 40,
+                  height: 7,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: redAccentColor,
+                  ),
+                ),
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: 40,
+                      left: defaultSpace,
+                      right: defaultSpace,
+                    ),
+                    child: Wrap(
+                      spacing: 8.0,
+                      runSpacing: 4.0,
+                      children: [
+                        ChipFilterItem(),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 55,
+                    margin: EdgeInsets.only(
+                      top: 20,
+                      left: defaultSpace,
+                      right: defaultSpace,
+                      bottom: defaultSpace,
+                    ),
+                    child: TextButton(
+                      onPressed: () {},
+                      style: TextButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: Text(
+                        'Apply',
+                        style: GoogleFonts.inter(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     Widget header() {
       return Container(
         margin: EdgeInsets.only(
@@ -137,9 +218,14 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () {},
+            InkWell(
+              onTap: () {
+                showModalFilterProvince();
+              },
               child: Container(
+                padding: const EdgeInsets.only(
+                  top: 10,
+                ),
                 width: 30,
                 height: 30,
                 decoration: const BoxDecoration(
