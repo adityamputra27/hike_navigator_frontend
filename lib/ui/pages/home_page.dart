@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/cubit/destinations_cubit.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
+import 'package:hike_navigator/models/province_model.dart';
+import 'package:hike_navigator/services/configuration_service.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/chip_filter_item.dart';
 import 'package:hike_navigator/ui/widgets/destination_card.dart';
@@ -18,10 +20,25 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isChipFilterItemClicked = false;
+  List<ProvinceModel> provinces = [];
+
+  void fetchProvinces() async {
+    try {
+      List<ProvinceModel> fetchedProvinces =
+          await ConfigurationService().fetchProvinces();
+      setState(() {
+        provinces = fetchedProvinces;
+      });
+      print(fetchedProvinces);
+    } catch (e) {
+      print('Error fetching provinces: $e');
+    }
+  }
 
   @override
   void initState() {
     context.read<DestinationsCubit>().fetchDestinations();
+    fetchProvinces();
     super.initState();
   }
 
@@ -65,9 +82,11 @@ class _HomePageState extends State<HomePage> {
                     child: Wrap(
                       spacing: 8.0,
                       runSpacing: 4.0,
-                      children: [
-                        ChipFilterItem(),
-                      ],
+                      children: provinces.map((province) {
+                        return ChipFilterItem(
+                          name: province.name,
+                        );
+                      }).toList(),
                     ),
                   ),
                   Container(

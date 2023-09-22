@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/extensions/string_extension.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
 class ChipFilterItem extends StatefulWidget {
-  const ChipFilterItem({super.key});
+  final String name;
+  const ChipFilterItem({required this.name, super.key});
 
   @override
   State<ChipFilterItem> createState() => _ChipFilterItemState();
@@ -41,9 +43,9 @@ class _ChipFilterItemState extends State<ChipFilterItem> {
             bottom: 3,
           ),
           child: Text(
-            'Aceh',
+            widget.name.toLowerCase().capitalize(),
             style: GoogleFonts.inter(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: medium,
                 letterSpacing: 0.5,
                 color: isClicked ? whiteColor : blackColor),
