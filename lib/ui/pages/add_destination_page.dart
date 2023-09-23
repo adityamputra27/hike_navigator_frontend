@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/cubit/mountains_cubit.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
+import 'package:hike_navigator/models/province_model.dart';
+import 'package:hike_navigator/services/configuration_service.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/add_destination_card.dart';
+import 'package:hike_navigator/ui/widgets/chip_filter_item.dart';
 
 class AddDestinationPage extends StatefulWidget {
   const AddDestinationPage({super.key});
@@ -14,14 +17,173 @@ class AddDestinationPage extends StatefulWidget {
 }
 
 class _AddDestinationPageState extends State<AddDestinationPage> {
+  String searchQuery = '';
+  int searchProvince = 0;
+
+  ValueNotifier<int> activeProvinceFilterIndexNotifier = ValueNotifier<int>(-1);
+  List<ProvinceModel> provinces = [];
+
+  void fetchProvinces() async {
+    try {
+      List<ProvinceModel> fetchedProvinces =
+          await ConfigurationService().fetchProvinces();
+      setState(() {
+        provinces = fetchedProvinces;
+      });
+    } catch (e) {
+      print('Error fetching provinces: $e');
+    }
+  }
+
+  void setActiveProvinceFilterIndex(int index, String id) {
+    setState(() {
+      activeProvinceFilterIndexNotifier.value = index;
+      searchProvince = int.parse(id);
+    });
+  }
+
   @override
   void initState() {
-    context.read<MountainsCubit>().fetchMountains();
+    context.read<MountainsCubit>().fetchMountains(searchQuery, searchProvince);
+    fetchProvinces();
     super.initState();
+  }
+
+  void startSearch() {
+    context.read<MountainsCubit>().fetchMountains(searchQuery, searchProvince);
+  }
+
+  void startFilter() {
+    context.read<MountainsCubit>().fetchMountains(searchQuery, searchProvince);
+    Navigator.pop(context);
+  }
+
+  void resetFilter() {
+    setState(() {
+      searchProvince = 0;
+      activeProvinceFilterIndexNotifier.value = -1;
+    });
+    context.read<MountainsCubit>().fetchMountains(searchQuery, searchProvince);
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    void showModalFilterProvince() {
+      showModalBottomSheet(
+        isScrollControlled: true,
+        elevation: 2,
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
+        builder: (_) {
+          return ValueListenableBuilder<int>(
+              valueListenable: activeProvinceFilterIndexNotifier,
+              builder: (context, value, child) {
+                return Stack(
+                  alignment: AlignmentDirectional.topCenter,
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned(
+                      top: 10,
+                      child: Container(
+                        width: 40,
+                        height: 7,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: redAccentColor,
+                        ),
+                      ),
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: 40,
+                            left: defaultSpace,
+                            right: defaultSpace,
+                          ),
+                          child: Wrap(
+                            spacing: 8.0,
+                            runSpacing: 4.0,
+                            children: provinces.asMap().entries.map((entry) {
+                              int index = entry.key;
+                              return ChipFilterItem(
+                                id: entry.value.id,
+                                name: entry.value.name,
+                                isActive: index == value,
+                                widgetIndex: index,
+                                setActiveIndex: setActiveProvinceFilterIndex,
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          height: 55,
+                          margin: EdgeInsets.only(
+                            top: 20,
+                            left: defaultSpace,
+                            right: defaultSpace,
+                            bottom: defaultSpace,
+                          ),
+                          child: TextButton(
+                            onPressed: startFilter,
+                            style: TextButton.styleFrom(
+                              backgroundColor: primaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: Text(
+                              'Apply',
+                              style: GoogleFonts.inter(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          height: 55,
+                          margin: EdgeInsets.only(
+                            left: defaultSpace,
+                            right: defaultSpace,
+                            bottom: defaultSpace,
+                          ),
+                          child: TextButton(
+                            onPressed: resetFilter,
+                            style: TextButton.styleFrom(
+                              backgroundColor: greyColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: Text(
+                              'Reset',
+                              style: GoogleFonts.inter(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              });
+        },
+      );
+    }
+
     Widget header() {
       return Container(
         margin: EdgeInsets.only(
@@ -122,6 +284,14 @@ class _AddDestinationPageState extends State<AddDestinationPage> {
                     fontWeight: normal,
                     color: greyColor,
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value;
+                    });
+                  },
+                  onSubmitted: (value) {
+                    startSearch();
+                  },
                   decoration: InputDecoration(
                     hintText: 'search destination',
                     border: OutlineInputBorder(
@@ -164,9 +334,14 @@ class _AddDestinationPageState extends State<AddDestinationPage> {
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () {},
+            InkWell(
+              onTap: () {
+                showModalFilterProvince();
+              },
               child: Container(
+                padding: const EdgeInsets.only(
+                  top: 10,
+                ),
                 width: 30,
                 height: 30,
                 decoration: const BoxDecoration(
@@ -187,27 +362,45 @@ class _AddDestinationPageState extends State<AddDestinationPage> {
       return BlocConsumer<MountainsCubit, MountainsState>(
         builder: (context, state) {
           if (state is MountainsSuccess) {
-            return Container(
-              margin: EdgeInsets.only(
-                top: 40,
-                left: defaultSpace,
-                right: defaultSpace,
-              ),
-              child: Column(
-                children: state.mountains.map((MountainsModel mountain) {
-                  return Column(
-                    children: [
-                      AddDestinationCard(
-                        mountain: mountain,
-                      ),
-                      const SizedBox(
-                        height: 35,
-                      ),
-                    ],
-                  );
-                }).toList(),
-              ),
-            );
+            if (state.mountains.isNotEmpty) {
+              return Container(
+                margin: EdgeInsets.only(
+                  top: 40,
+                  left: defaultSpace,
+                  right: defaultSpace,
+                ),
+                child: Column(
+                  children: state.mountains.map((MountainsModel mountain) {
+                    return Column(
+                      children: [
+                        AddDestinationCard(
+                          mountain: mountain,
+                        ),
+                        const SizedBox(
+                          height: 35,
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              );
+            } else {
+              return Container(
+                margin: EdgeInsets.only(
+                  top: 50,
+                  left: defaultSpace,
+                  right: defaultSpace,
+                ),
+                child: Text(
+                  "Oopps... search destination not found!",
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    fontWeight: semiBold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              );
+            }
           }
           return Center(
             child: Container(

@@ -9,12 +9,14 @@ part 'mountains_state.dart';
 class MountainsCubit extends Cubit<MountainsState> {
   MountainsCubit() : super(MountainsInitial());
 
-  void fetchMountains() async {
+  void fetchMountains(String? keyword, int? provinceId) async {
+    print(keyword);
+
     try {
       emit(MountainsLoading());
 
       List<MountainsModel> mountains =
-          await MountainsService().fetchMountains();
+          await MountainsService().fetchMountains(keyword, provinceId);
 
       emit(MountainsSuccess(mountains));
     } catch (e) {

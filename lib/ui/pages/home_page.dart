@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool isChipFilterItemClicked = false;
+  ValueNotifier<int> activeProvinceFilterIndexNotifier = ValueNotifier<int>(-1);
   List<ProvinceModel> provinces = [];
 
   void fetchProvinces() async {
@@ -29,10 +29,15 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         provinces = fetchedProvinces;
       });
-      print(fetchedProvinces);
     } catch (e) {
       print('Error fetching provinces: $e');
     }
+  }
+
+  void setActiveProvinceFilterIndex(int index, String id) {
+    setState(() {
+      activeProvinceFilterIndexNotifier.value = index;
+    });
   }
 
   @override
@@ -55,71 +60,80 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         builder: (_) {
-          return Stack(
-            alignment: AlignmentDirectional.topCenter,
-            clipBehavior: Clip.none,
-            children: [
-              Positioned(
-                top: 10,
-                child: Container(
-                  width: 40,
-                  height: 7,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: redAccentColor,
-                  ),
-                ),
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: 40,
-                      left: defaultSpace,
-                      right: defaultSpace,
-                    ),
-                    child: Wrap(
-                      spacing: 8.0,
-                      runSpacing: 4.0,
-                      children: provinces.map((province) {
-                        return ChipFilterItem(
-                          name: province.name,
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 55,
-                    margin: EdgeInsets.only(
-                      top: 20,
-                      left: defaultSpace,
-                      right: defaultSpace,
-                      bottom: defaultSpace,
-                    ),
-                    child: TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        backgroundColor: primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      child: Text(
-                        'Apply',
-                        style: GoogleFonts.inter(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+          return ValueListenableBuilder<int>(
+              valueListenable: activeProvinceFilterIndexNotifier,
+              builder: (context, value, child) {
+                return Stack(
+                  alignment: AlignmentDirectional.topCenter,
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned(
+                      top: 10,
+                      child: Container(
+                        width: 40,
+                        height: 7,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: redAccentColor,
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          );
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: 40,
+                            left: defaultSpace,
+                            right: defaultSpace,
+                          ),
+                          child: Wrap(
+                            spacing: 8.0,
+                            runSpacing: 4.0,
+                            children: provinces.asMap().entries.map((entry) {
+                              int index = entry.key;
+                              return ChipFilterItem(
+                                id: entry.value.id,
+                                name: entry.value.name,
+                                isActive: index == value,
+                                widgetIndex: index,
+                                setActiveIndex: setActiveProvinceFilterIndex,
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          height: 55,
+                          margin: EdgeInsets.only(
+                            top: 20,
+                            left: defaultSpace,
+                            right: defaultSpace,
+                            bottom: defaultSpace,
+                          ),
+                          child: TextButton(
+                            onPressed: () {},
+                            style: TextButton.styleFrom(
+                              backgroundColor: primaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: Text(
+                              'Apply',
+                              style: GoogleFonts.inter(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              });
         },
       );
     }

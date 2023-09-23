@@ -4,31 +4,41 @@ import 'package:hike_navigator/extensions/string_extension.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
 class ChipFilterItem extends StatefulWidget {
+  final String id;
   final String name;
-  const ChipFilterItem({required this.name, super.key});
+  final int widgetIndex;
+  final bool isActive;
+  final Function(int, String) setActiveIndex;
+
+  const ChipFilterItem({
+    required this.id,
+    required this.name,
+    required this.widgetIndex,
+    required this.isActive,
+    required this.setActiveIndex,
+    super.key,
+  });
 
   @override
   State<ChipFilterItem> createState() => _ChipFilterItemState();
 }
 
 class _ChipFilterItemState extends State<ChipFilterItem> {
-  bool isClicked = false;
-
-  void onChipTapped() {
-    setState(() {
-      isClicked = !isClicked;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onChipTapped,
+      onTap: () {
+        setState(() {
+          if (!widget.isActive) {
+            widget.setActiveIndex(widget.widgetIndex, widget.id);
+          }
+        });
+      },
       child: Chip(
-        backgroundColor: isClicked ? primaryColor : transparentColor,
+        backgroundColor: widget.isActive ? primaryColor : transparentColor,
         shape: RoundedRectangleBorder(
           side: BorderSide(
-            color: isClicked ? transparentColor : blackColor,
+            color: widget.isActive ? transparentColor : blackColor,
             width: 1.5,
           ),
           borderRadius: const BorderRadius.all(
@@ -48,7 +58,7 @@ class _ChipFilterItemState extends State<ChipFilterItem> {
                 fontSize: 14,
                 fontWeight: medium,
                 letterSpacing: 0.5,
-                color: isClicked ? whiteColor : blackColor),
+                color: widget.isActive ? whiteColor : blackColor),
           ),
         ),
       ),
