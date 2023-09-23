@@ -3,46 +3,51 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
-import 'package:hike_navigator/ui/pages/reset_password_page.dart';
+import 'package:hike_navigator/ui/pages/sign_in_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/text_form_field_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({Key? key}) : super(key: key);
+class ResetPassword extends StatefulWidget {
+  const ResetPassword({Key? key}) : super(key: key);
 
   @override
-  State<ForgotPassword> createState() => _ForgotPasswordState();
+  State<ResetPassword> createState() => _ResetPasswordState();
 }
 
-class _ForgotPasswordState extends State<ForgotPassword> {
-  final TextEditingController emailController = TextEditingController(text: '');
+class _ResetPasswordState extends State<ResetPassword> {
+  final TextEditingController newPasswordController =
+      TextEditingController(text: '');
+  final TextEditingController confirmPasswordController =
+      TextEditingController(text: '');
 
-  bool emailValidate = false;
+  bool newPasswordValidate = false;
+  bool confirmPasswordValidate = false;
 
-  void check() async {
+  void resetPassword() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var email = preferences.getString('email_check');
+
     final payload = {
-      'email': emailController.text.toString(),
+      'email': email.toString(),
+      'password': newPasswordController.text.toString(),
+      'confirmation_password': confirmPasswordController.text.toString(),
     };
     final result = await API().postRequest(
-      route: '/forgot-password/check',
+      route: '/forgot-password/store',
       payload: payload,
     );
     final response = jsonDecode(result.body);
     if (response['status'] == 200) {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      await preferences.setString(
-          'email_check', emailController.text.toString());
-
-      _showDialog('Email found!', 'success', () {
+      _showDialog('Reset password success!', 'success', () {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const ResetPassword(),
+            builder: (context) => const SignInPage(),
           ),
         );
       });
     } else {
-      _showDialog('Email not found!', 'success', () {
+      _showDialog(response['message'], 'failed', () {
         Navigator.pop(context);
       });
     }
@@ -149,7 +154,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       height: 5,
                     ),
                     Text(
-                      'Forgot Password',
+                      'Reset Password',
                       style: GoogleFonts.inter(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -160,7 +165,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       height: 7.5,
                     ),
                     Text(
-                      'Please enter your email',
+                      'Enter your new password',
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         fontWeight: FontWeight.normal,
@@ -185,18 +190,33 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         children: [
           TextFormFieldAuth(
             icon: Icon(
-              Icons.email_outlined,
+              Icons.lock,
               color: blackColor,
               size: 25,
             ),
-            hintText: 'Email',
-            controller: emailController,
+            hintText: 'New password',
+            controller: newPasswordController,
             margin: EdgeInsets.only(
               top: 20,
               left: defaultSpace,
               right: defaultSpace,
             ),
-            errorText: emailValidate ? 'Email is required' : null,
+            errorText: newPasswordValidate ? 'New password is required' : null,
+          ),
+          TextFormFieldAuth(
+            icon: Icon(
+              Icons.lock,
+              color: blackColor,
+              size: 25,
+            ),
+            hintText: 'Confirm password',
+            controller: confirmPasswordController,
+            margin: EdgeInsets.only(
+              left: defaultSpace,
+              right: defaultSpace,
+            ),
+            errorText:
+                confirmPasswordValidate ? 'Confirm password is required' : null,
           ),
         ],
       );
@@ -216,13 +236,19 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             child: TextButton(
               onPressed: () {
                 setState(() {
-                  emailController.text.isEmpty
-                      ? emailValidate = true
-                      : emailValidate = false;
+                  newPasswordController.text.isEmpty
+                      ? newPasswordValidate = true
+                      : newPasswordValidate = false;
                 });
 
-                if (!emailValidate) {
-                  check();
+                setState(() {
+                  confirmPasswordController.text.isEmpty
+                      ? confirmPasswordValidate = true
+                      : confirmPasswordValidate = false;
+                });
+
+                if (!newPasswordValidate && !confirmPasswordValidate) {
+                  resetPassword();
                 }
               },
               style: TextButton.styleFrom(
@@ -234,7 +260,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
               ),
               child: Text(
-                'Continue',
+                'Reset Password',
                 style: GoogleFonts.inter(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
