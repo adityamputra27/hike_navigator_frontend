@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DestinationsService {
   String url = API().getURL();
 
-  fetchDestinations() async {
+  fetchDestinations(String? keyword, int? provinceId) async {
     var token = API().getToken();
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -16,7 +16,8 @@ class DestinationsService {
 
     try {
       var response = await http.get(
-        Uri.parse("$url/climbing-plans/getActiveUser/$userId"),
+        Uri.parse(
+            "$url/climbing-plans/getActiveUser/$userId?keyword=${keyword ?? ''}&provinceId=${provinceId ?? 0}"),
         headers: {
           "Content-Type": "application/json",
           'Authorization': 'Bearer $token',

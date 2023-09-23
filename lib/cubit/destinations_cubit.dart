@@ -8,12 +8,12 @@ part 'destinations_state.dart';
 class DestinationsCubit extends Cubit<DestinationsState> {
   DestinationsCubit() : super(DestinationsInitial());
 
-  void fetchDestinations() async {
+  void fetchDestinations(String? keyword, int? provinceId) async {
     try {
       emit(DestinationsLoading());
 
       List<DestinationsModel> destinations =
-          await DestinationsService().fetchDestinations();
+          await DestinationsService().fetchDestinations(keyword, provinceId);
 
       emit(DestinationsSuccess(destinations));
     } catch (e) {

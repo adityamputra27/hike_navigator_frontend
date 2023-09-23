@@ -19,6 +19,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String searchQuery = '';
+  int searchProvince = 0;
+
   ValueNotifier<int> activeProvinceFilterIndexNotifier = ValueNotifier<int>(-1);
   List<ProvinceModel> provinces = [];
 
@@ -37,14 +40,41 @@ class _HomePageState extends State<HomePage> {
   void setActiveProvinceFilterIndex(int index, String id) {
     setState(() {
       activeProvinceFilterIndexNotifier.value = index;
+      searchProvince = int.parse(id);
     });
   }
 
   @override
   void initState() {
-    context.read<DestinationsCubit>().fetchDestinations();
+    context
+        .read<DestinationsCubit>()
+        .fetchDestinations(searchQuery, searchProvince);
     fetchProvinces();
     super.initState();
+  }
+
+  void startSearch() {
+    context
+        .read<DestinationsCubit>()
+        .fetchDestinations(searchQuery, searchProvince);
+  }
+
+  void startFilter() {
+    context
+        .read<DestinationsCubit>()
+        .fetchDestinations(searchQuery, searchProvince);
+    Navigator.pop(context);
+  }
+
+  void resetFilter() {
+    setState(() {
+      searchProvince = 0;
+      activeProvinceFilterIndexNotifier.value = -1;
+    });
+    context
+        .read<DestinationsCubit>()
+        .fetchDestinations(searchQuery, searchProvince);
+    Navigator.pop(context);
   }
 
   @override
@@ -112,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                             bottom: defaultSpace,
                           ),
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: startFilter,
                             style: TextButton.styleFrom(
                               backgroundColor: primaryColor,
                               shape: RoundedRectangleBorder(
@@ -121,6 +151,32 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: Text(
                               'Apply',
+                              style: GoogleFonts.inter(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          height: 55,
+                          margin: EdgeInsets.only(
+                            left: defaultSpace,
+                            right: defaultSpace,
+                            bottom: defaultSpace,
+                          ),
+                          child: TextButton(
+                            onPressed: resetFilter,
+                            style: TextButton.styleFrom(
+                              backgroundColor: greyColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: Text(
+                              'Reset',
                               style: GoogleFonts.inter(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -209,6 +265,14 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: normal,
                     color: greyColor,
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value;
+                    });
+                  },
+                  onSubmitted: (value) {
+                    startSearch();
+                  },
                   decoration: InputDecoration(
                     hintText: 'search destination',
                     border: OutlineInputBorder(

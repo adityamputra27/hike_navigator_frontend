@@ -18,7 +18,7 @@ class MyDestinationPage extends StatefulWidget {
 class _MyDestinationPageState extends State<MyDestinationPage> {
   @override
   void initState() {
-    context.read<DestinationsCubit>().fetchDestinations();
+    context.read<DestinationsCubit>().fetchDestinations('', 0);
     context.read<DestinationsSavedCubit>().fetchDestinationsSaved();
     super.initState();
   }
