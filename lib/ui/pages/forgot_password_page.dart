@@ -99,7 +99,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               left: defaultSpace,
               right: defaultSpace,
             ),
-            errorText: emailValidate ? 'Email harus diisi' : null,
+            errorText: emailValidate ? 'Email is required' : null,
           ),
         ],
       );

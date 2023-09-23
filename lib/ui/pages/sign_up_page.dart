@@ -171,7 +171,7 @@ class _SignUpPageState extends State<SignUpPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
-            errorText: nameValidate ? 'Full name harus diisi' : null,
+            errorText: nameValidate ? 'Full name is required' : null,
           ),
           TextFormFieldAuth(
             icon: Icon(
@@ -185,7 +185,7 @@ class _SignUpPageState extends State<SignUpPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
-            errorText: emailValidate ? 'Email harus diisi' : null,
+            errorText: emailValidate ? 'Email is required' : null,
           ),
           TextFormFieldAuth(
             icon: Icon(
@@ -200,7 +200,7 @@ class _SignUpPageState extends State<SignUpPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
-            errorText: passwordValidate ? 'Password harus diisi' : null,
+            errorText: passwordValidate ? 'Password is required' : null,
           ),
           TextFormFieldAuth(
             icon: Icon(
@@ -216,7 +216,7 @@ class _SignUpPageState extends State<SignUpPage> {
               right: defaultSpace,
             ),
             errorText: confirmationPasswordValidate
-                ? 'Password confirmation harus diisi'
+                ? 'Confirmation password is required'
                 : null,
           ),
         ],

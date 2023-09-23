@@ -188,7 +188,7 @@ class _SignInPageState extends State<SignInPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
-            errorText: emailValidate ? 'Email harus diisi' : null,
+            errorText: emailValidate ? 'Email is required' : null,
           ),
           TextFormFieldAuth(
             icon: Icon(
@@ -203,7 +203,7 @@ class _SignInPageState extends State<SignInPage> {
               left: defaultSpace,
               right: defaultSpace,
             ),
-            errorText: passwordValidate ? 'Password harus diisi' : null,
+            errorText: passwordValidate ? 'Password is required' : null,
           ),
           GestureDetector(
             onTap: () {
