@@ -146,7 +146,9 @@ class MyDestinationCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const DetailAddDestinationMapPage(),
+            builder: (context) => DetailAddDestinationMapPage(
+              mountain: destination.mountain,
+            ),
           ),
         );
       },

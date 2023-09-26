@@ -2,11 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/constans/maps/main.dart';
+import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
-class DetailAddDestinationMapPage extends StatelessWidget {
-  const DetailAddDestinationMapPage({super.key});
+class DetailAddDestinationMapPage extends StatefulWidget {
+  final MountainsModel mountain;
+  const DetailAddDestinationMapPage({required this.mountain, super.key});
 
+  @override
+  State<DetailAddDestinationMapPage> createState() =>
+      _DetailAddDestinationMapPageState();
+}
+
+class _DetailAddDestinationMapPageState
+    extends State<DetailAddDestinationMapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

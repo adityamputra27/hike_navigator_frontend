@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:hike_navigator/models/mountain_model.dart';
+import 'package:hike_navigator/models/mountains_model.dart';
 
 class DestinationsModel extends Equatable {
   final String id;
   final String scheduleDate;
-  final MountainModel mountain;
+  final MountainsModel mountain;
   final String status;
 
   const DestinationsModel({
@@ -18,7 +19,7 @@ class DestinationsModel extends Equatable {
       DestinationsModel(
         id: json['id'].toString(),
         scheduleDate: json['schedule_date'].toString(),
-        mountain: MountainModel.fromJson(json['mountain']),
+        mountain: MountainsModel.fromJson(json['mountain']),
         status: json['status'],
       );
 
