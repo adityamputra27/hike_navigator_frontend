@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
+import 'package:hike_navigator/ui/pages/detail/detail_add_destination_map_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
 
@@ -140,75 +141,108 @@ class MyDestinationCard extends StatelessWidget {
       );
     }
 
-    return Container(
-      width: 300,
-      height: 450,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(imageURL),
-          fit: BoxFit.cover,
-        ),
-        borderRadius: BorderRadius.circular(
-          25,
-        ),
-      ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DetailAddDestinationMapPage(),
+          ),
+        );
+      },
       child: Container(
-        margin: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  destination.mountain.name,
-                  style: GoogleFonts.inter(
-                    fontSize: 24,
-                    color: blackColor,
-                    fontWeight: bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  destination.mountain.height,
-                  style: GoogleFonts.inter(
-                    fontSize: 18,
-                    color: blackColor,
-                    fontWeight: medium,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: primaryColor,
-                    shadowColor: Colors.grey.shade400,
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+        width: 300,
+        height: 450,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(imageURL),
+            fit: BoxFit.cover,
+          ),
+          borderRadius: BorderRadius.circular(
+            25,
+          ),
+        ),
+        child: Container(
+          margin:
+              const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    destination.mountain.name,
+                    style: GoogleFonts.inter(
+                      fontSize: 24,
+                      color: blackColor,
+                      fontWeight: bold,
                     ),
                   ),
-                  onPressed: () {
-                    showBottomModal();
-                  },
-                  child: RichText(
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    destination.mountain.height,
+                    style: GoogleFonts.inter(
+                      fontSize: 18,
+                      color: blackColor,
+                      fontWeight: medium,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: primaryColor,
+                      shadowColor: Colors.grey.shade400,
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    onPressed: () {
+                      showBottomModal();
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          WidgetSpan(
+                            child: Icon(
+                              Icons.visibility,
+                              color: whiteColor,
+                              size: 16,
+                            ),
+                          ),
+                          TextSpan(
+                            text: ' Preview',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              color: whiteColor,
+                              fontWeight: bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  RichText(
                     text: TextSpan(
                       children: [
                         WidgetSpan(
                           child: Icon(
-                            Icons.visibility,
+                            Icons.date_range_outlined,
                             color: whiteColor,
-                            size: 16,
+                            size: 18,
                           ),
                         ),
                         TextSpan(
-                          text: ' Preview',
+                          text:
+                              ' ${DateFormat('dd MMM yyyy').format(DateTime.parse(destination.scheduleDate))}',
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             color: whiteColor,
@@ -218,31 +252,10 @@ class MyDestinationCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      WidgetSpan(
-                        child: Icon(
-                          Icons.date_range_outlined,
-                          color: whiteColor,
-                          size: 18,
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' Tomorrow',
-                        style: GoogleFonts.inter(
-                          fontSize: 14,
-                          color: whiteColor,
-                          fontWeight: bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

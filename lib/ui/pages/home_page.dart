@@ -355,7 +355,10 @@ class _HomePageState extends State<HomePage> {
                       state.destinations.map((DestinationsModel destination) {
                     return Column(
                       children: [
-                        DestinationCard(destination.mountain),
+                        DestinationCard(
+                          mountain: destination.mountain,
+                          destination: destination,
+                        ),
                         const SizedBox(
                           height: 35,
                         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
+import 'package:hike_navigator/ui/pages/detail/detail_add_destination_map_page.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
@@ -39,7 +40,8 @@ class AddDestinationCard extends StatelessWidget {
           ),
         ),
         child: Container(
-          margin: const EdgeInsets.all(20),
+          margin:
+              const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,26 +70,71 @@ class AddDestinationCard extends StatelessWidget {
                   ),
                 ],
               ),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    WidgetSpan(
-                      child: Icon(
-                        Icons.location_on,
-                        color: whiteColor,
-                        size: 18,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Icon(
+                            Icons.location_on,
+                            color: whiteColor,
+                            size: 18,
+                          ),
+                        ),
+                        TextSpan(
+                          text: mountain.province.name,
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            color: whiteColor,
+                            fontWeight: bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: primaryColor,
+                      shadowColor: Colors.grey.shade400,
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
                     ),
-                    TextSpan(
-                      text: mountain.province.name,
-                      style: GoogleFonts.inter(
-                        fontSize: 16,
-                        color: whiteColor,
-                        fontWeight: bold,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const DetailAddDestinationMapPage(),
+                        ),
+                      );
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          WidgetSpan(
+                            child: Icon(
+                              Icons.visibility,
+                              color: whiteColor,
+                              size: 16,
+                            ),
+                          ),
+                          TextSpan(
+                            text: ' Preview',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              color: whiteColor,
+                              fontWeight: bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
