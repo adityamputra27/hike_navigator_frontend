@@ -96,14 +96,7 @@ class _DetailAddDestinationDownloadPageState
                   borderRadius: BorderRadius.circular(defaultRadius),
                 ),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DetailAddDestinationMapPage(),
-                  ),
-                );
-              },
+              onPressed: () {},
               child: Text(
                 'Download Map',
                 style: GoogleFonts.inter(
