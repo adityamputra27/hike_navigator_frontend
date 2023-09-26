@@ -23,8 +23,8 @@ class _DetailAddDestinationMapPageState
   @override
   Widget build(BuildContext context) {
     List<MountainPeaksModel> mountainPeaks = widget.mountain.mountainPeaks;
-    List<TracksModel> allTracks =
-        mountainPeaks.expand((peak) => peak.tracks).toList();
+    // List<TracksModel> allTracks =
+    //     mountainPeaks.expand((peak) => peak.tracks).toList();
     List<Marker> peakMarkers = [];
 
     for (var peak in mountainPeaks) {
