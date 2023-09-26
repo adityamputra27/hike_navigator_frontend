@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:hike_navigator/models/mountain_model.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
 
 class DestinationsModel extends Equatable {
