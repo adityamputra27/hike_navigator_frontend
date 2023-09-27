@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/constans/maps/main.dart';
 import 'package:hike_navigator/models/mountain_peaks_model.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
-import 'package:hike_navigator/models/tracks_model.dart';
+// import 'package:hike_navigator/models/tracks_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -76,16 +76,16 @@ class _DetailAddDestinationMapPageState
                   ...peakMarkers
                 ],
               ),
-              // PolylineLayer(
-              //   polylines: [
-              //     for (var track in allTracks)
-              //       Polyline(
-              //         points: decodePolyline(track.geojson),
-              //         color: Colors.blue,
-              //         strokeWidth: 4.0,
-              //       ),
-              //   ],
-              // ),
+              PolylineLayer(
+                polylines: [
+                  // for (var track in allTracks)
+                  //   Polyline(
+                  //     points: decodePolyline(track.geojson),
+                  //     color: Colors.blue,
+                  //     strokeWidth: 4.0,
+                  //   ),
+                ],
+              ),
             ],
           ),
           Positioned(

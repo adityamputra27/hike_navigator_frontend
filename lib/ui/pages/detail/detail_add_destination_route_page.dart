@@ -31,6 +31,7 @@ class _DetailAddDestinationRoutePageState
 
   List<TracksModel> trackLists = [];
 
+  String? mountainPeakId;
   String? peakId;
   String? trackId;
   String peakNameSelected = '-';
@@ -39,6 +40,7 @@ class _DetailAddDestinationRoutePageState
   void setActivePeakIndex(int index) {
     setState(() {
       activePeakIndex = index;
+      mountainPeakId = widget.mountainPeaks[index].id;
       trackLists = widget.mountainPeaks[index].tracks;
       peakNameSelected = widget.mountainPeaks[index].peak.name;
       peakId = widget.mountainPeaks[index].peak.id;
@@ -213,6 +215,7 @@ class _DetailAddDestinationRoutePageState
                       builder: (context) => DetailReviewDestinationPage(
                         scheduleDate: widget.scheduleDate,
                         mountain: widget.mountain,
+                        mountainPeakId: mountainPeakId.toString(),
                         peakId: peakId.toString(),
                         peakName: peakNameSelected,
                         trackId: trackId.toString(),

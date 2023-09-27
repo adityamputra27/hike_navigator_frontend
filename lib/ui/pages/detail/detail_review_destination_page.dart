@@ -9,6 +9,7 @@ class DetailReviewDestinationPage extends StatefulWidget {
   final DateTime scheduleDate;
   final MountainsModel mountain;
 
+  final String mountainPeakId;
   final String peakId;
   final String trackId;
   final String peakName;
@@ -18,6 +19,7 @@ class DetailReviewDestinationPage extends StatefulWidget {
     Key? key,
     required this.mountain,
     required this.scheduleDate,
+    required this.mountainPeakId,
     required this.peakId,
     required this.peakName,
     required this.trackId,
@@ -33,6 +35,10 @@ class _DetailReviewDestinationPageState
     extends State<DetailReviewDestinationPage> {
   @override
   Widget build(BuildContext context) {
+    print(widget.scheduleDate);
+    print(widget.mountainPeakId);
+    print(widget.peakId);
+    print(widget.trackId);
     Widget header() {
       return Container(
         margin: EdgeInsets.only(
@@ -114,15 +120,7 @@ class _DetailReviewDestinationPageState
                   borderRadius: BorderRadius.circular(defaultRadius),
                 ),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        const DetailAddDestinationDownloadPage(),
-                  ),
-                );
-              },
+              onPressed: () {},
               child: Text(
                 'Create My Plan',
                 style: GoogleFonts.inter(
