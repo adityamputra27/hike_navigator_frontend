@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 );
-              });
+              },);
         },
       );
     }
@@ -208,7 +208,8 @@ class _HomePageState extends State<HomePage> {
               height: 5,
             ),
             Text(
-              'Hello, ${widget.preferences?.getString('name').toString()}!',
+              // 'Hello, ${widget.preferences?.getString('name').toString()}!',
+              '',
               style: GoogleFonts.inter(
                 fontSize: 28,
                 fontWeight: black,

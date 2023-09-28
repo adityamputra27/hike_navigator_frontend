@@ -1,8 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:hike_navigator/models/city_model.dart';
+import 'package:hike_navigator/models/marks_model.dart';
 import 'package:hike_navigator/models/mountain_images_model.dart';
 import 'package:hike_navigator/models/mountain_peaks_model.dart';
+import 'package:hike_navigator/models/posts_model.dart';
 import 'package:hike_navigator/models/province_model.dart';
+import 'package:hike_navigator/models/rivers_model.dart';
+import 'package:hike_navigator/models/tracks_model.dart';
+import 'package:hike_navigator/models/waterfalls_model.dart';
+import 'package:hike_navigator/models/watersprings_model.dart';
 
 class MountainsModel extends Equatable {
   final String id;
@@ -17,6 +23,12 @@ class MountainsModel extends Equatable {
   final String description;
   final List<MountainImagesModel> mountainImages;
   final List<MountainPeaksModel> mountainPeaks;
+  final List<TracksModel> mountainTracks;
+  final List<MarksModel> mountainMarks;
+  final List<WaterfallsModel> mountainWaterfalls;
+  final List<WaterspringsModel> mountainWatersprings;
+  final List<RiversModel> mountainRivers;
+  final List<PostsModel> mountainPosts;
 
   const MountainsModel({
     required this.id,
@@ -31,6 +43,12 @@ class MountainsModel extends Equatable {
     this.description = '',
     required this.mountainImages,
     required this.mountainPeaks,
+    required this.mountainTracks,
+    required this.mountainMarks,
+    required this.mountainWaterfalls,
+    required this.mountainWatersprings,
+    required this.mountainRivers,
+    required this.mountainPosts,
   });
 
   factory MountainsModel.fromJson(Map<String, dynamic> json) {
@@ -50,6 +68,24 @@ class MountainsModel extends Equatable {
           .toList(),
       mountainPeaks: (json['mountain_peaks'] as List)
           .map((peaks) => MountainPeaksModel.fromJson(peaks))
+          .toList(),
+      mountainTracks: (json['mountain_tracks'] as List)
+          .map((peaks) => TracksModel.fromJson(peaks))
+          .toList(),
+      mountainMarks: (json['mountain_marks'] as List)
+          .map((peaks) => MarksModel.fromJson(peaks))
+          .toList(),
+      mountainWaterfalls: (json['mountain_waterfalls'] as List)
+          .map((peaks) => WaterfallsModel.fromJson(peaks))
+          .toList(),
+      mountainWatersprings: (json['mountain_watersprings'] as List)
+          .map((peaks) => WaterspringsModel.fromJson(peaks))
+          .toList(),
+      mountainRivers: (json['mountain_rivers'] as List)
+          .map((peaks) => RiversModel.fromJson(peaks))
+          .toList(),
+      mountainPosts: (json['mountain_posts'] as List)
+          .map((peaks) => PostsModel.fromJson(peaks))
           .toList(),
     );
   }

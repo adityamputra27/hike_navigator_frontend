@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
-import 'package:hike_navigator/ui/pages/detail/detail_add_destination_download_page.dart';
+import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailReviewDestinationPage extends StatefulWidget {
   final DateTime scheduleDate;
@@ -34,11 +38,117 @@ class DetailReviewDestinationPage extends StatefulWidget {
 class _DetailReviewDestinationPageState
     extends State<DetailReviewDestinationPage> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  void createPlan() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    int userId = preferences.getInt('user_id')!;
+    final payload = {
+      "user_id": userId,
+      "mountain_id": widget.mountain.id,
+      "mountain_peak_id": widget.mountainPeakId,
+      "track_id": widget.trackId,
+      "schedule_date":
+          '${DateFormat('yyyy-MM-dd').format(widget.scheduleDate)} ${DateFormat('HH:m:ss').format(DateTime.now())}',
+      "status": "ACTIVE"
+    };
+    final result = await API().postRequestWithToken(
+      route: '/climbing-plans/create',
+      payload: payload,
+    );
+
+    final response = jsonDecode(result.body);
+    if (response['status'] == 400) {
+      _showDialog(
+        response['message'],
+        'success',
+        () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainPage(preferences: preferences),
+          ),
+        ),
+      );
+    } else {
+      _showDialog(
+        response['message'],
+        'failed',
+        () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainPage(preferences: preferences),
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> _showDialog(
+      String text, String status, Function() onPressed) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              defaultRadius,
+            ),
+          ),
+          icon: Image.asset(
+            status == 'success'
+                ? 'assets/images/check_icon.png'
+                : 'assets/images/failed_icon.png',
+            width: 45,
+            height: 45,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                text.toString(),
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: blackColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              TextButton(
+                onPressed: onPressed,
+                style: TextButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      10,
+                    ),
+                  ),
+                ),
+                child: Text(
+                  'OK',
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w700,
+                    color: whiteColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print(widget.scheduleDate);
-    print(widget.mountainPeakId);
-    print(widget.peakId);
-    print(widget.trackId);
     Widget header() {
       return Container(
         margin: EdgeInsets.only(
@@ -120,7 +230,7 @@ class _DetailReviewDestinationPageState
                   borderRadius: BorderRadius.circular(defaultRadius),
                 ),
               ),
-              onPressed: () {},
+              onPressed: createPlan,
               child: Text(
                 'Create My Plan',
                 style: GoogleFonts.inter(

@@ -1,13 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/constans/maps/main.dart';
+import 'package:hike_navigator/models/marks_model.dart';
 import 'package:hike_navigator/models/mountain_peaks_model.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
-// import 'package:hike_navigator/models/tracks_model.dart';
+import 'package:hike_navigator/models/posts_model.dart';
+import 'package:hike_navigator/models/rivers_model.dart';
+import 'package:hike_navigator/models/tracks_model.dart';
+import 'package:hike_navigator/models/waterfalls_model.dart';
+import 'package:hike_navigator/models/watersprings_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 
 class DetailAddDestinationMapPage extends StatefulWidget {
   final MountainsModel mountain;
@@ -22,10 +30,22 @@ class _DetailAddDestinationMapPageState
     extends State<DetailAddDestinationMapPage> {
   @override
   Widget build(BuildContext context) {
+    List<TracksModel> mountainTracks = widget.mountain.mountainTracks;
     List<MountainPeaksModel> mountainPeaks = widget.mountain.mountainPeaks;
-    // List<TracksModel> allTracks =
-    //     mountainPeaks.expand((peak) => peak.tracks).toList();
+    List<MarksModel> mountainMarks = widget.mountain.mountainMarks;
+    List<WaterfallsModel> mountainWaterfalls =
+        widget.mountain.mountainWaterfalls;
+    List<WaterspringsModel> mountainWatersprings =
+        widget.mountain.mountainWatersprings;
+    List<RiversModel> mountainRivers = widget.mountain.mountainRivers;
+    List<PostsModel> mountainPosts = widget.mountain.mountainPosts;
+
     List<Marker> peakMarkers = [];
+    List<Marker> markMarkers = [];
+    List<Marker> waterfallMarkers = [];
+    List<Marker> waterspringMarkers = [];
+    List<Marker> riverMarkers = [];
+    List<Marker> postMarkers = [];
 
     for (var peak in mountainPeaks) {
       Marker peakMarker = Marker(
@@ -40,6 +60,71 @@ class _DetailAddDestinationMapPageState
       peakMarkers.add(peakMarker);
     }
 
+    for (var mark in mountainMarks) {
+      Marker markMarker = Marker(
+        width: 35,
+        height: 35,
+        point: LatLng(
+          double.parse(mark.latitude),
+          double.parse(mark.longitude),
+        ),
+        builder: (context) => Image.asset('assets/images/mark_marker.png'),
+      );
+      markMarkers.add(markMarker);
+    }
+
+    for (var waterfall in mountainWaterfalls) {
+      Marker waterfallMarker = Marker(
+        width: 35,
+        height: 35,
+        point: LatLng(
+          double.parse(waterfall.latitude),
+          double.parse(waterfall.longitude),
+        ),
+        builder: (context) => Image.asset('assets/images/waterfall_marker.png'),
+      );
+      waterfallMarkers.add(waterfallMarker);
+    }
+
+    for (var waterspring in mountainWatersprings) {
+      Marker waterspringMarker = Marker(
+        width: 35,
+        height: 35,
+        point: LatLng(
+          double.parse(waterspring.latitude),
+          double.parse(waterspring.longitude),
+        ),
+        builder: (context) => Image.asset('assets/images/water_marker.png'),
+      );
+      waterspringMarkers.add(waterspringMarker);
+    }
+
+    for (var river in mountainRivers) {
+      Marker riverMarker = Marker(
+        width: 35,
+        height: 35,
+        point: LatLng(
+          double.parse(river.latitude),
+          double.parse(river.longitude),
+        ),
+        builder: (context) => Image.asset('assets/images/wave_marker.png'),
+      );
+      riverMarkers.add(riverMarker);
+    }
+
+    for (var post in mountainPosts) {
+      Marker postMarker = Marker(
+        width: 35,
+        height: 35,
+        point: LatLng(
+          double.parse(post.latitude),
+          double.parse(post.longitude),
+        ),
+        builder: (context) => Image.asset('assets/images/camp_marker.png'),
+      );
+      postMarkers.add(postMarker);
+    }
+
     return Scaffold(
       backgroundColor: whiteColor,
       body: Stack(
@@ -47,8 +132,8 @@ class _DetailAddDestinationMapPageState
           FlutterMap(
             options: MapOptions(
               minZoom: 1,
-              maxZoom: 18,
-              zoom: 10,
+              maxZoom: 15,
+              zoom: 14,
               center: LatLng(double.parse(widget.mountain.latitude),
                   double.parse(widget.mountain.longitude)),
             ),
@@ -61,6 +146,21 @@ class _DetailAddDestinationMapPageState
                   'accessToken': MapConstant.mapBoxAccessToken,
                 },
               ),
+              PolylineLayer(
+                polylines: mountainTracks.map((track) {
+                  List<dynamic> coordinates = jsonDecode(track.coordinates);
+                  List<LatLng> points = coordinates
+                      .map((coord) => LatLng(coord[1], coord[0]))
+                      .toList();
+
+                  return Polyline(
+                    points: points,
+                    color: whiteColor,
+                    strokeWidth: 3,
+                    isDotted: true,
+                  );
+                }).toList(),
+              ),
               MarkerLayer(
                 markers: [
                   Marker(
@@ -70,20 +170,18 @@ class _DetailAddDestinationMapPageState
                       double.parse(widget.mountain.latitude),
                       double.parse(widget.mountain.longitude),
                     ),
-                    builder: (context) =>
-                        Image.asset('assets/images/mountain_marker.png'),
+                    builder: (context) {
+                      return GestureDetector(
+                        onTap: () {},
+                        child: Image.asset('assets/images/mountain_marker.png'),
+                      );
+                    },
                   ),
-                  ...peakMarkers
-                ],
-              ),
-              PolylineLayer(
-                polylines: [
-                  // for (var track in allTracks)
-                  //   Polyline(
-                  //     points: decodePolyline(track.geojson),
-                  //     color: Colors.blue,
-                  //     strokeWidth: 4.0,
-                  //   ),
+                  ...peakMarkers,
+                  ...waterfallMarkers,
+                  ...waterspringMarkers,
+                  ...riverMarkers,
+                  ...postMarkers,
                 ],
               ),
             ],

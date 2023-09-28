@@ -11,6 +11,7 @@ class TracksModel extends Equatable {
   final String latitude;
   final String longitude;
   final String geojson;
+  final String coordinates;
   final List<MarksModel> marks;
   final List<WaterfallsModel> waterfalls;
   final List<WaterspringsModel> watersprings;
@@ -23,6 +24,7 @@ class TracksModel extends Equatable {
     this.latitude = '',
     this.longitude = '',
     this.geojson = '',
+    this.coordinates = '',
     required this.marks,
     required this.waterfalls,
     required this.watersprings,
@@ -72,6 +74,7 @@ class TracksModel extends Equatable {
       latitude: json['latitude'],
       longitude: json['longitude'],
       geojson: json['geojson'],
+      coordinates: json['coordinates'],
       marks: marks,
       waterfalls: waterfalls,
       watersprings: watersprings,
