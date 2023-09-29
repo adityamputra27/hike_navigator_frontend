@@ -15,7 +15,6 @@ import 'package:hike_navigator/models/watersprings_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 
 class DetailAddDestinationMapPage extends StatefulWidget {
   final MountainsModel mountain;
@@ -28,6 +27,11 @@ class DetailAddDestinationMapPage extends StatefulWidget {
 
 class _DetailAddDestinationMapPageState
     extends State<DetailAddDestinationMapPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     List<TracksModel> mountainTracks = widget.mountain.mountainTracks;
@@ -46,6 +50,7 @@ class _DetailAddDestinationMapPageState
     List<Marker> waterspringMarkers = [];
     List<Marker> riverMarkers = [];
     List<Marker> postMarkers = [];
+    var mountainPopup = false;
 
     for (var peak in mountainPeaks) {
       Marker peakMarker = Marker(
@@ -133,9 +138,11 @@ class _DetailAddDestinationMapPageState
             options: MapOptions(
               minZoom: 1,
               maxZoom: 15,
-              zoom: 14,
-              center: LatLng(double.parse(widget.mountain.latitude),
-                  double.parse(widget.mountain.longitude)),
+              zoom: 13,
+              center: LatLng(
+                double.parse(widget.mountain.latitude),
+                double.parse(widget.mountain.longitude),
+              ),
             ),
             children: [
               TileLayer(
@@ -172,7 +179,12 @@ class _DetailAddDestinationMapPageState
                     ),
                     builder: (context) {
                       return GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {
+                            mountainPopup = true;
+                          });
+                          print(mountainPopup);
+                        },
                         child: Image.asset('assets/images/mountain_marker.png'),
                       );
                     },

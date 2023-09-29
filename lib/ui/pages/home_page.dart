@@ -91,105 +91,106 @@ class _HomePageState extends State<HomePage> {
         ),
         builder: (_) {
           return ValueListenableBuilder<int>(
-              valueListenable: activeProvinceFilterIndexNotifier,
-              builder: (context, value, child) {
-                return Stack(
-                  alignment: AlignmentDirectional.topCenter,
-                  clipBehavior: Clip.none,
-                  children: [
-                    Positioned(
-                      top: 10,
-                      child: Container(
-                        width: 40,
-                        height: 7,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: redAccentColor,
-                        ),
+            valueListenable: activeProvinceFilterIndexNotifier,
+            builder: (context, value, child) {
+              return Stack(
+                alignment: AlignmentDirectional.topCenter,
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    top: 10,
+                    child: Container(
+                      width: 40,
+                      height: 7,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: redAccentColor,
                       ),
                     ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(
-                            top: 40,
-                            left: defaultSpace,
-                            right: defaultSpace,
-                          ),
-                          child: Wrap(
-                            spacing: 8.0,
-                            runSpacing: 4.0,
-                            children: provinces.asMap().entries.map((entry) {
-                              int index = entry.key;
-                              return ChipFilterItem(
-                                id: entry.value.id,
-                                name: entry.value.name,
-                                isActive: index == value,
-                                widgetIndex: index,
-                                setActiveIndex: setActiveProvinceFilterIndex,
-                              );
-                            }).toList(),
-                          ),
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: 40,
+                          left: defaultSpace,
+                          right: defaultSpace,
                         ),
-                        Container(
-                          width: double.infinity,
-                          height: 55,
-                          margin: EdgeInsets.only(
-                            top: 20,
-                            left: defaultSpace,
-                            right: defaultSpace,
-                            bottom: defaultSpace,
-                          ),
-                          child: TextButton(
-                            onPressed: startFilter,
-                            style: TextButton.styleFrom(
-                              backgroundColor: primaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                            ),
-                            child: Text(
-                              'Apply',
-                              style: GoogleFonts.inter(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
+                        child: Wrap(
+                          spacing: 8.0,
+                          runSpacing: 4.0,
+                          children: provinces.asMap().entries.map((entry) {
+                            int index = entry.key;
+                            return ChipFilterItem(
+                              id: entry.value.id,
+                              name: entry.value.name,
+                              isActive: index == value,
+                              widgetIndex: index,
+                              setActiveIndex: setActiveProvinceFilterIndex,
+                            );
+                          }).toList(),
                         ),
-                        Container(
-                          width: double.infinity,
-                          height: 55,
-                          margin: EdgeInsets.only(
-                            left: defaultSpace,
-                            right: defaultSpace,
-                            bottom: defaultSpace,
-                          ),
-                          child: TextButton(
-                            onPressed: resetFilter,
-                            style: TextButton.styleFrom(
-                              backgroundColor: greyColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 55,
+                        margin: EdgeInsets.only(
+                          top: 20,
+                          left: defaultSpace,
+                          right: defaultSpace,
+                          bottom: defaultSpace,
+                        ),
+                        child: TextButton(
+                          onPressed: startFilter,
+                          style: TextButton.styleFrom(
+                            backgroundColor: primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
                             ),
-                            child: Text(
-                              'Reset',
-                              style: GoogleFonts.inter(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                          ),
+                          child: Text(
+                            'Apply',
+                            style: GoogleFonts.inter(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                );
-              },);
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 55,
+                        margin: EdgeInsets.only(
+                          left: defaultSpace,
+                          right: defaultSpace,
+                          bottom: defaultSpace,
+                        ),
+                        child: TextButton(
+                          onPressed: resetFilter,
+                          style: TextButton.styleFrom(
+                            backgroundColor: greyColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: Text(
+                            'Reset',
+                            style: GoogleFonts.inter(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          );
         },
       );
     }
@@ -208,8 +209,7 @@ class _HomePageState extends State<HomePage> {
               height: 5,
             ),
             Text(
-              // 'Hello, ${widget.preferences?.getString('name').toString()}!',
-              '',
+              'Hello, ${widget.preferences?.getString('name').toString()}!',
               style: GoogleFonts.inter(
                 fontSize: 28,
                 fontWeight: black,
