@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,9 +11,11 @@ import 'package:hike_navigator/models/rivers_model.dart';
 import 'package:hike_navigator/models/tracks_model.dart';
 import 'package:hike_navigator/models/waterfalls_model.dart';
 import 'package:hike_navigator/models/watersprings_model.dart';
+import 'package:hike_navigator/services/location_service.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:location/location.dart';
 
 class DetailAddDestinationMapPage extends StatefulWidget {
   final MountainsModel mountain;
@@ -27,9 +28,25 @@ class DetailAddDestinationMapPage extends StatefulWidget {
 
 class _DetailAddDestinationMapPageState
     extends State<DetailAddDestinationMapPage> {
+  LocationData? _currentLocation;
+  LocationService locationService = LocationService();
+  Location location = Location();
+
   @override
   void initState() {
+    locationService.requestPermission();
     super.initState();
+    location.onLocationChanged.listen((LocationData locationData) {
+      setState(() {
+        _currentLocation = locationData;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    locationService.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,7 +67,6 @@ class _DetailAddDestinationMapPageState
     List<Marker> waterspringMarkers = [];
     List<Marker> riverMarkers = [];
     List<Marker> postMarkers = [];
-    var mountainPopup = false;
 
     for (var peak in mountainPeaks) {
       Marker peakMarker = Marker(
@@ -134,69 +150,88 @@ class _DetailAddDestinationMapPageState
       backgroundColor: whiteColor,
       body: Stack(
         children: [
-          FlutterMap(
-            options: MapOptions(
-              minZoom: 1,
-              maxZoom: 15,
-              zoom: 13,
-              center: LatLng(
-                double.parse(widget.mountain.latitude),
-                double.parse(widget.mountain.longitude),
-              ),
-            ),
-            children: [
-              TileLayer(
-                urlTemplate:
-                    'https://api.mapbox.com/styles/v1/hikenavigatornew/cllhutmqy017e01pb2626daaw/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaGlrZW5hdmlnYXRvcm5ldyIsImEiOiJjbGxoZXRsdnoxOW5wM2ZwamZ2eTBtMWV1In0.jYkxsonNQIn_GsbJorNkEw',
-                additionalOptions: const {
-                  'mapStyleId': MapConstant.mapBoxStyleID,
-                  'accessToken': MapConstant.mapBoxAccessToken,
-                },
-              ),
-              PolylineLayer(
-                polylines: mountainTracks.map((track) {
-                  List<dynamic> coordinates = jsonDecode(track.coordinates);
-                  List<LatLng> points = coordinates
-                      .map((coord) => LatLng(coord[1], coord[0]))
-                      .toList();
-
-                  return Polyline(
-                    points: points,
-                    color: whiteColor,
-                    strokeWidth: 3,
-                    isDotted: true,
-                  );
-                }).toList(),
-              ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                    width: 50,
-                    height: 50,
-                    point: LatLng(
+          StreamBuilder(
+            stream: locationService.locationStream,
+            builder: (_, snapshot) {
+              if (snapshot.hasData) {
+                return FlutterMap(
+                  options: MapOptions(
+                    minZoom: 1,
+                    maxZoom: 14,
+                    zoom: 14,
+                    center: LatLng(
                       double.parse(widget.mountain.latitude),
                       double.parse(widget.mountain.longitude),
                     ),
-                    builder: (context) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            mountainPopup = true;
-                          });
-                          print(mountainPopup);
-                        },
-                        child: Image.asset('assets/images/mountain_marker.png'),
-                      );
-                    },
                   ),
-                  ...peakMarkers,
-                  ...waterfallMarkers,
-                  ...waterspringMarkers,
-                  ...riverMarkers,
-                  ...postMarkers,
-                ],
-              ),
-            ],
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          'https://api.mapbox.com/styles/v1/hikenavigatornew/cllhutmqy017e01pb2626daaw/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaGlrZW5hdmlnYXRvcm5ldyIsImEiOiJjbGxoZXRsdnoxOW5wM2ZwamZ2eTBtMWV1In0.jYkxsonNQIn_GsbJorNkEw',
+                      additionalOptions: const {
+                        'mapStyleId': MapConstant.mapBoxStyleID,
+                        'accessToken': MapConstant.mapBoxAccessToken,
+                      },
+                    ),
+                    PolylineLayer(
+                      polylines: mountainTracks.map((track) {
+                        List<dynamic> coordinates =
+                            jsonDecode(track.coordinates);
+                        List<LatLng> points = coordinates
+                            .map((coord) => LatLng(coord[1], coord[0]))
+                            .toList();
+
+                        return Polyline(
+                          points: points,
+                          color: whiteColor,
+                          strokeWidth: 3,
+                          isDotted: true,
+                        );
+                      }).toList(),
+                    ),
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          width: 35,
+                          height: 35,
+                          point: LatLng(
+                            _currentLocation?.latitude ?? 0.0,
+                            _currentLocation?.longitude ?? 0.0,
+                          ),
+                          builder: (context) =>
+                              Image.asset('assets/images/user_marker.png'),
+                        ),
+                        Marker(
+                          width: 50,
+                          height: 50,
+                          point: LatLng(
+                            double.parse(widget.mountain.latitude),
+                            double.parse(widget.mountain.longitude),
+                          ),
+                          builder: (context) {
+                            return GestureDetector(
+                              onTap: () {
+                                // setState(() {
+                                //   mountainPopup = true;
+                                // });
+                              },
+                              child: Image.asset(
+                                  'assets/images/mountain_marker.png'),
+                            );
+                          },
+                        ),
+                        ...peakMarkers,
+                        ...waterfallMarkers,
+                        ...waterspringMarkers,
+                        ...riverMarkers,
+                        ...postMarkers,
+                      ],
+                    ),
+                  ],
+                );
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
           ),
           Positioned(
             left: 0,
