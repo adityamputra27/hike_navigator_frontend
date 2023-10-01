@@ -45,7 +45,6 @@ dependencies:
   intl: ^0.18.1
   flutter_map: ^5.0.0
   flutter_svg: ^2.0.7
-  latlong2: ^0.9.0
   compass_icon: ^1.0.4
   http: ^1.1.0
   shared_preferences: ^2.2.0
@@ -55,7 +54,7 @@ dependencies:
   flutter_map_marker_popup: ^5.2.0
   location: ^5.0.3
   permission_handler: ^11.0.0
-  geolocator: ^10.1.0
+  mapbox_gl: ^0.16.0
 
 dev_dependencies:
   flutter_test:

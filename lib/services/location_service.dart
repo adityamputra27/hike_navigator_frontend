@@ -24,8 +24,8 @@ class LocationService {
   Future<void> initGeolocator() async {
     location.onLocationChanged.listen((locationData) {
       _locationStreamController.add(UserLocation(
-        latitude: locationData.latitude,
-        longitude: locationData.longitude,
+        latitude: locationData.latitude!,
+        longitude: locationData.longitude!,
         speed: locationData.speed ?? 0,
         heading: locationData.heading ?? 0,
       ));
