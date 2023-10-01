@@ -79,11 +79,11 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
                       state.destinations.map((DestinationsModel destination) {
                     return Column(
                       children: [
-                        MyDestinationCard(
-                          destination: destination,
-                        ),
-                        const SizedBox(
-                          width: 30,
+                        Padding(
+                          padding: const EdgeInsets.only(right: 30),
+                          child: MyDestinationCard(
+                            destination: destination,
+                          ),
                         ),
                       ],
                     );

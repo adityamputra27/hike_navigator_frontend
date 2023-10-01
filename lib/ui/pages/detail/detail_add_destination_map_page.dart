@@ -43,11 +43,11 @@ class _DetailAddDestinationMapPageState
     });
   }
 
-  @override
-  void dispose() {
-    locationService.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   locationService.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -1,15 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_download_page.dart';
-// import 'package:hike_navigator/ui/pages/detail/detail_add_destination_map_page.dart';
+import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/pages/start_destination_map_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class DestinationCard extends StatelessWidget {
+class DestinationCard extends StatefulWidget {
   final MountainsModel mountain;
   final DestinationsModel destination;
 
@@ -17,10 +20,111 @@ class DestinationCard extends StatelessWidget {
       {required this.mountain, required this.destination, super.key});
 
   @override
+  State<DestinationCard> createState() => _DestinationCardState();
+}
+
+class _DestinationCardState extends State<DestinationCard> {
+  @override
   Widget build(BuildContext context) {
-    String imageURL = mountain.mountainImages.isNotEmpty
-        ? API().baseURL + mountain.mountainImages[0].url
+    String imageURL = widget.mountain.mountainImages.isNotEmpty
+        ? API().baseURL + widget.mountain.mountainImages[0].url
         : 'https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/3/0/7/5/235703-6-eng-GB/CEM-CORP-SIC-Food-20142.jpg';
+
+    Future<void> _showDialog(
+        String text, String status, Function() onPressed) async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                defaultRadius,
+              ),
+            ),
+            icon: Image.asset(
+              status == 'success'
+                  ? 'assets/images/check_icon.png'
+                  : 'assets/images/failed_icon.png',
+              width: 45,
+              height: 45,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  text.toString(),
+                  style: GoogleFonts.inter(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: blackColor,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                TextButton(
+                  onPressed: onPressed,
+                  style: TextButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        10,
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    'OK',
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w700,
+                      color: whiteColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
+    void cancelDestination() async {
+      Navigator.pop(context);
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      final result = await API().postRequestWithToken(
+        route: '/climbing-plans/${widget.destination.id}/cancel',
+        payload: {},
+      );
+
+      final response = jsonDecode(result.body);
+      if (response['status'] == 400) {
+        _showDialog(
+          response['message'],
+          'success',
+          () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MainPage(preferences: preferences),
+            ),
+          ),
+        );
+      } else {
+        _showDialog(
+          response['message'],
+          'failed',
+          () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MainPage(preferences: preferences),
+            ),
+          ),
+        );
+      }
+    }
 
     void showBottomModal() {
       showModalBottomSheet(
@@ -59,7 +163,7 @@ class DestinationCard extends StatelessWidget {
                     height: 35,
                   ),
                   Text(
-                    '${destination.mountain.name} - ${destination.mountain.province.name}',
+                    '${widget.destination.mountain.name} - ${widget.destination.mountain.province.name}',
                     style: GoogleFonts.inter(
                       fontSize: 22,
                       fontWeight: bold,
@@ -70,8 +174,8 @@ class DestinationCard extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    DateFormat('dd MMMM yyyy')
-                        .format(DateTime.parse(destination.scheduleDate)),
+                    DateFormat('dd MMMM yyyy').format(
+                        DateTime.parse(widget.destination.scheduleDate)),
                     style: GoogleFonts.inter(
                       fontSize: 18,
                       fontWeight: medium,
@@ -102,8 +206,9 @@ class DestinationCard extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              const DetailAddDestinationDownloadPage()),
+                        builder: (context) =>
+                            const DetailAddDestinationDownloadPage(),
+                      ),
                     );
                   },
                   style: TextButton.styleFrom(
@@ -129,9 +234,7 @@ class DestinationCard extends StatelessWidget {
                   top: 20,
                 ),
                 child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: cancelDestination,
                   style: TextButton.styleFrom(
                     backgroundColor: greyColor,
                     shape: RoundedRectangleBorder(
@@ -160,7 +263,7 @@ class DestinationCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => StartDestinationMapPage(
-              mountain: mountain,
+              mountain: widget.mountain,
             ),
           ),
         );
@@ -188,7 +291,7 @@ class DestinationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    mountain.name,
+                    widget.mountain.name,
                     style: GoogleFonts.inter(
                       fontSize: 24,
                       color: blackColor,
@@ -199,7 +302,7 @@ class DestinationCard extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    mountain.height,
+                    widget.mountain.height,
                     style: GoogleFonts.inter(
                       fontSize: 18,
                       color: blackColor,
@@ -222,7 +325,7 @@ class DestinationCard extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: mountain.province.name.toString(),
+                          text: widget.mountain.province.name.toString(),
                           style: GoogleFonts.inter(
                             fontSize: 16,
                             color: whiteColor,

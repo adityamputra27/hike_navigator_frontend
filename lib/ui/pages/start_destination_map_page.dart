@@ -64,13 +64,13 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           children: [
             MapboxMap(
               initialCameraPosition: _initialCameraPosition,
-              accessToken:
-                  'pk.eyJ1IjoiaGlrZW5hdmlnYXRvcm5ldyIsImEiOiJjbGxoZXRsdnoxOW5wM2ZwamZ2eTBtMWV1In0.jYkxsonNQIn_GsbJorNkEw',
-              onMapCreated: _onMapCreated,
-              myLocationEnabled: true,
-              myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-              myLocationRenderMode: MyLocationRenderMode.COMPASS,
-              minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
+              // accessToken:
+              //     'pk.eyJ1IjoiaGlrZW5hdmlnYXRvcm5ldyIsImEiOiJjbGxoZXRsdnoxOW5wM2ZwamZ2eTBtMWV1In0.jYkxsonNQIn_GsbJorNkEw',
+              // onMapCreated: _onMapCreated,
+              // myLocationEnabled: true,
+              // myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+              // myLocationRenderMode: MyLocationRenderMode.COMPASS,
+              // minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
             ),
           ],
         ),
