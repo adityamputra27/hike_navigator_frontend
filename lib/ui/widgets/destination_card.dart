@@ -206,8 +206,9 @@ class _DestinationCardState extends State<DestinationCard> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            const DetailAddDestinationDownloadPage(),
+                        builder: (context) => StartDestinationMapPage(
+                          mountain: widget.mountain,
+                        ),
                       ),
                     );
                   },

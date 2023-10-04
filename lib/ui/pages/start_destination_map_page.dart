@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
+import 'package:hike_navigator/ui/shared/theme.dart';
 // import 'package:hike_navigator/services/location_service.dart';
 // import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:location/location.dart';
@@ -49,33 +50,36 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
     }
 
     LocationData locationData = await location.getLocation();
-    print('Location: ${locationData.latitude}, ${locationData.longitude}');
   }
 
   _onMapCreated(MapboxMapController controller) async {
-    this.controller = controller;
+    controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        _initialCameraPosition,
+      ),
+    );
+
+    // var markerImage = await loadIma
+    // controller.addImage('marker', bytes);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: [
-            MapboxMap(
-              initialCameraPosition: _initialCameraPosition,
-              // accessToken:
-              //     'pk.eyJ1IjoiaGlrZW5hdmlnYXRvcm5ldyIsImEiOiJjbGxoZXRsdnoxOW5wM2ZwamZ2eTBtMWV1In0.jYkxsonNQIn_GsbJorNkEw',
-              // onMapCreated: _onMapCreated,
-              // myLocationEnabled: true,
-              // myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-              // myLocationRenderMode: MyLocationRenderMode.COMPASS,
-              // minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
-            ),
-          ],
+        child: MapboxMap(
+          initialCameraPosition: _initialCameraPosition,
+          accessToken:
+              'pk.eyJ1IjoiaGlrZW5hdmlnYXRvcm5ldyIsImEiOiJjbGxoZXRsdnoxOW5wM2ZwamZ2eTBtMWV1In0.jYkxsonNQIn_GsbJorNkEw',
+          onMapCreated: _onMapCreated,
+          myLocationEnabled: true,
+          myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+          myLocationRenderMode: MyLocationRenderMode.COMPASS,
+          minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: primaryColor,
         onPressed: () {
           controller.animateCamera(
             CameraUpdate.newCameraPosition(
