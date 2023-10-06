@@ -6,6 +6,7 @@ import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_download_page.dart';
+import 'package:hike_navigator/ui/pages/detail/detail_add_destination_map_page.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/pages/start_destination_map_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
@@ -29,6 +30,8 @@ class _DestinationCardState extends State<DestinationCard> {
     String imageURL = widget.mountain.mountainImages.isNotEmpty
         ? API().baseURL + widget.mountain.mountainImages[0].url
         : 'https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/3/0/7/5/235703-6-eng-GB/CEM-CORP-SIC-Food-20142.jpg';
+
+    DateTime test = DateTime.now();
 
     Future<void> _showDialog(
         String text, String status, Function() onPressed) async {
@@ -206,7 +209,7 @@ class _DestinationCardState extends State<DestinationCard> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => StartDestinationMapPage(
+                        builder: (context) => DetailAddDestinationDownloadPage(
                           mountain: widget.mountain,
                         ),
                       ),
@@ -263,7 +266,7 @@ class _DestinationCardState extends State<DestinationCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => StartDestinationMapPage(
+            builder: (context) => DetailAddDestinationMapPage(
               mountain: widget.mountain,
             ),
           ),

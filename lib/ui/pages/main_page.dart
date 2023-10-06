@@ -118,6 +118,7 @@ class _MainPageState extends State<MainPage> {
                         child: const Icon(
                           Icons.add,
                           size: 30,
+                          color: Colors.white,
                         ),
                       ),
                     ),

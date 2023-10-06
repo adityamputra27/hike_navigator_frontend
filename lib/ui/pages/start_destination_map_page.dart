@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
-import 'package:hike_navigator/ui/shared/theme.dart';
-// import 'package:hike_navigator/services/location_service.dart';
-// import 'package:hike_navigator/ui/shared/theme.dart';
-import 'package:location/location.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:maplibre_gl/mapbox_gl.dart';
 
 class StartDestinationMapPage extends StatefulWidget {
   final MountainsModel mountain;
-
   const StartDestinationMapPage({required this.mountain, super.key});
 
   @override
@@ -17,77 +13,33 @@ class StartDestinationMapPage extends StatefulWidget {
 }
 
 class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
-  late CameraPosition _initialCameraPosition;
-  late MapboxMapController controller;
+  MaplibreMapController? mapController;
 
-  @override
-  void initState() {
-    _initialCameraPosition =
-        const CameraPosition(target: LatLng(-6.820762, 107.142960));
-    checkAndRequestLocationPermission();
-    super.initState();
-  }
-
-  Future<void> checkAndRequestLocationPermission() async {
-    Location location = Location();
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
-
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        return;
-      }
-    }
-
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
-
-    LocationData locationData = await location.getLocation();
-  }
-
-  _onMapCreated(MapboxMapController controller) async {
-    controller.animateCamera(
-      CameraUpdate.newCameraPosition(
-        _initialCameraPosition,
-      ),
-    );
-
-    // var markerImage = await loadIma
-    // controller.addImage('marker', bytes);
+  void _onMapCreated(MaplibreMapController controller) {
+    mapController = controller;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: MapboxMap(
-          initialCameraPosition: _initialCameraPosition,
-          accessToken:
-              'pk.eyJ1IjoiaGlrZW5hdmlnYXRvcm5ldyIsImEiOiJjbGxoZXRsdnoxOW5wM2ZwamZ2eTBtMWV1In0.jYkxsonNQIn_GsbJorNkEw',
-          onMapCreated: _onMapCreated,
-          myLocationEnabled: true,
-          myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-          myLocationRenderMode: MyLocationRenderMode.COMPASS,
-          minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: primaryColor,
-        onPressed: () {
-          controller.animateCamera(
-            CameraUpdate.newCameraPosition(
-              _initialCameraPosition,
+        child: Stack(
+          children: [
+            MaplibreMap(
+              styleString:
+                  'https://tiles.stadiamaps.com/styles/outdoors.json?api_key=8b9c5db3-b674-43f3-8e62-79e5936a6b2f',
+              onMapCreated: _onMapCreated,
+              myLocationEnabled: true,
+              myLocationRenderMode: MyLocationRenderMode.GPS,
+              myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(-6.820762, 107.142960),
+                zoom: 14,
+              ),
+              trackCameraPosition: true,
             ),
-          );
-        },
-        child: const Icon(Icons.my_location),
+          ],
+        ),
       ),
     );
   }

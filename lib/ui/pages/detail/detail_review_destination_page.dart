@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
+import 'package:hike_navigator/ui/pages/detail/detail_add_destination_download_page.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
@@ -67,7 +68,9 @@ class _DetailReviewDestinationPageState
         () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MainPage(preferences: preferences),
+            builder: (context) => DetailAddDestinationDownloadPage(
+              mountain: widget.mountain,
+            ),
           ),
         ),
       );

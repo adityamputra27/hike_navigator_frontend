@@ -54,7 +54,15 @@ dependencies:
   flutter_map_marker_popup: ^5.2.0
   location: ^5.0.3
   permission_handler: ^11.0.0
-  mapbox_gl: ^0.15.0
+  # mapbox_gl:
+  #   git:
+  #     url: https://github.com/srmanc/maps.git
+  #     ref: 7eead7c3fa4b59f553ee15a33ab12e8c564e60ac
+  maplibre_gl:
+    git:
+      url: https://github.com/maplibre/flutter-maplibre-gl.git
+      ref: main
+  geolocator: ^10.1.0
 
 dev_dependencies:
   flutter_test:

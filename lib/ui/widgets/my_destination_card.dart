@@ -97,8 +97,10 @@ class MyDestinationCard extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              const DetailAddDestinationDownloadPage()),
+                        builder: (context) => DetailAddDestinationDownloadPage(
+                          mountain: destination.mountain,
+                        ),
+                      ),
                     );
                   },
                   style: TextButton.styleFrom(
