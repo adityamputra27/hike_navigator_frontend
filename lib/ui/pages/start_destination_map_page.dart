@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:maplibre_gl/mapbox_gl.dart';
 
