@@ -30,8 +30,6 @@ class _DestinationCardState extends State<DestinationCard> {
         ? API().baseURL + widget.mountain.mountainImages[0].url
         : 'https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/3/0/7/5/235703-6-eng-GB/CEM-CORP-SIC-Food-20142.jpg';
 
-    DateTime test = DateTime.now();
-
     Future<void> _showDialog(
         String text, String status, Function() onPressed) async {
       return showDialog<void>(
