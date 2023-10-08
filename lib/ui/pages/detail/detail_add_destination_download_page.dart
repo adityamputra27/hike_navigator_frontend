@@ -1,14 +1,23 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
+import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:maplibre_gl/mapbox_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 class DetailAddDestinationDownloadPage extends StatefulWidget {
+  final DestinationsModel destination;
   final MountainsModel mountain;
-  const DetailAddDestinationDownloadPage({required this.mountain, super.key});
+  const DetailAddDestinationDownloadPage(
+      {required this.mountain, required this.destination, super.key});
 
   @override
   State<DetailAddDestinationDownloadPage> createState() =>
@@ -19,8 +28,6 @@ class _DetailAddDestinationDownloadPageState
     extends State<DetailAddDestinationDownloadPage> {
   double downloadProgress = 0.0;
   bool isDownloading = false;
-  bool isDownloadFinished = false;
-  bool isDownloadFailed = false;
   String? message;
 
   void _onDowloadEvent(DownloadRegionStatus status) async {
@@ -86,7 +93,7 @@ class _DetailAddDestinationDownloadPageState
     }
 
     try {
-      await downloadOfflineRegion(
+      final region = await downloadOfflineRegion(
         regionDefinition,
         metadata: {
           'name': widget.mountain.name,
@@ -95,17 +102,35 @@ class _DetailAddDestinationDownloadPageState
           _onDowloadEvent(status);
         },
       );
+
+      await _saveOfflineDestination(region);
     } catch (e) {
-      print(e);
       setState(() {
+        isDownloading = false;
         _showDialog(
-          'Error download Peta Offline!',
+          'Error download Peta Offline! Pastikan jaringan tidak ada gangguan!',
           'error',
           0,
           () => (),
         );
       });
     }
+  }
+
+  Future<void> _saveOfflineDestination(region) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString('OFFLINE_DESTINATION_${region.id}',
+        jsonEncode(widget.destination.toJson()));
+
+    // image
+    final image = widget.destination.mountain.mountainImages[0].url;
+    var response = await http.get(Uri.parse(image));
+    Directory? externalStorageDirectory = await getExternalStorageDirectory();
+    File file =
+        File(path.join(externalStorageDirectory!.path, path.basename(image)));
+    await file.writeAsBytes(response.bodyBytes);
+
+    preferences.setString('OFFLINE_DESTINATION_IMAGE_${region.id}', file.path);
   }
 
   Future<void> _showDialog(String message, String type, double progress,
@@ -254,7 +279,56 @@ class _DetailAddDestinationDownloadPageState
             ),
           );
         } else {
-          return AlertDialog();
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                defaultRadius,
+              ),
+            ),
+            icon: Image.asset(
+              'assets/images/failed_icon.png',
+              width: 45,
+              height: 45,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  'J',
+                  style: GoogleFonts.inter(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: blackColor,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                TextButton(
+                  onPressed: onPressed,
+                  style: TextButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        10,
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    'OK',
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w700,
+                      color: whiteColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
         }
       },
     );

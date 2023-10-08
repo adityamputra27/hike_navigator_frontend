@@ -5,9 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
-import 'package:hike_navigator/ui/pages/detail/detail_add_destination_download_page.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_map_page.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
+import 'package:hike_navigator/ui/pages/start_destination_map_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,8 +16,11 @@ class DestinationCard extends StatefulWidget {
   final MountainsModel mountain;
   final DestinationsModel destination;
 
-  const DestinationCard(
-      {required this.mountain, required this.destination, super.key});
+  const DestinationCard({
+    required this.mountain,
+    required this.destination,
+    super.key,
+  });
 
   @override
   State<DestinationCard> createState() => _DestinationCardState();
@@ -206,7 +209,7 @@ class _DestinationCardState extends State<DestinationCard> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DetailAddDestinationDownloadPage(
+                        builder: (context) => StartDestinationMapPage(
                           mountain: widget.mountain,
                         ),
                       ),

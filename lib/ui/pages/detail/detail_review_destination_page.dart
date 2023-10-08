@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
+import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_download_page.dart';
-import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,28 +62,30 @@ class _DetailReviewDestinationPageState
 
     final response = jsonDecode(result.body);
     if (response['status'] == 400) {
-      _showDialog(
-        response['message'],
-        'success',
-        () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DetailAddDestinationDownloadPage(
-              mountain: widget.mountain,
+      final data = response['data'];
+
+      if (data != null) {
+        final destination = DestinationsModel.fromJson(data);
+        _showDialog(
+          response['message'],
+          'success',
+          () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetailAddDestinationDownloadPage(
+                mountain: widget.mountain,
+                destination: destination,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
+      // final data = response['data'];
     } else {
       _showDialog(
         response['message'],
         'failed',
-        () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MainPage(preferences: preferences),
-          ),
-        ),
+        () => Navigator.pop(context),
       );
     }
   }

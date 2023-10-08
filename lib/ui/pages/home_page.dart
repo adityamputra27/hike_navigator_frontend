@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/cubit/destinations_cubit.dart';
-import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/models/province_model.dart';
 import 'package:hike_navigator/services/configuration_service.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/chip_filter_item.dart';
-import 'package:hike_navigator/ui/widgets/destination_card.dart';
+import 'package:maplibre_gl/mapbox_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,6 +18,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<OfflineRegion>? offlineMaps;
+
   String searchQuery = '';
   int searchProvince = 0;
 
@@ -50,6 +51,7 @@ class _HomePageState extends State<HomePage> {
         .read<DestinationsCubit>()
         .fetchDestinations(searchQuery, searchProvince);
     fetchProvinces();
+    _getOfflineMap();
     super.initState();
   }
 
@@ -75,6 +77,13 @@ class _HomePageState extends State<HomePage> {
         .read<DestinationsCubit>()
         .fetchDestinations(searchQuery, searchProvince);
     Navigator.pop(context);
+  }
+
+  _getOfflineMap() async {
+    final regions = await getListOfRegions();
+    setState(() {
+      offlineMaps = regions;
+    });
   }
 
   @override
@@ -341,71 +350,82 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget destination() {
-      return BlocConsumer<DestinationsCubit, DestinationsState>(
-        builder: (context, state) {
-          if (state is DestinationsSuccess) {
-            if (state.destinations.isNotEmpty) {
-              return Container(
-                margin: EdgeInsets.only(
-                  top: 40,
-                  left: defaultSpace,
-                  right: defaultSpace,
-                ),
-                child: Column(
-                  children:
-                      state.destinations.map((DestinationsModel destination) {
-                    return Column(
-                      children: [
-                        DestinationCard(
-                          mountain: destination.mountain,
-                          destination: destination,
-                        ),
-                        const SizedBox(
-                          height: 35,
-                        ),
-                      ],
-                    );
-                  }).toList(),
-                ),
-              );
-            } else {
-              return Container(
-                margin: EdgeInsets.only(
+      return offlineMaps != null
+          ? Container(
+              // margin: EdgeInsets.only(
+              //   top: 40,
+              //   left: defaultSpace,
+              //   right: defaultSpace,
+              // ),
+              // child: Column(
+              //   children: offlineMaps!.map((offlineMap) {
+              //     return DestinationCard(
+              //       offlineMap: offlineMap,
+              //     );
+              //   }).toList(),
+              // ),
+              )
+          : Center(
+              child: Container(
+                margin: const EdgeInsets.only(
                   top: 50,
-                  left: defaultSpace,
-                  right: defaultSpace,
                 ),
-                child: Text(
-                  "Oopps... you don't have any destination!",
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    fontWeight: semiBold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              );
-            }
-          }
-          return Center(
-            child: Container(
-              margin: const EdgeInsets.only(
-                top: 50,
-              ),
-              child: const CircularProgressIndicator(),
-            ),
-          );
-        },
-        listener: (context, state) {
-          if (state is DestinationsFailed) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.redAccent,
-                content: Text(state.error),
+                child: const CircularProgressIndicator(),
               ),
             );
-          }
-        },
-      );
+
+      // return BlocConsumer<DestinationsCubit, DestinationsState>(
+      //   builder: (context, state) {
+      //     if (state is DestinationsSuccess) {
+      //       if (state.destinations.isNotEmpty) {
+      //         return Container(
+      //           margin: EdgeInsets.only(
+      //             top: 40,
+      //             left: defaultSpace,
+      //             right: defaultSpace,
+      //           ),
+      //           child: Column(
+      //             children: [],
+      //           ),
+      //         );
+      //       } else {
+      //         return Container(
+      //           margin: EdgeInsets.only(
+      //             top: 50,
+      //             left: defaultSpace,
+      //             right: defaultSpace,
+      //           ),
+      //           child: Text(
+      //             "Oopps... you don't have any destination!",
+      //             style: GoogleFonts.inter(
+      //               fontSize: 14,
+      //               fontWeight: semiBold,
+      //             ),
+      //             textAlign: TextAlign.center,
+      //           ),
+      //         );
+      //       }
+      //     }
+      //     return Center(
+      //       child: Container(
+      //         margin: const EdgeInsets.only(
+      //           top: 50,
+      //         ),
+      //         child: const CircularProgressIndicator(),
+      //       ),
+      //     );
+      //   },
+      //   listener: (context, state) {
+      //     if (state is DestinationsFailed) {
+      //       ScaffoldMessenger.of(context).showSnackBar(
+      //         SnackBar(
+      //           backgroundColor: Colors.redAccent,
+      //           content: Text(state.error),
+      //         ),
+      //       );
+      //     }
+      //   },
+      // );
     }
 
     return Scaffold(
