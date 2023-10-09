@@ -29,8 +29,21 @@ class TrackModel extends Equatable {
       longitude: json['longitude'],
       geojson: json['geojson'],
       coordinates: json['coordinates'],
-      startLatitude: json['start_latitude'],
-      startLongitude: json['start_longitude'],
+      startLatitude: json['start_latitude'] ?? '',
+      startLongitude: json['start_longitude'] ?? '',
+    );
+  }
+
+  factory TrackModel.fromJsonWithPreferences(Map<String, dynamic> json) {
+    return TrackModel(
+      id: json['id'].toString(),
+      title: json['title'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+      geojson: json['geojson'],
+      coordinates: json['coordinates'],
+      startLatitude: json['startLatitude'] ?? '',
+      startLongitude: json['startLongitude'] ?? '',
     );
   }
 
@@ -39,6 +52,10 @@ class TrackModel extends Equatable {
         'title': title,
         'latitude': latitude,
         'longitude': longitude,
+        'geojson': geojson,
+        'coordinates': coordinates,
+        'startLatitude': startLatitude,
+        'startLongitude': startLongitude,
       };
 
   @override

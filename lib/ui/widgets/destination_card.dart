@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,15 +11,16 @@ import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/pages/start_destination_map_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
+import 'package:maplibre_gl/mapbox_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DestinationCard extends StatefulWidget {
-  final MountainsModel mountain;
   final DestinationsModel destination;
+  final OfflineRegion offlineMap;
 
   const DestinationCard({
-    required this.mountain,
     required this.destination,
+    required this.offlineMap,
     super.key,
   });
 
@@ -27,11 +29,30 @@ class DestinationCard extends StatefulWidget {
 }
 
 class _DestinationCardState extends State<DestinationCard> {
+  File? offlineSaveImage;
+
+  @override
+  void initState() {
+    loadOfflineSaveImage();
+    super.initState();
+  }
+
+  void loadOfflineSaveImage() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    final path = preferences
+        .getString('OFFLINE_DESTINATION_IMAGE_${widget.offlineMap.id}');
+    if (path != null) {
+      setState(() {
+        offlineSaveImage = File(path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    String imageURL = widget.mountain.mountainImages.isNotEmpty
-        ? API().baseURL + widget.mountain.mountainImages[0].url
-        : 'https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/3/0/7/5/235703-6-eng-GB/CEM-CORP-SIC-Food-20142.jpg';
+    // String imageURL = widget.mountain.mountainImages.isNotEmpty
+    //     ? API().baseURL + widget.mountain.mountainImages[0].url
+    //     : 'https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/3/0/7/5/235703-6-eng-GB/CEM-CORP-SIC-Food-20142.jpg';
 
     Future<void> _showDialog(
         String text, String status, Function() onPressed) async {
@@ -210,7 +231,7 @@ class _DestinationCardState extends State<DestinationCard> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => StartDestinationMapPage(
-                          mountain: widget.mountain,
+                          mountain: widget.destination.mountain,
                         ),
                       ),
                     );
@@ -267,7 +288,7 @@ class _DestinationCardState extends State<DestinationCard> {
           context,
           MaterialPageRoute(
             builder: (context) => DetailAddDestinationMapPage(
-              mountain: widget.mountain,
+              mountain: widget.destination.mountain,
             ),
           ),
         );
@@ -277,7 +298,7 @@ class _DestinationCardState extends State<DestinationCard> {
         height: 200,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage(imageURL),
+            image: FileImage(offlineSaveImage!),
             fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.circular(
@@ -295,7 +316,7 @@ class _DestinationCardState extends State<DestinationCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.mountain.name,
+                    widget.destination.mountain.name,
                     style: GoogleFonts.inter(
                       fontSize: 24,
                       color: blackColor,
@@ -306,7 +327,7 @@ class _DestinationCardState extends State<DestinationCard> {
                     height: 5,
                   ),
                   Text(
-                    widget.mountain.height,
+                    widget.destination.mountain.height,
                     style: GoogleFonts.inter(
                       fontSize: 18,
                       color: blackColor,
@@ -329,7 +350,8 @@ class _DestinationCardState extends State<DestinationCard> {
                           ),
                         ),
                         TextSpan(
-                          text: widget.mountain.province.name.toString(),
+                          text: widget.destination.mountain.province.name
+                              .toString(),
                           style: GoogleFonts.inter(
                             fontSize: 16,
                             color: whiteColor,

@@ -26,6 +26,15 @@ class MountainPeaksModel extends Equatable {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'status': status,
+      'peak': peak.toJson(),
+      'tracks': tracks.map((e) => e.toJson()).toList(),
+    };
+  }
+
   @override
   List<Object?> get props => [id, status, peak];
 }

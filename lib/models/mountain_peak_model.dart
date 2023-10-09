@@ -13,12 +13,42 @@ class MountainPeakModel extends Equatable {
   });
 
   factory MountainPeakModel.fromJson(Map<String, dynamic> json) {
+    PeakModel peak;
+
+    if (json['peak'] != null) {
+      peak = PeakModel.fromJson(json['peak']);
+    } else {
+      peak = PeakModel.fromJson(const {});
+    }
+
     return MountainPeakModel(
       id: json['id'].toString(),
-      status: json['status'],
-      peak: PeakModel.fromJson(json['peak']),
+      status: json['status'] ?? '',
+      peak: peak,
     );
   }
+
+  factory MountainPeakModel.fromJsonPreferences(Map<String, dynamic> json) {
+    PeakModel peak;
+
+    if (json['peak'] != null) {
+      peak = PeakModel.fromJson(json['peak']);
+    } else {
+      peak = PeakModel.fromJson(const {});
+    }
+
+    return MountainPeakModel(
+      id: json['id'].toString(),
+      status: json['status'] ?? '',
+      peak: peak,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'status': status,
+        'peak': peak.toJson(),
+      };
 
   @override
   List<Object?> get props => [id, status, peak];

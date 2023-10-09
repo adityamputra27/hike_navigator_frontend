@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
@@ -16,8 +17,11 @@ import 'package:path/path.dart' as path;
 class DetailAddDestinationDownloadPage extends StatefulWidget {
   final DestinationsModel destination;
   final MountainsModel mountain;
-  const DetailAddDestinationDownloadPage(
-      {required this.mountain, required this.destination, super.key});
+  const DetailAddDestinationDownloadPage({
+    required this.mountain,
+    required this.destination,
+    super.key,
+  });
 
   @override
   State<DetailAddDestinationDownloadPage> createState() =>
@@ -29,6 +33,7 @@ class _DetailAddDestinationDownloadPageState
   double downloadProgress = 0.0;
   bool isDownloading = false;
   String? message;
+  OfflineRegion? region;
 
   void _onDowloadEvent(DownloadRegionStatus status) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -38,6 +43,8 @@ class _DetailAddDestinationDownloadPageState
         downloadProgress = 1.0;
       });
       if ((downloadProgress * 100).round() == 100) {
+        await _saveOfflineDestination(region);
+
         _showDialog(
           'Peta Offline Berhasil Di unduh!',
           'success',
@@ -56,10 +63,22 @@ class _DetailAddDestinationDownloadPageState
       setState(() {
         downloadProgress = status.progress / 100;
       });
+    } else if (status is Error) {
+      setState(() {
+        isDownloading = false;
+        _showDialog(
+            'Gagal mengunduh Peta Offline. Silahkan coba lagi', 'error', 0, () {
+          Navigator.pop(context);
+          _downloadRegion();
+        });
+      });
     }
   }
 
   Future<void> _downloadRegion() async {
+    print(widget.destination);
+    print(widget.destination.toJson());
+    print(jsonEncode(widget.destination.toJson()));
     if (isDownloading) return;
     setState(() {
       isDownloading = true;
@@ -93,7 +112,7 @@ class _DetailAddDestinationDownloadPageState
     }
 
     try {
-      final region = await downloadOfflineRegion(
+      final downloadedRegion = await downloadOfflineRegion(
         regionDefinition,
         metadata: {
           'name': widget.mountain.name,
@@ -103,17 +122,11 @@ class _DetailAddDestinationDownloadPageState
         },
       );
 
-      await _saveOfflineDestination(region);
-    } catch (e) {
       setState(() {
-        isDownloading = false;
-        _showDialog(
-          'Error download Peta Offline! Pastikan jaringan tidak ada gangguan!',
-          'error',
-          0,
-          () => (),
-        );
+        region = downloadedRegion;
       });
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -123,7 +136,8 @@ class _DetailAddDestinationDownloadPageState
         jsonEncode(widget.destination.toJson()));
 
     // image
-    final image = widget.destination.mountain.mountainImages[0].url;
+    final image =
+        API().baseURL + widget.destination.mountain.mountainImages[0].url;
     var response = await http.get(Uri.parse(image));
     Directory? externalStorageDirectory = await getExternalStorageDirectory();
     File file =
@@ -297,7 +311,7 @@ class _DetailAddDestinationDownloadPageState
                   height: 5,
                 ),
                 Text(
-                  'J',
+                  message,
                   style: GoogleFonts.inter(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

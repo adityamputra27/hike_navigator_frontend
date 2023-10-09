@@ -17,11 +17,19 @@ class PeakModel extends Equatable {
 
   factory PeakModel.fromJson(Map<String, dynamic> json) => PeakModel(
         id: json['id'].toString(),
-        name: json['name'],
-        height: json['height'],
-        latitude: json['latitude'],
-        longitude: json['longitude'],
+        name: json['name'] ?? '',
+        height: json['height'] ?? '',
+        latitude: json['latitude'] ?? '',
+        longitude: json['longitude'] ?? '',
       );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'height': height,
+        'latitude': latitude,
+        'longitude': longitude,
+      };
 
   @override
   List<Object?> get props => [id, name, height, latitude, longitude];

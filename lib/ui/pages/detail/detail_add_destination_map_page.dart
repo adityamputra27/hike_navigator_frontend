@@ -32,6 +32,12 @@ class _DetailAddDestinationMapPageState
   LocationService locationService = LocationService();
   Location location = Location();
 
+  // @override
+  // void dispose() {
+  //   locationService.dispose();
+  //   super.dispose();
+  // }
+
   @override
   void initState() {
     locationService.requestPermission();
@@ -41,12 +47,6 @@ class _DetailAddDestinationMapPageState
         _currentLocation = locationData;
       });
     });
-  }
-
-  @override
-  void dispose() {
-    locationService.dispose();
-    super.dispose();
   }
 
   @override

@@ -21,24 +21,52 @@ class DestinationsModel extends Equatable {
   });
 
   factory DestinationsModel.fromJson(Map<String, dynamic> json) {
+    MountainPeakModel mountainPeak;
+
+    if (json['mountain_peak'] != null) {
+      mountainPeak = MountainPeakModel.fromJson(json['mountain_peak']);
+    } else {
+      mountainPeak = MountainPeakModel.fromJson(const {});
+    }
+
     return DestinationsModel(
       id: json['id'].toString(),
       scheduleDate: json['schedule_date'].toString(),
       mountain: MountainsModel.fromJson(json['mountain']),
       status: json['status'],
-      mountainPeak: MountainPeakModel.fromJson(json['mountain_peak']),
+      mountainPeak: mountainPeak,
       track: TrackModel.fromJson(json['track']),
+    );
+  }
+
+  factory DestinationsModel.fromJsonWithPreferences(Map<String, dynamic> json) {
+    MountainPeakModel mountainPeak;
+
+    if (json['mountainPeak'] != null) {
+      mountainPeak =
+          MountainPeakModel.fromJsonPreferences(json['mountainPeak']);
+    } else {
+      mountainPeak = MountainPeakModel.fromJsonPreferences(const {});
+    }
+
+    return DestinationsModel(
+      id: json['id'].toString(),
+      scheduleDate: json['scheduleDate'].toString(),
+      mountain: MountainsModel.fromJson(json['mountain']),
+      status: json['status'],
+      mountainPeak: mountainPeak,
+      track: TrackModel.fromJsonWithPreferences(json['track']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'schedule_date': scheduleDate,
-      'mountain': mountain,
+      'scheduleDate': scheduleDate,
+      'mountain': mountain.toJson(),
       'status': status,
-      'mountain_peak': mountainPeak,
-      'track': track,
+      'mountainPeak': mountainPeak.toJson(),
+      'track': track.toJson(),
     };
   }
 

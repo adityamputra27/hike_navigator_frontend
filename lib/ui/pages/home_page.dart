@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/cubit/destinations_cubit.dart';
+import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/models/province_model.dart';
 import 'package:hike_navigator/services/configuration_service.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/chip_filter_item.dart';
+import 'package:hike_navigator/ui/widgets/destination_card.dart';
 import 'package:maplibre_gl/mapbox_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,6 +23,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<OfflineRegion>? offlineMaps;
+  SharedPreferences? preferencesLocal;
 
   String searchQuery = '';
   int searchProvince = 0;
@@ -52,6 +57,7 @@ class _HomePageState extends State<HomePage> {
         .fetchDestinations(searchQuery, searchProvince);
     fetchProvinces();
     _getOfflineMap();
+
     super.initState();
   }
 
@@ -80,9 +86,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   _getOfflineMap() async {
+    SharedPreferences? preferences = await SharedPreferences.getInstance();
     final regions = await getListOfRegions();
     setState(() {
       offlineMaps = regions;
+      preferencesLocal = preferences;
     });
   }
 
@@ -352,19 +360,28 @@ class _HomePageState extends State<HomePage> {
     Widget destination() {
       return offlineMaps != null
           ? Container(
-              // margin: EdgeInsets.only(
-              //   top: 40,
-              //   left: defaultSpace,
-              //   right: defaultSpace,
-              // ),
-              // child: Column(
-              //   children: offlineMaps!.map((offlineMap) {
-              //     return DestinationCard(
-              //       offlineMap: offlineMap,
-              //     );
-              //   }).toList(),
-              // ),
-              )
+              margin: EdgeInsets.only(
+                top: 40,
+                left: defaultSpace,
+                right: defaultSpace,
+              ),
+              child: Column(
+                children: offlineMaps!.map((offlineMap) {
+                  var prefDestination = preferencesLocal
+                      ?.getString('OFFLINE_DESTINATION_${offlineMap.id}');
+
+                  final offlineDestination =
+                      DestinationsModel.fromJson(jsonDecode(prefDestination!));
+
+                  print(prefDestination);
+
+                  return DestinationCard(
+                    offlineMap: offlineMap,
+                    destination: offlineDestination,
+                  );
+                }).toList(),
+              ),
+            )
           : Center(
               child: Container(
                 margin: const EdgeInsets.only(
