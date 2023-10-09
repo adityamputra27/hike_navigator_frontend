@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
-import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_map_page.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/pages/start_destination_map_page.dart';
@@ -50,10 +49,6 @@ class _DestinationCardState extends State<DestinationCard> {
 
   @override
   Widget build(BuildContext context) {
-    // String imageURL = widget.mountain.mountainImages.isNotEmpty
-    //     ? API().baseURL + widget.mountain.mountainImages[0].url
-    //     : 'https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/3/0/7/5/235703-6-eng-GB/CEM-CORP-SIC-Food-20142.jpg';
-
     Future<void> _showDialog(
         String text, String status, Function() onPressed) async {
       return showDialog<void>(
