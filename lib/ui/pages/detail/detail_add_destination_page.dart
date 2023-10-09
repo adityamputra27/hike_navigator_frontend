@@ -381,7 +381,7 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                   Column(
                     children: mountainPeaks.map((mountainPeak) {
                       List<Widget> trackWidgets = [];
-                      if (mountainPeak.tracks.length > 0 &&
+                      if (mountainPeak.tracks.isNotEmpty &&
                           mountainPeak.tracks.isNotEmpty) {
                         trackWidgets = mountainPeak.tracks.map((track) {
                           return DetailTrackItem(

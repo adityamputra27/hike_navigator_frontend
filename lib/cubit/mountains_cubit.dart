@@ -10,8 +10,6 @@ class MountainsCubit extends Cubit<MountainsState> {
   MountainsCubit() : super(MountainsInitial());
 
   void fetchMountains(String? keyword, int? provinceId) async {
-    print(keyword);
-
     try {
       emit(MountainsLoading());
 

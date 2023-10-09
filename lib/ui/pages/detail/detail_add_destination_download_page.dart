@@ -76,9 +76,6 @@ class _DetailAddDestinationDownloadPageState
   }
 
   Future<void> _downloadRegion() async {
-    print(widget.destination);
-    print(widget.destination.toJson());
-    print(jsonEncode(widget.destination.toJson()));
     if (isDownloading) return;
     setState(() {
       isDownloading = true;

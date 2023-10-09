@@ -371,9 +371,8 @@ class _HomePageState extends State<HomePage> {
                       ?.getString('OFFLINE_DESTINATION_${offlineMap.id}');
 
                   final offlineDestination =
-                      DestinationsModel.fromJson(jsonDecode(prefDestination!));
-
-                  print(prefDestination);
+                      DestinationsModel.fromJsonWithPreferences(
+                          jsonDecode(prefDestination!));
 
                   return DestinationCard(
                     offlineMap: offlineMap,
