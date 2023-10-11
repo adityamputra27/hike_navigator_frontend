@@ -1,7 +1,4 @@
 import 'dart:convert';
-
-import 'package:logger/logger.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,7 +22,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<OfflineRegion>? offlineMaps;
-  SharedPreferences? preferencesLocal;
 
   String searchQuery = '';
   int searchProvince = 0;
@@ -34,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   List<ProvinceModel> provinces = [];
 
   void fetchProvinces() async {
+    if (!mounted) return;
     try {
       List<ProvinceModel> fetchedProvinces =
           await ConfigurationService().fetchProvinces();
@@ -41,7 +38,9 @@ class _HomePageState extends State<HomePage> {
         provinces = fetchedProvinces;
       });
     } catch (e) {
-      print('Error fetching provinces: $e');
+      if (mounted) {
+        print('Error fetching provinces: $e');
+      }
     }
   }
 
@@ -88,11 +87,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   _getOfflineMap() async {
-    SharedPreferences? preferences = await SharedPreferences.getInstance();
-    final regions = await getListOfRegions();
+    List<OfflineRegion> regions = await getListOfRegions();
     setState(() {
       offlineMaps = regions;
-      preferencesLocal = preferences;
     });
   }
 
@@ -360,7 +357,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget destination() {
-      return offlineMaps != null
+      return offlineMaps != null && widget.preferences != null
           ? Container(
               margin: EdgeInsets.only(
                 top: 40,
@@ -369,23 +366,23 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Column(
                 children: offlineMaps!.map((offlineMap) {
-                  var prefDestination = preferencesLocal
-                      ?.getString('OFFLINE_DESTINATION_${offlineMap.id}');
-                  final offlineDestination =
-                      DestinationsModel.fromJsonWithPreferences(
-                          jsonDecode(prefDestination!));
+                  var prefDestination = widget.preferences!
+                      .getString('OFFLINE_DESTINATION_${offlineMap.id}');
 
                   if (prefDestination != null) {
+                    final offlineDestination =
+                        DestinationsModel.fromJsonWithPreferences(
+                            jsonDecode(prefDestination));
                     if (offlineDestination != null) {
                       return DestinationCard(
                         offlineMap: offlineMap,
                         destination: offlineDestination,
                       );
                     } else {
-                      return const SizedBox();
+                      return SizedBox();
                     }
                   } else {
-                    return const SizedBox();
+                    return SizedBox();
                   }
                 }).toList(),
               ),

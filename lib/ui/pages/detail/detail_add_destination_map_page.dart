@@ -164,7 +164,7 @@ class _DetailAddDestinationMapPageState
                       double.parse(widget.mountain.longitude),
                     ),
                   ),
-                  children: [
+                  nonRotatedChildren: [
                     TileLayer(
                       urlTemplate:
                           'https://api.mapbox.com/styles/v1/hikenavigatornew/cllhutmqy017e01pb2626daaw/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaGlrZW5hdmlnYXRvcm5ldyIsImEiOiJjbGxoZXRsdnoxOW5wM2ZwamZ2eTBtMWV1In0.jYkxsonNQIn_GsbJorNkEw',

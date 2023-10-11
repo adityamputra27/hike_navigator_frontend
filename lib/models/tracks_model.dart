@@ -72,12 +72,12 @@ class TracksModel extends Equatable {
 
     return TracksModel(
       id: json['id'].toString(),
-      title: json['title'],
-      latitude: json['latitude'],
-      longitude: json['longitude'],
+      title: json['title'].toString(),
+      latitude: json['latitude'].toString(),
+      longitude: json['longitude'].toString(),
       coordinates: json['coordinates'],
-      startLatitude: json['start_latitude'],
-      startLongitude: json['start_longitude'],
+      startLatitude: json['start_latitude'].toString(),
+      startLongitude: json['start_longitude'].toString(),
       marks: marks,
       waterfalls: waterfalls,
       watersprings: watersprings,

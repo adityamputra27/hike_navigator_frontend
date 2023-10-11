@@ -125,17 +125,31 @@ class MountainsModel extends Equatable {
       mountainPosts = [];
     }
 
+    CityModel city;
+    if (json['city'] != null) {
+      city = CityModel.fromJson(json['city']);
+    } else {
+      city = CityModel.fromJson(const {});
+    }
+
+    ProvinceModel province;
+    if (json['province'] != null) {
+      province = ProvinceModel.fromJson(json['province']);
+    } else {
+      province = ProvinceModel.fromJson(const {});
+    }
+
     return MountainsModel(
       id: json['id'].toString(),
-      name: json['name'].toString(),
-      latitude: json['latitude'].toString(),
-      longitude: json['longitude'].toString(),
-      isMapOffline: json['is_map_offline'].toString(),
-      city: CityModel.fromJson(json['city']),
-      province: ProvinceModel.fromJson(json['province']),
-      height: json['height'].toString(),
-      status: json['status'].toString(),
-      description: json['description'].toString(),
+      name: json['name'] ?? '',
+      latitude: json['latitude'] ?? '',
+      longitude: json['longitude'] ?? '',
+      isMapOffline: json['is_map_offline'] ?? '',
+      city: city,
+      province: province,
+      height: json['height'] ?? '',
+      status: json['status'] ?? '',
+      description: json['description'] ?? '',
       mountainImages: mountainImages,
       mountainPeaks: mountainPeaks,
       mountainTracks: mountainTracks,

@@ -36,6 +36,7 @@ class _DetailAddDestinationDownloadPageState
   OfflineRegion? region;
 
   void _onDowloadEvent(DownloadRegionStatus status) async {
+    if (!mounted) return;
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     if (status is Success) {
@@ -83,12 +84,12 @@ class _DetailAddDestinationDownloadPageState
 
     final bounds = LatLngBounds(
       southwest: LatLng(
-        double.parse(widget.mountain.latitude) - 1,
-        double.parse(widget.mountain.longitude) - 1,
+        double.parse(widget.mountain.latitude),
+        double.parse(widget.mountain.longitude),
       ),
       northeast: LatLng(
-        double.parse(widget.mountain.latitude) + 1,
-        double.parse(widget.mountain.longitude) + 1,
+        double.parse(widget.mountain.latitude),
+        double.parse(widget.mountain.longitude),
       ),
     );
 
@@ -133,8 +134,8 @@ class _DetailAddDestinationDownloadPageState
         jsonEncode(widget.destination.toJson()));
 
     // image
-    final image =
-        API().baseURL + widget.destination.mountain.mountainImages[0].url;
+    final image = API().baseURL + widget.mountain.mountainImages[0].url;
+
     var response = await http.get(Uri.parse(image));
     Directory? externalStorageDirectory = await getExternalStorageDirectory();
     File file =

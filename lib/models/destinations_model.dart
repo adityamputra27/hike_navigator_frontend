@@ -20,6 +20,25 @@ class DestinationsModel extends Equatable {
     required this.track,
   });
 
+  factory DestinationsModel.fromJsonRequest(Map<String, dynamic> json) {
+    MountainPeakModel mountainPeak;
+
+    if (json['mountain_peak'] != null) {
+      mountainPeak = MountainPeakModel.fromJson(json['mountain_peak']);
+    } else {
+      mountainPeak = MountainPeakModel.fromJson(const {});
+    }
+
+    return DestinationsModel(
+      id: json['id'].toString(),
+      scheduleDate: json['schedule_date'].toString(),
+      mountain: MountainsModel.fromJson(json['mountain']),
+      status: json['status'],
+      mountainPeak: mountainPeak,
+      track: TrackModel.fromJson(json['track']),
+    );
+  }
+
   factory DestinationsModel.fromJson(Map<String, dynamic> json) {
     MountainPeakModel mountainPeak;
 

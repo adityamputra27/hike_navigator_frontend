@@ -65,7 +65,7 @@ class _DetailReviewDestinationPageState
       final data = response['data'];
 
       if (data != null) {
-        final destination = DestinationsModel.fromJson(data);
+        final destination = DestinationsModel.fromJsonRequest(data);
         _showDialog(
           response['message'],
           'success',
@@ -80,7 +80,6 @@ class _DetailReviewDestinationPageState
           ),
         );
       }
-      // final data = response['data'];
     } else {
       _showDialog(
         response['message'],

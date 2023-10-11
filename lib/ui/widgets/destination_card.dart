@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:async';
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
@@ -30,9 +32,27 @@ class DestinationCard extends StatefulWidget {
 class _DestinationCardState extends State<DestinationCard> {
   File? offlineSaveImage;
 
+  bool isOnline = false;
+  Future checkConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isOnline = true;
+        });
+      }
+    } on SocketException catch (_) {
+      setState(() {
+        isOnline = false;
+      });
+    }
+  }
+
   @override
   void initState() {
     loadOfflineSaveImage();
+    checkConnection();
+
     super.initState();
   }
 
@@ -47,102 +67,114 @@ class _DestinationCardState extends State<DestinationCard> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    print(widget.destination.mountain);
-
-    Future<void> _showDialog(
-        String text, String status, Function() onPressed) async {
-      return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                defaultRadius,
+  Future<void> _showDialog(
+      String text, String status, Function() onPressed) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              defaultRadius,
+            ),
+          ),
+          icon: Image.asset(
+            status == 'success'
+                ? 'assets/images/check_icon.png'
+                : 'assets/images/failed_icon.png',
+            width: 45,
+            height: 45,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                height: 5,
               ),
-            ),
-            icon: Image.asset(
-              status == 'success'
-                  ? 'assets/images/check_icon.png'
-                  : 'assets/images/failed_icon.png',
-              width: 45,
-              height: 45,
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(
-                  height: 5,
+              Text(
+                text.toString(),
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: blackColor,
                 ),
-                Text(
-                  text.toString(),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              TextButton(
+                onPressed: onPressed,
+                style: TextButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      10,
+                    ),
+                  ),
+                ),
+                child: Text(
+                  'OK',
                   style: GoogleFonts.inter(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: blackColor,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                TextButton(
-                  onPressed: onPressed,
-                  style: TextButton.styleFrom(
-                    backgroundColor: primaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        10,
-                      ),
-                    ),
-                  ),
-                  child: Text(
-                    'OK',
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w700,
-                      color: whiteColor,
-                    ),
+                    fontWeight: FontWeight.w700,
+                    color: whiteColor,
                   ),
                 ),
-              ],
-            ),
-          );
-        },
-      );
-    }
-
-    void cancelDestination() async {
-      Navigator.pop(context);
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      final result = await API().postRequestWithToken(
-        route: '/climbing-plans/${widget.destination.id}/cancel',
-        payload: {},
-      );
-
-      final response = jsonDecode(result.body);
-      if (response['status'] == 400) {
-        _showDialog(
-          response['message'],
-          'success',
-          () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainPage(preferences: preferences),
-            ),
+              ),
+            ],
           ),
         );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    void cancelDestination() async {
+      Navigator.pop(context);
+      if (isOnline == true) {
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        final result = await API().postRequestWithToken(
+          route: '/climbing-plans/${widget.destination.id}/cancel',
+          payload: {},
+        );
+
+        final response = jsonDecode(result.body);
+        if (response['status'] == 400) {
+          preferences.remove('OFFLINE_DESTINATION_${widget.offlineMap.id}');
+          preferences
+              .remove('OFFLINE_DESTINATION_IMAGE_${widget.offlineMap.id}');
+
+          _showDialog(
+            response['message'],
+            'success',
+            () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainPage(preferences: preferences),
+                ),
+              )
+            },
+          );
+        } else {
+          _showDialog(
+            response['message'],
+            'failed',
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MainPage(preferences: preferences),
+              ),
+            ),
+          );
+        }
       } else {
         _showDialog(
-          response['message'],
+          'No internet connection',
           'failed',
-          () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainPage(preferences: preferences),
-            ),
-          ),
+          () => Navigator.pop(context),
         );
       }
     }
@@ -280,7 +312,8 @@ class _DestinationCardState extends State<DestinationCard> {
       );
     }
 
-    if (widget.destination != null) {
+    if (widget.destination != null && widget.offlineMap != null) {
+      // return Text(widget.destination.id);
       return GestureDetector(
         onTap: () {
           Navigator.push(
@@ -296,10 +329,12 @@ class _DestinationCardState extends State<DestinationCard> {
           width: double.infinity,
           height: 200,
           decoration: BoxDecoration(
-            image: DecorationImage(
-              image: FileImage(offlineSaveImage!),
-              fit: BoxFit.cover,
-            ),
+            image: offlineSaveImage != null
+                ? DecorationImage(
+                    image: FileImage(offlineSaveImage!),
+                    fit: BoxFit.cover,
+                  )
+                : null,
             borderRadius: BorderRadius.circular(
               25,
             ),
