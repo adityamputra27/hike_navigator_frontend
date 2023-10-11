@@ -312,82 +312,113 @@ class _DestinationCardState extends State<DestinationCard> {
       );
     }
 
-    if (widget.destination != null && widget.offlineMap != null) {
-      // return Text(widget.destination.id);
-      return GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DetailAddDestinationMapPage(
-                mountain: widget.destination.mountain,
-              ),
-            ),
-          );
-        },
-        child: Container(
-          width: double.infinity,
-          height: 200,
-          decoration: BoxDecoration(
-            image: offlineSaveImage != null
-                ? DecorationImage(
-                    image: FileImage(offlineSaveImage!),
-                    fit: BoxFit.cover,
-                  )
-                : null,
-            borderRadius: BorderRadius.circular(
-              25,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailAddDestinationMapPage(
+              mountain: widget.destination.mountain,
             ),
           ),
-          child: Container(
-            margin:
-                const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.destination.mountain.name,
-                      style: GoogleFonts.inter(
-                        fontSize: 24,
-                        color: blackColor,
-                        fontWeight: bold,
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        height: 200,
+        decoration: BoxDecoration(
+          image: offlineSaveImage != null
+              ? DecorationImage(
+                  image: FileImage(offlineSaveImage!),
+                  fit: BoxFit.cover,
+                )
+              : null,
+          borderRadius: BorderRadius.circular(
+            25,
+          ),
+        ),
+        child: Container(
+          margin:
+              const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.destination.mountain.name,
+                    style: GoogleFonts.inter(
+                      fontSize: 24,
+                      color: blackColor,
+                      fontWeight: bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    widget.destination.mountain.height,
+                    style: GoogleFonts.inter(
+                      fontSize: 18,
+                      color: blackColor,
+                      fontWeight: medium,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Icon(
+                            Icons.location_on,
+                            color: whiteColor,
+                            size: 18,
+                          ),
+                        ),
+                        TextSpan(
+                          text: widget.destination.mountain.province.name
+                              .toString(),
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            color: whiteColor,
+                            fontWeight: bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: primaryColor,
+                      shadowColor: Colors.grey.shade400,
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      widget.destination.mountain.height,
-                      style: GoogleFonts.inter(
-                        fontSize: 18,
-                        color: blackColor,
-                        fontWeight: medium,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    RichText(
+                    onPressed: () {
+                      showBottomModal();
+                    },
+                    child: RichText(
                       text: TextSpan(
                         children: [
                           WidgetSpan(
                             child: Icon(
-                              Icons.location_on,
+                              Icons.visibility,
                               color: whiteColor,
-                              size: 18,
+                              size: 16,
                             ),
                           ),
                           TextSpan(
-                            text: widget.destination.mountain.province.name
-                                .toString(),
+                            text: ' Preview',
                             style: GoogleFonts.inter(
-                              fontSize: 16,
+                              fontSize: 14,
                               color: whiteColor,
                               fontWeight: bold,
                             ),
@@ -395,49 +426,13 @@ class _DestinationCardState extends State<DestinationCard> {
                         ],
                       ),
                     ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: primaryColor,
-                        shadowColor: Colors.grey.shade400,
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      onPressed: () {
-                        showBottomModal();
-                      },
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            WidgetSpan(
-                              child: Icon(
-                                Icons.visibility,
-                                color: whiteColor,
-                                size: 16,
-                              ),
-                            ),
-                            TextSpan(
-                              text: ' Preview',
-                              style: GoogleFonts.inter(
-                                fontSize: 14,
-                                color: whiteColor,
-                                fontWeight: bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-      );
-    } else {
-      return const SizedBox();
-    }
+      ),
+    );
   }
 }
