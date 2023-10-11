@@ -10,7 +10,6 @@ class TracksModel extends Equatable {
   final String title;
   final String latitude;
   final String longitude;
-  final String geojson;
   final String coordinates;
   final String startLatitude;
   final String startLongitude;
@@ -25,7 +24,6 @@ class TracksModel extends Equatable {
     this.title = '',
     this.latitude = '',
     this.longitude = '',
-    this.geojson = '',
     this.coordinates = '',
     this.startLatitude = '',
     this.startLongitude = '',
@@ -77,10 +75,61 @@ class TracksModel extends Equatable {
       title: json['title'],
       latitude: json['latitude'],
       longitude: json['longitude'],
-      geojson: json['geojson'],
       coordinates: json['coordinates'],
       startLatitude: json['start_latitude'],
       startLongitude: json['start_longitude'],
+      marks: marks,
+      waterfalls: waterfalls,
+      watersprings: watersprings,
+      rivers: rivers,
+      posts: posts,
+    );
+  }
+
+  factory TracksModel.fromJsonWithPreferences(Map<String, dynamic> json) {
+    List<MarksModel> marks = [];
+    if (json['marks'] != null) {
+      marks = (json['marks'] as List)
+          .map((mark) => MarksModel.fromJson(mark))
+          .toList();
+    }
+
+    List<WaterfallsModel> waterfalls = [];
+    if (json['waterfalls'] != null) {
+      waterfalls = (json['waterfalls'] as List)
+          .map((waterfall) => WaterfallsModel.fromJson(waterfall))
+          .toList();
+    }
+
+    List<WaterspringsModel> watersprings = [];
+    if (json['watersprings'] != null) {
+      watersprings = (json['watersprings'] as List)
+          .map((waterspring) => WaterspringsModel.fromJson(waterspring))
+          .toList();
+    }
+
+    List<RiversModel> rivers = [];
+    if (json['rivers'] != null) {
+      rivers = (json['rivers'] as List)
+          .map((river) => RiversModel.fromJson(river))
+          .toList();
+    }
+
+    List<PostsModel> posts = [];
+    if (json['posts'] != null) {
+      posts = (json['posts'] as List)
+          .map((post) => PostsModel.fromJson(post))
+          .toList();
+    }
+
+    return TracksModel(
+      id: json['id'].toString(),
+      title: json['title'].toString(),
+      latitude: json['latitude'].toString(),
+      longitude: json['longitude'].toString(),
+      coordinates: json['coordinates'],
+      startLatitude: json['startLatitude'].toString(),
+      startLongitude: json['startLongitude'].toString(),
       marks: marks,
       waterfalls: waterfalls,
       watersprings: watersprings,

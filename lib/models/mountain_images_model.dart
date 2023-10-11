@@ -12,7 +12,7 @@ class MountainImagesModel extends Equatable {
   factory MountainImagesModel.fromJson(Map<String, dynamic> json) {
     return MountainImagesModel(
       id: json['id'].toString(),
-      url: json['url'],
+      url: json['url'] ?? '',
     );
   }
 

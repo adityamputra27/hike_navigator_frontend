@@ -15,9 +15,9 @@ class MarksModel extends Equatable {
 
   factory MarksModel.fromJson(Map<String, dynamic> json) => MarksModel(
         id: json['id'].toString(),
-        title: json['title'],
-        latitude: json['latitude'],
-        longitude: json['longitude'],
+        title: json['title'] ?? '',
+        latitude: json['latitude'] ?? '',
+        longitude: json['longitude'] ?? '',
       );
 
   Map<String, dynamic> toJson() => {

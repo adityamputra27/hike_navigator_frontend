@@ -94,14 +94,14 @@ class MyDestinationCard extends StatelessWidget {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => StartDestinationMapPage(
-                          mountain: destination.mountain,
-                        ),
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => StartDestinationMapPage(
+                    //       destination: destination,
+                    //     ),
+                    //   ),
+                    // );
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: primaryColor,

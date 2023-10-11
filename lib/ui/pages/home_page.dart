@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:logger/logger.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -369,15 +371,22 @@ class _HomePageState extends State<HomePage> {
                 children: offlineMaps!.map((offlineMap) {
                   var prefDestination = preferencesLocal
                       ?.getString('OFFLINE_DESTINATION_${offlineMap.id}');
-
                   final offlineDestination =
                       DestinationsModel.fromJsonWithPreferences(
                           jsonDecode(prefDestination!));
 
-                  return DestinationCard(
-                    offlineMap: offlineMap,
-                    destination: offlineDestination,
-                  );
+                  if (prefDestination != null) {
+                    if (offlineDestination != null) {
+                      return DestinationCard(
+                        offlineMap: offlineMap,
+                        destination: offlineDestination,
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  } else {
+                    return const SizedBox();
+                  }
                 }).toList(),
               ),
             )
@@ -389,59 +398,6 @@ class _HomePageState extends State<HomePage> {
                 child: const CircularProgressIndicator(),
               ),
             );
-
-      // return BlocConsumer<DestinationsCubit, DestinationsState>(
-      //   builder: (context, state) {
-      //     if (state is DestinationsSuccess) {
-      //       if (state.destinations.isNotEmpty) {
-      //         return Container(
-      //           margin: EdgeInsets.only(
-      //             top: 40,
-      //             left: defaultSpace,
-      //             right: defaultSpace,
-      //           ),
-      //           child: Column(
-      //             children: [],
-      //           ),
-      //         );
-      //       } else {
-      //         return Container(
-      //           margin: EdgeInsets.only(
-      //             top: 50,
-      //             left: defaultSpace,
-      //             right: defaultSpace,
-      //           ),
-      //           child: Text(
-      //             "Oopps... you don't have any destination!",
-      //             style: GoogleFonts.inter(
-      //               fontSize: 14,
-      //               fontWeight: semiBold,
-      //             ),
-      //             textAlign: TextAlign.center,
-      //           ),
-      //         );
-      //       }
-      //     }
-      //     return Center(
-      //       child: Container(
-      //         margin: const EdgeInsets.only(
-      //           top: 50,
-      //         ),
-      //         child: const CircularProgressIndicator(),
-      //       ),
-      //     );
-      //   },
-      //   listener: (context, state) {
-      //     if (state is DestinationsFailed) {
-      //       ScaffoldMessenger.of(context).showSnackBar(
-      //         SnackBar(
-      //           backgroundColor: Colors.redAccent,
-      //           content: Text(state.error),
-      //         ),
-      //       );
-      //     }
-      //   },
-      // );
     }
 
     return Scaffold(

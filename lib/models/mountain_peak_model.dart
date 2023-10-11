@@ -32,9 +32,9 @@ class MountainPeakModel extends Equatable {
     PeakModel peak;
 
     if (json['peak'] != null) {
-      peak = PeakModel.fromJson(json['peak']);
+      peak = PeakModel.fromJsonWithPreferences(json['peak']);
     } else {
-      peak = PeakModel.fromJson(const {});
+      peak = PeakModel.fromJsonWithPreferences(const {});
     }
 
     return MountainPeakModel(

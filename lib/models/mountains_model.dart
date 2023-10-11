@@ -148,41 +148,112 @@ class MountainsModel extends Equatable {
   }
 
   factory MountainsModel.fromJsonWithPreferences(Map<String, dynamic> json) {
+    List<MountainImagesModel> mountainImages = [];
+    List<MountainPeaksModel> mountainPeaks = [];
+    List<TracksModel> mountainTracks = [];
+    List<MarksModel> mountainMarks = [];
+    List<WaterfallsModel> mountainWaterfalls = [];
+    List<WaterspringsModel> mountainWatersprings = [];
+    List<RiversModel> mountainRivers = [];
+    List<PostsModel> mountainPosts = [];
+
+    if (json['mountainImages'] != null) {
+      mountainImages = (json['mountainImages'] as List)
+          .map((image) => MountainImagesModel.fromJson(image))
+          .toList();
+    } else {
+      mountainImages = [];
+    }
+
+    if (json['mountainPeaks'] != null) {
+      mountainPeaks = (json['mountainPeaks'] as List)
+          .map((peak) => MountainPeaksModel.fromJson(peak))
+          .toList();
+    } else {
+      mountainPeaks = [];
+    }
+
+    if (json['mountainTracks'] != null) {
+      mountainTracks = (json['mountainTracks'] as List)
+          .map((track) => TracksModel.fromJsonWithPreferences(track))
+          .toList();
+    } else {
+      mountainTracks = [];
+    }
+
+    if (json['mountainMarks'] != null) {
+      mountainMarks = (json['mountainMarks'] as List)
+          .map((mark) => MarksModel.fromJson(mark))
+          .toList();
+    } else {
+      mountainMarks = [];
+    }
+
+    if (json['mountainWaterfalls'] != null) {
+      mountainWaterfalls = (json['mountainWaterfalls'] as List)
+          .map((waterfall) => WaterfallsModel.fromJson(waterfall))
+          .toList();
+    } else {
+      mountainWaterfalls = [];
+    }
+
+    if (json['mountainWatersprings'] != null) {
+      mountainWatersprings = (json['mountainWatersprings'] as List)
+          .map((waterspring) => WaterspringsModel.fromJson(waterspring))
+          .toList();
+    } else {
+      mountainWatersprings = [];
+    }
+
+    if (json['mountainRivers'] != null) {
+      mountainRivers = (json['mountainRivers'] as List)
+          .map((river) => RiversModel.fromJson(river))
+          .toList();
+    } else {
+      mountainRivers = [];
+    }
+
+    if (json['mountainPosts'] != null) {
+      mountainPosts = (json['mountainPosts'] as List)
+          .map((post) => PostsModel.fromJson(post))
+          .toList();
+    } else {
+      mountainPosts = [];
+    }
+
+    CityModel city;
+    if (json['city'] != null) {
+      city = CityModel.fromJson(json['city']);
+    } else {
+      city = CityModel.fromJson(const {});
+    }
+
+    ProvinceModel province;
+    if (json['province'] != null) {
+      province = ProvinceModel.fromJson(json['province']);
+    } else {
+      province = ProvinceModel.fromJson(const {});
+    }
+
     return MountainsModel(
       id: json['id'].toString(),
-      name: json['name'].toString(),
-      latitude: json['latitude'].toString(),
-      longitude: json['longitude'].toString(),
-      isMapOffline: json['isMapOffline'].toString(),
-      city: CityModel.fromJson(json['city']),
-      province: ProvinceModel.fromJson(json['province']),
-      height: json['height'].toString(),
-      status: json['status'].toString(),
-      description: json['description'].toString(),
-      mountainImages: (json['mountainImages'] as List)
-          .map((image) => MountainImagesModel.fromJson(image))
-          .toList(),
-      mountainPeaks: (json['mountainPeaks'] as List)
-          .map((peak) => MountainPeaksModel.fromJson(peak))
-          .toList(),
-      mountainTracks: (json['mountainTracks'] as List)
-          .map((track) => TracksModel.fromJson(track))
-          .toList(),
-      mountainMarks: (json['mountainMarks'] as List)
-          .map((mark) => MarksModel.fromJson(mark))
-          .toList(),
-      mountainWaterfalls: (json['mountainWaterfalls'] as List)
-          .map((waterfall) => WaterfallsModel.fromJson(waterfall))
-          .toList(),
-      mountainWatersprings: (json['mountainWatersprings'] as List)
-          .map((waterspring) => WaterspringsModel.fromJson(waterspring))
-          .toList(),
-      mountainRivers: (json['mountainRivers'] as List)
-          .map((river) => RiversModel.fromJson(river))
-          .toList(),
-      mountainPosts: (json['mountainPosts'] as List)
-          .map((post) => PostsModel.fromJson(post))
-          .toList(),
+      name: json['name'] ?? '',
+      latitude: json['latitude'] ?? '',
+      longitude: json['longitude'] ?? '',
+      isMapOffline: json['isMapOffline'] ?? '',
+      city: city,
+      province: province,
+      height: json['height'] ?? '',
+      status: json['status'] ?? '',
+      description: json['description'] ?? '',
+      mountainImages: mountainImages,
+      mountainPeaks: mountainPeaks,
+      mountainTracks: mountainTracks,
+      mountainMarks: mountainMarks,
+      mountainWaterfalls: mountainWaterfalls,
+      mountainWatersprings: mountainWatersprings,
+      mountainRivers: mountainRivers,
+      mountainPosts: mountainPosts,
     );
   }
 

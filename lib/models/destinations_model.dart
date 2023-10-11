@@ -32,7 +32,7 @@ class DestinationsModel extends Equatable {
     return DestinationsModel(
       id: json['id'].toString(),
       scheduleDate: json['schedule_date'].toString(),
-      mountain: MountainsModel.fromJson(json['mountain']),
+      mountain: MountainsModel.fromJsonWithPreferences(json['mountain']),
       status: json['status'],
       mountainPeak: mountainPeak,
       track: TrackModel.fromJson(json['track']),
@@ -49,13 +49,27 @@ class DestinationsModel extends Equatable {
       mountainPeak = MountainPeakModel.fromJsonPreferences(const {});
     }
 
+    TrackModel track;
+    if (json['track'] != null) {
+      track = TrackModel.fromJsonWithPreferences(json['track']);
+    } else {
+      track = TrackModel.fromJsonWithPreferences(const {});
+    }
+
+    MountainsModel mountain;
+    if (json['mountain'] != null) {
+      mountain = MountainsModel.fromJsonWithPreferences(json['mountain']);
+    } else {
+      mountain = MountainsModel.fromJsonWithPreferences(const {});
+    }
+
     return DestinationsModel(
       id: json['id'].toString(),
       scheduleDate: json['scheduleDate'].toString(),
-      mountain: MountainsModel.fromJson(json['mountain']),
-      status: json['status'],
+      status: json['status'] ?? '',
       mountainPeak: mountainPeak,
-      track: TrackModel.fromJsonWithPreferences(json['track']),
+      track: track,
+      mountain: mountain,
     );
   }
 

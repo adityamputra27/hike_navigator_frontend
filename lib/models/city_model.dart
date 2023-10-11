@@ -12,7 +12,7 @@ class CityModel extends Equatable {
   factory CityModel.fromJson(Map<String, dynamic> json) {
     return CityModel(
       id: json['id'].toString(),
-      name: json['name'],
+      name: json['name'] ?? '',
     );
   }
 

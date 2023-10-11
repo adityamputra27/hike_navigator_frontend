@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:hike_navigator/models/mountains_model.dart';
+import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:maplibre_gl/mapbox_gl.dart';
 
 class StartDestinationMapPage extends StatefulWidget {
-  final MountainsModel mountain;
-  const StartDestinationMapPage({required this.mountain, super.key});
+  final DestinationsModel destination;
+  final OfflineRegion offlineMap;
+  const StartDestinationMapPage({
+    required this.destination,
+    required this.offlineMap,
+    super.key,
+  });
 
   @override
   State<StartDestinationMapPage> createState() =>
@@ -25,8 +30,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
         child: Stack(
           children: [
             MaplibreMap(
-              styleString:
-                  'https://tiles.stadiamaps.com/styles/outdoors.json?api_key=8b9c5db3-b674-43f3-8e62-79e5936a6b2f',
+              styleString: widget.offlineMap.definition.mapStyleUrl,
               onMapCreated: _onMapCreated,
               myLocationEnabled: true,
               myLocationRenderMode: MyLocationRenderMode.GPS,

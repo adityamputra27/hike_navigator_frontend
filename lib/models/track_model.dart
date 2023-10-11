@@ -37,11 +37,11 @@ class TrackModel extends Equatable {
   factory TrackModel.fromJsonWithPreferences(Map<String, dynamic> json) {
     return TrackModel(
       id: json['id'].toString(),
-      title: json['title'],
-      latitude: json['latitude'],
-      longitude: json['longitude'],
-      geojson: json['geojson'],
-      coordinates: json['coordinates'],
+      title: json['title'] ?? '',
+      latitude: json['latitude'] ?? '',
+      longitude: json['longitude'] ?? '',
+      geojson: json['geojson'] ?? '',
+      coordinates: json['coordinates'] ?? '',
       startLatitude: json['startLatitude'] ?? '',
       startLongitude: json['startLongitude'] ?? '',
     );
