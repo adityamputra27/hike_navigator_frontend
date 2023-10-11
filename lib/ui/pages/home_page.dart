@@ -373,17 +373,12 @@ class _HomePageState extends State<HomePage> {
                     final offlineDestination =
                         DestinationsModel.fromJsonWithPreferences(
                             jsonDecode(prefDestination));
-                    if (offlineDestination != null) {
-                      return DestinationCard(
-                        offlineMap: offlineMap,
-                        destination: offlineDestination,
-                      );
-                    } else {
-                      return SizedBox();
-                    }
-                  } else {
-                    return SizedBox();
+                    return DestinationCard(
+                      offlineMap: offlineMap,
+                      destination: offlineDestination,
+                    );
                   }
+                  return const SizedBox();
                 }).toList(),
               ),
             )

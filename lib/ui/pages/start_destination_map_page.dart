@@ -70,7 +70,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
             Positioned(
               left: 0,
               right: 0,
-              top: 20,
+              top: 15,
               height: 65,
               child: PageView.builder(
                 itemBuilder: (_, index) {
