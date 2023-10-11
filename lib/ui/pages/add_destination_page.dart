@@ -72,6 +72,7 @@ class _AddDestinationPageState extends State<AddDestinationPage> {
     void showModalFilterProvince() {
       showModalBottomSheet(
         isScrollControlled: true,
+        backgroundColor: whiteColor,
         elevation: 2,
         context: context,
         shape: const RoundedRectangleBorder(

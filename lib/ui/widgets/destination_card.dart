@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
@@ -31,8 +30,10 @@ class DestinationCard extends StatefulWidget {
 
 class _DestinationCardState extends State<DestinationCard> {
   File? offlineSaveImage;
-
   bool isOnline = false;
+  int _seconds = 3;
+  Timer? _timer;
+
   Future checkConnection() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -50,10 +51,40 @@ class _DestinationCardState extends State<DestinationCard> {
 
   @override
   void initState() {
+    _seconds = 3;
     loadOfflineSaveImage();
     checkConnection();
 
     super.initState();
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_seconds > 0) {
+          _seconds--;
+        } else {
+          _timer?.cancel();
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => StartDestinationMapPage(
+                destination: widget.destination,
+                offlineMap: widget.offlineMap,
+              ),
+            ),
+          );
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+    super.dispose();
   }
 
   void loadOfflineSaveImage() async {
@@ -65,6 +96,50 @@ class _DestinationCardState extends State<DestinationCard> {
         offlineSaveImage = File(path);
       });
     }
+  }
+
+  Future<void> _showTimerDialog() {
+    startTimer();
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: whiteColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              defaultRadius,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                height: 15,
+              ),
+              CircularProgressIndicator(
+                backgroundColor: primaryColor,
+                color: redColor,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Please wait..',
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: blackColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _showDialog(
@@ -131,6 +206,29 @@ class _DestinationCardState extends State<DestinationCard> {
 
   @override
   Widget build(BuildContext context) {
+    final scheduleDate = DateTime.parse('2023-10-12 00:00:00');
+    final currentDate = DateTime.now();
+    Duration diff = scheduleDate.difference(currentDate);
+
+    void startDestination() async {
+      Navigator.pop(context);
+      if (diff.inDays.toInt() == 0) {
+        _showTimerDialog();
+      } else if (diff.isNegative) {
+        _showDialog(
+          'Your journey has been missed! ',
+          'failed',
+          () => Navigator.pop(context),
+        );
+      } else {
+        _showDialog(
+          "You can't start your journey today!",
+          'failed',
+          () => Navigator.pop(context),
+        );
+      }
+    }
+
     void cancelDestination() async {
       Navigator.pop(context);
       if (isOnline == true) {
@@ -181,6 +279,7 @@ class _DestinationCardState extends State<DestinationCard> {
 
     void showBottomModal() {
       showModalBottomSheet(
+        backgroundColor: whiteColor,
         elevation: 2,
         isScrollControlled: true,
         context: context,
@@ -227,8 +326,7 @@ class _DestinationCardState extends State<DestinationCard> {
                     height: 5,
                   ),
                   Text(
-                    DateFormat('dd MMMM yyyy').format(
-                        DateTime.parse(widget.destination.scheduleDate)),
+                    DateFormat('dd MMMM yyyy').format(scheduleDate),
                     style: GoogleFonts.inter(
                       fontSize: 18,
                       fontWeight: medium,
@@ -239,10 +337,12 @@ class _DestinationCardState extends State<DestinationCard> {
                     height: 25,
                   ),
                   Text(
-                    'Prepare yourself, it’s only 2 days left before your new adventure is started',
+                    diff.isNegative || diff.inDays.toString() == "0"
+                        ? 'Prepare yourself, today is your new adventure is started'
+                        : 'Prepare yourself, it’s only ${diff.inDays.toString()} days left before your new adventure is started',
                     style: GoogleFonts.inter(
                       fontSize: 14,
-                      fontWeight: normal,
+                      fontWeight: medium,
                       color: greyColor,
                     ),
                   ),
@@ -255,17 +355,7 @@ class _DestinationCardState extends State<DestinationCard> {
                   top: 35,
                 ),
                 child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => StartDestinationMapPage(
-                          destination: widget.destination,
-                          offlineMap: widget.offlineMap,
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: startDestination,
                   style: TextButton.styleFrom(
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
@@ -302,6 +392,37 @@ class _DestinationCardState extends State<DestinationCard> {
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                height: 55,
+                margin: const EdgeInsets.only(
+                  top: 20,
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: transparentColor,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        width: 2,
+                        color: greyColor,
+                        style: BorderStyle.solid,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  child: Text(
+                    'Close',
+                    style: GoogleFonts.inter(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: greyColor,
                     ),
                   ),
                 ),
