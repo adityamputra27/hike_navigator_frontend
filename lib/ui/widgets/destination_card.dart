@@ -206,7 +206,7 @@ class _DestinationCardState extends State<DestinationCard> {
 
   @override
   Widget build(BuildContext context) {
-    final scheduleDate = DateTime.parse('2023-10-12 00:00:00');
+    final scheduleDate = DateTime.parse(widget.destination.scheduleDate);
     final currentDate = DateTime.now();
     Duration diff = scheduleDate.difference(currentDate);
 
@@ -339,7 +339,7 @@ class _DestinationCardState extends State<DestinationCard> {
                   Text(
                     diff.isNegative || diff.inDays.toString() == "0"
                         ? 'Prepare yourself, today is your new adventure is started'
-                        : 'Prepare yourself, it’s only ${diff.inDays.toString()} days left before your new adventure is started',
+                        : 'Prepare yourself, it’s only ${diff.inDays.toInt() + 1} days left before your new adventure is started',
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       fontWeight: medium,
