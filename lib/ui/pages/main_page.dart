@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/constans/helper.dart';
 import 'package:hike_navigator/cubit/page_cubit.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/ui/pages/add_destination_page.dart';
@@ -26,6 +27,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  String newVersion = '';
+  String currVersion = '';
   @override
   void initState() {
     versionCheck();
@@ -47,9 +50,14 @@ class _MainPageState extends State<MainPage> {
     final result = jsonDecode(response.body);
     final version = result['data']['version'];
 
-    if (version == currentVersion) {
+    if (isVersionGreaterThan(version, currentVersion)) {
       showDialogUpdateNotification();
     }
+
+    setState(() {
+      currVersion = currentVersion;
+      newVersion = version;
+    });
   }
 
   Future<void> showDialogUpdateNotification() async {
@@ -82,7 +90,7 @@ class _MainPageState extends State<MainPage> {
                 height: 15,
               ),
               Text(
-                'You can now update this app from 1 to 2',
+                'You can now update this app from $currVersion to $newVersion',
                 style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: medium,
