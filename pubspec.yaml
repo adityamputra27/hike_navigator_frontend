@@ -67,6 +67,8 @@ dependencies:
   path: ^1.8.3
   logger: ^2.0.2+1
   connectivity_plus: ^5.0.0
+  package_info_plus: ^4.1.0
+  url_launcher: ^6.1.14
 
 dev_dependencies:
   flutter_test:

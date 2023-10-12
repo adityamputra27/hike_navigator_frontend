@@ -43,6 +43,7 @@ class _SignInPageState extends State<SignInPage> {
       await preferences.setString('name', response['user']['name']);
       await preferences.setString('email', response['user']['email']);
       await preferences.setString('token', response['token']);
+      await preferences.setString('version', response['setting']['version']);
 
       _showDialog(
         response['message'],

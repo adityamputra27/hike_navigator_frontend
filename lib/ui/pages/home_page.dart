@@ -58,7 +58,6 @@ class _HomePageState extends State<HomePage> {
         .fetchDestinations(searchQuery, searchProvince);
     fetchProvinces();
     _getOfflineMap();
-
     super.initState();
   }
 
