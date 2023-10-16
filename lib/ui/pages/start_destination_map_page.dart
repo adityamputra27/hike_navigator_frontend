@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,6 +32,9 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
   String riverMarker = 'assets/images/wave_marker.png';
   String startMarker = 'assets/images/start.png';
 
+  dynamic symbolData;
+  bool showMarkerDialog = false;
+
   void _onMapCreated(MaplibreMapController controller) async {
     mapController = controller;
     mapController?.onSymbolTapped.add(_onMarkerTapped);
@@ -58,6 +62,11 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
         double.parse(widget.destination.track.startLatitude),
         double.parse(widget.destination.track.startLongitude),
       ),
+      {
+        'title': 'Start Point',
+        'latitude': widget.destination.track.startLatitude,
+        'longitude': widget.destination.track.startLongitude,
+      },
     );
     _addMarkerImage(
       mountainMarker,
@@ -65,6 +74,11 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
         double.parse(widget.destination.mountain.latitude),
         double.parse(widget.destination.mountain.longitude),
       ),
+      {
+        'title': widget.destination.mountain.name,
+        'latitude': widget.destination.mountain.latitude,
+        'longitude': widget.destination.mountain.longitude,
+      },
     );
     _addMarkerImage(
       mountainMarker,
@@ -72,6 +86,11 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
         double.parse(widget.destination.mountainPeak.peak.latitude),
         double.parse(widget.destination.mountainPeak.peak.longitude),
       ),
+      {
+        'title': widget.destination.mountainPeak.peak.name,
+        'latitude': widget.destination.mountainPeak.peak.latitude,
+        'longitude': widget.destination.mountainPeak.peak.longitude,
+      },
     );
     for (var camp in widget.destination.mountain.mountainPosts) {
       _addMarkerImage(
@@ -80,6 +99,11 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           double.parse(camp.latitude),
           double.parse(camp.longitude),
         ),
+        {
+          'title': camp.title,
+          'latitude': camp.latitude,
+          'longitude': camp.longitude,
+        },
       );
     }
     for (var mark in widget.destination.mountain.mountainMarks) {
@@ -89,6 +113,11 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           double.parse(mark.latitude),
           double.parse(mark.longitude),
         ),
+        {
+          'title': mark.title,
+          'latitude': mark.latitude,
+          'longitude': mark.longitude,
+        },
       );
     }
     for (var waterfall in widget.destination.mountain.mountainWaterfalls) {
@@ -98,6 +127,11 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           double.parse(waterfall.latitude),
           double.parse(waterfall.longitude),
         ),
+        {
+          'title': waterfall.title,
+          'latitude': waterfall.latitude,
+          'longitude': waterfall.longitude,
+        },
       );
     }
     for (var waterspring in widget.destination.mountain.mountainWatersprings) {
@@ -107,6 +141,11 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           double.parse(waterspring.latitude),
           double.parse(waterspring.longitude),
         ),
+        {
+          'title': waterspring.title,
+          'latitude': waterspring.latitude,
+          'longitude': waterspring.longitude,
+        },
       );
     }
     for (var river in widget.destination.mountain.mountainRivers) {
@@ -116,6 +155,11 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           double.parse(river.latitude),
           double.parse(river.longitude),
         ),
+        {
+          'title': river.title,
+          'latitude': river.latitude,
+          'longitude': river.longitude,
+        },
       );
     }
     for (var track in widget.destination.mountain.mountainTracks) {
@@ -132,9 +176,10 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
     return mapController?.addImage(name, list);
   }
 
-  void _addMarkerImage(String iconImage, LatLng location) {
+  void _addMarkerImage(String iconImage, LatLng location, dynamic data) {
     mapController?.addSymbol(
       _getImageSymbolOptions(iconImage, location),
+      data,
     );
   }
 
@@ -162,16 +207,14 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
   }
 
   void _onMarkerTapped(Symbol symbol) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Marker ID: ${symbol.data}'),
-          content: Text('Isi dari popup di sini'),
-          actions: <Widget>[],
-        );
-      },
-    );
+    setState(() {
+      showMarkerDialog = false;
+    });
+
+    setState(() {
+      symbolData = symbol.data;
+      showMarkerDialog = true;
+    });
   }
 
   @override
@@ -258,17 +301,22 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           styleString: widget.offlineMap.definition.mapStyleUrl,
           onMapCreated: _onMapCreated,
           onStyleLoadedCallback: _onStyleLoaded,
-          myLocationEnabled: false,
-          // myLocationRenderMode: MyLocationRenderMode.GPS,
-          // myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+          myLocationEnabled: true,
+          myLocationRenderMode: MyLocationRenderMode.GPS,
+          myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
           initialCameraPosition: CameraPosition(
             target: LatLng(
-              double.parse(widget.destination.mountain.latitude),
-              double.parse(widget.destination.mountain.longitude),
+              double.parse(widget.destination.track.startLatitude),
+              double.parse(widget.destination.track.startLongitude),
             ),
-            zoom: 13,
+            zoom: 13.5,
           ),
           trackCameraPosition: true,
+          onMapClick: (Point<double> point, LatLng coordinates) {
+            setState(() {
+              showMarkerDialog = false;
+            });
+          },
         ),
         Positioned(
           left: 0,
@@ -343,6 +391,65 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
                       child: Icon(
                         Icons.compass_calibration,
                         color: whiteColor,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        AnimatedPositioned(
+          duration: const Duration(milliseconds: 200),
+          left: 0,
+          right: 0,
+          bottom: showMarkerDialog ? 15 : -150,
+          height: 120,
+          child: PageView.builder(
+            itemBuilder: (_, index) {
+              return Container(
+                margin: const EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
+                padding: const EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    20,
+                  ),
+                  color: whiteColor,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      symbolData['title'].toString(),
+                      style: GoogleFonts.inter(
+                        fontSize: 22,
+                        fontWeight: black,
+                        color: blackColor,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Latitude : ${symbolData['latitude']}",
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: medium,
+                        color: blackColor,
+                      ),
+                    ),
+                    Text(
+                      "Longitude : ${symbolData['longitude']}",
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: medium,
+                        color: blackColor,
                       ),
                     ),
                   ],
