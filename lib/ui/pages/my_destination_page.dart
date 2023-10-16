@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/cubit/destinations_cubit.dart';
 import 'package:hike_navigator/cubit/destinations_saved_cubit.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
+import 'package:hike_navigator/models/destinations_saved_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/my_destination_card.dart';
 import 'package:hike_navigator/ui/widgets/my_saved_destination_card.dart';
@@ -127,7 +128,7 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: state.destinationsSaved.map(
-                    (DestinationsModel destination) {
+                    (DestinationsSavedModel destination) {
                       return Padding(
                         padding: const EdgeInsets.only(right: 30),
                         child: MySavedDestinationCard(

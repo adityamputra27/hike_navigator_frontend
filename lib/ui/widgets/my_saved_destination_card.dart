@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
-import 'package:hike_navigator/models/destinations_model.dart';
+import 'package:hike_navigator/models/destinations_saved_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 
 class MySavedDestinationCard extends StatelessWidget {
-  final DestinationsModel destination;
+  final DestinationsSavedModel destination;
   const MySavedDestinationCard({required this.destination, super.key});
 
   @override

@@ -24,6 +24,8 @@ class DetailAddDestinationPage extends StatefulWidget {
 }
 
 class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
+  bool _isMounted = false;
+
   final List urlImages = [];
   int activeIndex = 0;
   int waterfallTotal = 0;
@@ -33,6 +35,8 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
 
   @override
   void initState() {
+    _isMounted = true;
+
     for (var image in widget.mountain.mountainImages) {
       urlImages.add(API().baseURL + image.url);
     }
@@ -55,7 +59,15 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _isMounted = false;
+    super.dispose();
+  }
+
   void saveDestination() async {
+    if (!_isMounted) return;
+
     SharedPreferences preferences = await SharedPreferences.getInstance();
     int userId = preferences.getInt('user_id')!;
     final payload = {
@@ -69,6 +81,7 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
     );
 
     final response = jsonDecode(result.body);
+    print(response);
     if (response['status'] == 400) {
       _showDialog(
           'Success saved destination', 'success', () => Navigator.pop(context));

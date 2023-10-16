@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:hike_navigator/methods/api.dart';
-import 'package:hike_navigator/models/destinations_model.dart';
+import 'package:hike_navigator/models/destinations_saved_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,8 +24,9 @@ class DestinationsSavedService {
       );
       List<dynamic> result = jsonDecode(response.body)['data'];
 
-      List<DestinationsModel> destinationsSaved = result
-          .map((e) => DestinationsModel.fromJson(e as Map<String, dynamic>))
+      List<DestinationsSavedModel> destinationsSaved = result
+          .map((e) =>
+              DestinationsSavedModel.fromJsonRequest(e as Map<String, dynamic>))
           .toList();
 
       return destinationsSaved;

@@ -117,6 +117,9 @@ flutter:
     - assets/images/wave_marker.png
     - assets/images/camp_marker.png
     - assets/images/user_marker.png
+    - assets/images/mark_marker.png
+    - assets/images/dot.png
+    - assets/images/start.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

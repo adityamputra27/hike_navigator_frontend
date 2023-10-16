@@ -12,7 +12,7 @@ class DestinationsSavedInitial extends DestinationsSavedState {}
 class DestinationsSavedLoading extends DestinationsSavedState {}
 
 class DestinationsSavedSuccess extends DestinationsSavedState {
-  final List<DestinationsModel> destinationsSaved;
+  final List<DestinationsSavedModel> destinationsSaved;
 
   const DestinationsSavedSuccess(this.destinationsSaved);
 

@@ -25,7 +25,8 @@ class DestinationsService {
       );
       List<dynamic> result = jsonDecode(response.body)['data'];
       List<DestinationsModel> destinations = result
-          .map((e) => DestinationsModel.fromJson(e as Map<String, dynamic>))
+          .map((e) =>
+              DestinationsModel.fromJsonRequest(e as Map<String, dynamic>))
           .toList();
 
       return destinations;

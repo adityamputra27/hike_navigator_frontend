@@ -36,15 +36,15 @@ class PeakModel extends Equatable {
   factory PeakModel.fromJsonWithPreferences(Map<String, dynamic> json) =>
       PeakModel(
         id: json['id'].toString(),
-        name: json['name'].toString() ?? '',
-        height: json['height'].toString() ?? '',
+        name: json['name'].toString(),
+        height: json['height'].toString(),
         latitude: json['latitude'].toString(),
         longitude: json['longitude'].toString(),
-        status: json['status'].toString() ?? '',
-        userId: json['user_id'].toString() ?? '',
-        description: json['description'].toString() ?? '',
-        createdAt: json['created_at'].toString() ?? '',
-        updatedAt: json['updated_at'].toString() ?? '',
+        status: json['status'].toString(),
+        userId: json['user_id'].toString(),
+        description: json['description'].toString(),
+        createdAt: json['created_at'].toString(),
+        updatedAt: json['updated_at'].toString(),
       );
 
   Map<String, dynamic> toJson() => {
