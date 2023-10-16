@@ -245,8 +245,8 @@ class _MainPageState extends State<MainPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const AddDestinationPage()),
+                              builder: (context) => const AddDestinationPage(),
+                            ),
                           );
                         },
                         shape: const RoundedRectangleBorder(

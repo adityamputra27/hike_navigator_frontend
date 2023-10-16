@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
+import 'package:hike_navigator/services/location_service.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:maplibre_gl/mapbox_gl.dart';
 
@@ -34,6 +35,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
 
   dynamic symbolData;
   bool showMarkerDialog = false;
+  LocationService locationService = LocationService();
 
   void _onMapCreated(MaplibreMapController controller) async {
     mapController = controller;
@@ -195,6 +197,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
 
   @override
   void initState() {
+    locationService.requestPermission();
     super.initState();
   }
 

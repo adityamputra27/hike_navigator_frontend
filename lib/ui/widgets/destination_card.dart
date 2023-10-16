@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
+import 'package:hike_navigator/services/location_service.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_map_page.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/pages/start_destination_map_page.dart';
@@ -29,6 +30,7 @@ class DestinationCard extends StatefulWidget {
 }
 
 class _DestinationCardState extends State<DestinationCard> {
+  LocationService locationService = LocationService();
   File? offlineSaveImage;
   bool isOnline = false;
   int _seconds = 3;
@@ -54,6 +56,7 @@ class _DestinationCardState extends State<DestinationCard> {
     _seconds = 3;
     loadOfflineSaveImage();
     checkConnection();
+    locationService.requestPermission();
 
     super.initState();
   }

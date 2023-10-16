@@ -47,7 +47,17 @@ class _MyProfilePageState extends State<MyProfilePage> {
               widget.preferences!.getString('name').toString(),
               style: GoogleFonts.inter(
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
+                fontWeight: bold,
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Text(
+              widget.preferences!.getString('role').toString(),
+              style: GoogleFonts.inter(
+                fontSize: 16,
+                fontWeight: medium,
               ),
             ),
           ],
@@ -105,7 +115,33 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 ),
                 Container(
                   height: 0.5,
-                  color: blackColor,
+                  color: greyColor,
+                ),
+              ],
+            ),
+          ),
+          InkWell(
+            onTap: () {},
+            child: Column(
+              children: [
+                ListTile(
+                  tileColor: whiteColor,
+                  title: Text(
+                    'Clear data',
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      color: blackColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  leading: Icon(
+                    Icons.clear_all,
+                    color: blackColor,
+                  ),
+                ),
+                Container(
+                  height: 0.5,
+                  color: greyColor,
                 ),
               ],
             ),

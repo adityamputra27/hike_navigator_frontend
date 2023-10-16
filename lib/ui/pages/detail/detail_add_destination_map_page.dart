@@ -32,11 +32,11 @@ class _DetailAddDestinationMapPageState
   LocationService locationService = LocationService();
   Location location = Location();
 
-  // @override
-  // void dispose() {
-  //   locationService.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    locationService.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
