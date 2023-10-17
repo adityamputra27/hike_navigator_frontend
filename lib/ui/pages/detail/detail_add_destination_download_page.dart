@@ -50,13 +50,14 @@ class _DetailAddDestinationDownloadPageState
           'Peta Offline Berhasil Di unduh!',
           'success',
           0,
-          () => Navigator.pushReplacement(
+          () => Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (context) => MainPage(
                 preferences: preferences,
               ),
             ),
+            (Route route) => false,
           ),
         );
       }

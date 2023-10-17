@@ -15,9 +15,15 @@ class MyProfilePage extends StatefulWidget {
 
 class _MyProfilePageState extends State<MyProfilePage> {
   void logout() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const SignInPage(),
+        ),
+        (Route route) => false);
+  }
+
+  void clear() {
     widget.preferences!.clear();
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const SignInPage()));
   }
 
   @override
@@ -121,7 +127,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              clear();
+            },
             child: Column(
               children: [
                 ListTile(
