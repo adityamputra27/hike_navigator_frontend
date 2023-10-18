@@ -60,6 +60,14 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      print('Could not launch $url');
+    }
+  }
+
   Future<void> showDialogUpdateNotification() async {
     return showDialog<void>(
       context: context,
@@ -129,8 +137,8 @@ class _MainPageState extends State<MainPage> {
                   ),
                   TextButton(
                     onPressed: () {
-                      launch(
-                          'https://play.google.com/store/apps/details?id=com.mu.muclubapp&hl=id&gl=US');
+                      _launchURL(
+                          'https://play.google.com/store/apps/details?id=&hl=id&gl=US');
                     },
                     style: TextButton.styleFrom(
                       backgroundColor: primaryColor,

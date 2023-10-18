@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/cubit/page_cubit.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/ui/pages/forgot_password_page.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
@@ -27,6 +29,8 @@ class _SignInPageState extends State<SignInPage> {
   bool passwordValidate = false;
 
   void login() async {
+    context.read<PageCubit>().setPage(0);
+
     final payload = {
       'email': emailController.text.toString(),
       'password': passwordController.text.toString(),
@@ -50,12 +54,13 @@ class _SignInPageState extends State<SignInPage> {
         response['message'],
         'success',
         () {
-          Navigator.of(context).pushReplacement(
+          Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (context) => MainPage(
                 preferences: preferences,
               ),
             ),
+            (Route route) => false,
           );
         },
       );
