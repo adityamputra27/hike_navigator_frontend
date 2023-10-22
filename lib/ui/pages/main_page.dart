@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/constans/helper.dart';
 import 'package:hike_navigator/cubit/page_cubit.dart';
 import 'package:hike_navigator/methods/api.dart';
+import 'package:hike_navigator/models/province_model.dart';
+import 'package:hike_navigator/services/configuration_service.dart';
 import 'package:hike_navigator/ui/pages/add_destination_page.dart';
 import 'package:hike_navigator/ui/pages/home_page.dart';
 import 'package:hike_navigator/ui/pages/my_destination_page.dart';
@@ -27,13 +30,32 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  bool isOnline = false;
+
   String newVersion = '';
   String currVersion = '';
   @override
   void initState() {
     versionCheck();
+    fetchProvinces();
+    checkConnection();
 
     super.initState();
+  }
+
+  Future checkConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isOnline = true;
+        });
+      }
+    } on SocketException catch (_) {
+      setState(() {
+        isOnline = false;
+      });
+    }
   }
 
   versionCheck() async {
@@ -65,6 +87,21 @@ class _MainPageState extends State<MainPage> {
       await launch(url);
     } else {
       print('Could not launch $url');
+    }
+  }
+
+  void fetchProvinces() async {
+    if (!mounted) return;
+    try {
+      List<ProvinceModel> fetchedProvinces =
+          await ConfigurationService().fetchProvinces();
+
+      widget.preferences!
+          .setString('OFFLINE_PROVINCE', jsonEncode(fetchedProvinces));
+    } catch (e) {
+      if (mounted) {
+        print('Error fetching provinces: $e');
+      }
     }
   }
 
@@ -190,6 +227,68 @@ class _MainPageState extends State<MainPage> {
       }
     }
 
+    Future<void> _showDialog(
+        String text, String status, Function() onPressed) async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                defaultRadius,
+              ),
+            ),
+            icon: Image.asset(
+              status == 'success'
+                  ? 'assets/images/check_icon.png'
+                  : 'assets/images/failed_icon.png',
+              width: 45,
+              height: 45,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  text.toString(),
+                  style: GoogleFonts.inter(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: blackColor,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                TextButton(
+                  onPressed: onPressed,
+                  style: TextButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        10,
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    'OK',
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w700,
+                      color: whiteColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
     Widget navigation(int currentIndex) {
       return Align(
         alignment: Alignment.bottomCenter,
@@ -250,12 +349,23 @@ class _MainPageState extends State<MainPage> {
                     child: FittedBox(
                       child: FloatingActionButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AddDestinationPage(),
-                            ),
-                          );
+                          if (isOnline == true) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const AddDestinationPage(),
+                              ),
+                            );
+                          } else {
+                            _showDialog(
+                              'No internet connection',
+                              'failed',
+                              () => {
+                                Navigator.pop(context),
+                              },
+                            );
+                          }
                         },
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(

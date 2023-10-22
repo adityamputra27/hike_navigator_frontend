@@ -22,27 +22,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<OfflineRegion>? offlineMaps;
+  bool isDestinationLoading = false;
 
   String searchQuery = '';
   int searchProvince = 0;
 
   ValueNotifier<int> activeProvinceFilterIndexNotifier = ValueNotifier<int>(-1);
-  List<ProvinceModel> provinces = [];
-
-  void fetchProvinces() async {
-    if (!mounted) return;
-    try {
-      List<ProvinceModel> fetchedProvinces =
-          await ConfigurationService().fetchProvinces();
-      setState(() {
-        provinces = fetchedProvinces;
-      });
-    } catch (e) {
-      if (mounted) {
-        print('Error fetching provinces: $e');
-      }
-    }
-  }
 
   void setActiveProvinceFilterIndex(int index, String id) {
     setState(() {
@@ -53,18 +38,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    context
-        .read<DestinationsCubit>()
-        .fetchDestinations(searchQuery, searchProvince);
-    fetchProvinces();
     _getOfflineMap();
     super.initState();
   }
 
   void startSearch() {
-    context
-        .read<DestinationsCubit>()
-        .fetchDestinations(searchQuery, searchProvince);
+    setState(() {
+      isDestinationLoading = true;
+    });
+
+    setState(() {
+      isDestinationLoading = false;
+    });
   }
 
   void startFilter() {
@@ -96,6 +81,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     void showModalFilterProvince() {
       showModalBottomSheet(
+        backgroundColor: whiteColor,
         isScrollControlled: true,
         elevation: 2,
         context: context,
@@ -108,6 +94,14 @@ class _HomePageState extends State<HomePage> {
           return ValueListenableBuilder<int>(
             valueListenable: activeProvinceFilterIndexNotifier,
             builder: (context, value, child) {
+              String? provincesJSON =
+                  widget.preferences!.getString('OFFLINE_PROVINCE');
+
+              var provincesDecode = jsonDecode(provincesJSON!);
+              List<ProvinceModel> provinces = List<ProvinceModel>.from(
+                  provincesDecode
+                      .map((province) => ProvinceModel.fromJson(province)));
+
               return Stack(
                 alignment: AlignmentDirectional.topCenter,
                 clipBehavior: Clip.none,
@@ -356,39 +350,50 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget destination() {
-      return offlineMaps != null && widget.preferences != null
-          ? Container(
-              margin: EdgeInsets.only(
-                top: 40,
-                left: defaultSpace,
-                right: defaultSpace,
-              ),
-              child: Column(
-                children: offlineMaps!.map((offlineMap) {
-                  var prefDestination = widget.preferences!
-                      .getString('OFFLINE_DESTINATION_${offlineMap.id}');
+      List<Widget> filteredDestinations = [];
+      if (offlineMaps != null && widget.preferences != null) {
+        filteredDestinations = offlineMaps!
+            .map<Widget>((offlineMap) {
+              var prefDestination = widget.preferences!
+                  .getString('OFFLINE_DESTINATION_${offlineMap.id}');
 
-                  if (prefDestination != null) {
-                    final offlineDestination =
-                        DestinationsModel.fromJsonWithPreferences(
-                            jsonDecode(prefDestination));
-                    return DestinationCard(
-                      offlineMap: offlineMap,
-                      destination: offlineDestination,
-                    );
-                  }
-                  return const SizedBox();
-                }).toList(),
-              ),
-            )
-          : Center(
-              child: Container(
-                margin: const EdgeInsets.only(
-                  top: 50,
-                ),
-                child: const CircularProgressIndicator(),
-              ),
-            );
+              if (prefDestination != null) {
+                final offlineDestination =
+                    DestinationsModel.fromJsonWithPreferences(
+                        jsonDecode(prefDestination));
+
+                if (offlineDestination.mountain.name
+                    .toLowerCase()
+                    .contains(searchQuery.toLowerCase())) {
+                  return DestinationCard(
+                    destination: offlineDestination,
+                    offlineMap: offlineMap,
+                  );
+                }
+              }
+              return const SizedBox();
+            })
+            .where((destinationCard) => destinationCard != const SizedBox())
+            .toList();
+      } else {
+        return Center(
+          child: Container(
+            margin: const EdgeInsets.only(
+              top: 50,
+            ),
+            child: const CircularProgressIndicator(),
+          ),
+        );
+      }
+
+      return Container(
+        margin: EdgeInsets.only(
+          top: 40,
+          left: defaultSpace,
+          right: defaultSpace,
+        ),
+        child: Column(children: filteredDestinations),
+      );
     }
 
     return Scaffold(
