@@ -81,7 +81,6 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
     );
 
     final response = jsonDecode(result.body);
-    print(response);
     if (response['status'] == 400) {
       _showDialog(
           'Success saved destination', 'success', () => Navigator.pop(context));
