@@ -33,6 +33,7 @@ class PrivacyAndPolicy extends StatelessWidget {
                     fontSize: 14,
                     color: blackColor,
                   ),
+                  textAlign: TextAlign.justify,
                 ),
                 const SizedBox(
                   height: 10,
@@ -43,6 +44,7 @@ class PrivacyAndPolicy extends StatelessWidget {
                     fontSize: 14,
                     color: blackColor,
                   ),
+                  textAlign: TextAlign.justify,
                 ),
                 const SizedBox(
                   height: 10,
@@ -64,6 +66,7 @@ class PrivacyAndPolicy extends StatelessWidget {
                     fontSize: 14,
                     color: blackColor,
                   ),
+                  textAlign: TextAlign.justify,
                 ),
                 const SizedBox(
                   height: 10,
@@ -85,6 +88,7 @@ class PrivacyAndPolicy extends StatelessWidget {
                     fontSize: 14,
                     color: blackColor,
                   ),
+                  textAlign: TextAlign.justify,
                 ),
                 const SizedBox(
                   height: 10,
@@ -106,6 +110,7 @@ class PrivacyAndPolicy extends StatelessWidget {
                     fontSize: 14,
                     color: blackColor,
                   ),
+                  textAlign: TextAlign.justify,
                 ),
                 const SizedBox(
                   height: 10,
@@ -127,6 +132,7 @@ class PrivacyAndPolicy extends StatelessWidget {
                     fontSize: 14,
                     color: blackColor,
                   ),
+                  textAlign: TextAlign.justify,
                 ),
                 const SizedBox(
                   height: 10,
@@ -137,6 +143,7 @@ class PrivacyAndPolicy extends StatelessWidget {
                     fontSize: 14,
                     color: blackColor,
                   ),
+                  textAlign: TextAlign.justify,
                 ),
                 const SizedBox(
                   height: 10,
@@ -158,6 +165,7 @@ class PrivacyAndPolicy extends StatelessWidget {
                     fontSize: 14,
                     color: blackColor,
                   ),
+                  textAlign: TextAlign.justify,
                 ),
                 const SizedBox(
                   height: 10,
@@ -168,6 +176,7 @@ class PrivacyAndPolicy extends StatelessWidget {
                     fontSize: 14,
                     color: blackColor,
                   ),
+                  textAlign: TextAlign.justify,
                 ),
               ],
             ),
