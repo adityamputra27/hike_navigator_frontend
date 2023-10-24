@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/ui/pages/sign_in_page.dart';
 import 'package:hike_navigator/ui/pages/static/privacy_and_policy.dart';
+import 'package:hike_navigator/ui/pages/static/terms_and_condition.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -162,6 +163,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
         context,
         MaterialPageRoute(builder: (context) => const PrivacyAndPolicy()),
       );
+    }
+
+    void termsAndCondition() {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const TermsAndCondition()));
     }
 
     void clear() {
@@ -351,7 +357,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              termsAndCondition();
+            },
             child: Column(
               children: [
                 ListTile(
