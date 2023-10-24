@@ -297,7 +297,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 backgroundImage: AssetImage(
                   'assets/images/default.jpg',
                 ),
-                radius: 65,
+                radius: 67.5,
               ),
             ),
             const SizedBox(
