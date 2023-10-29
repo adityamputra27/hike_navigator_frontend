@@ -5,12 +5,14 @@ class WaterspringsModel extends Equatable {
   final String title;
   final String latitude;
   final String longitude;
+  final String contactNumber;
 
   const WaterspringsModel({
     required this.id,
     this.title = '',
     this.latitude = '',
     this.longitude = '',
+    this.contactNumber = '',
   });
 
   factory WaterspringsModel.fromJson(Map<String, dynamic> json) =>
@@ -19,6 +21,7 @@ class WaterspringsModel extends Equatable {
         title: json['title'],
         latitude: json['latitude'],
         longitude: json['longitude'],
+        contactNumber: json['contact_number'] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -29,5 +32,5 @@ class WaterspringsModel extends Equatable {
       };
 
   @override
-  List<Object?> get props => [id, title, latitude, longitude];
+  List<Object?> get props => [id, title, latitude, longitude, contactNumber];
 }

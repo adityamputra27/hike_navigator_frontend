@@ -68,6 +68,8 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
         'title': 'Start Point',
         'latitude': widget.destination.track.startLatitude,
         'longitude': widget.destination.track.startLongitude,
+        'contactNumber': '-',
+        'height': '0',
       },
     );
     _addMarkerImage(
@@ -80,6 +82,8 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
         'title': widget.destination.mountain.name,
         'latitude': widget.destination.mountain.latitude,
         'longitude': widget.destination.mountain.longitude,
+        'contactNumber': '-',
+        'height': widget.destination.mountain.height,
       },
     );
     _addMarkerImage(
@@ -92,6 +96,8 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
         'title': widget.destination.mountainPeak.peak.name,
         'latitude': widget.destination.mountainPeak.peak.latitude,
         'longitude': widget.destination.mountainPeak.peak.longitude,
+        'contactNumber': '-',
+        'height': widget.destination.mountainPeak.peak.height,
       },
     );
     for (var camp in widget.destination.mountain.mountainPosts) {
@@ -105,6 +111,8 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'title': camp.title,
           'latitude': camp.latitude,
           'longitude': camp.longitude,
+          'contactNumber': camp.contactNumber,
+          'height': '0',
         },
       );
     }
@@ -119,6 +127,8 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'title': mark.title,
           'latitude': mark.latitude,
           'longitude': mark.longitude,
+          'contactNumber': mark.contactNumber,
+          'height': '0',
         },
       );
     }
@@ -133,6 +143,8 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'title': waterfall.title,
           'latitude': waterfall.latitude,
           'longitude': waterfall.longitude,
+          'contactNumber': waterfall.contactNumber,
+          'height': '0',
         },
       );
     }
@@ -147,6 +159,8 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'title': waterspring.title,
           'latitude': waterspring.latitude,
           'longitude': waterspring.longitude,
+          'contactNumber': waterspring.contactNumber,
+          'height': '0',
         },
       );
     }
@@ -161,6 +175,8 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'title': river.title,
           'latitude': river.latitude,
           'longitude': river.longitude,
+          'contactNumber': river.contactNumber,
+          'height': '0',
         },
       );
     }
@@ -205,7 +221,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
     return SymbolOptions(
       geometry: location,
       iconImage: iconImage,
-      iconSize: 1,
+      iconSize: 0.5,
     );
   }
 
@@ -301,6 +317,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
     return Stack(
       children: [
         MaplibreMap(
+          compassEnabled: false,
           styleString: widget.offlineMap.definition.mapStyleUrl,
           onMapCreated: _onMapCreated,
           onStyleLoadedCallback: _onStyleLoaded,
@@ -313,7 +330,9 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
               double.parse(widget.destination.track.startLongitude),
             ),
             zoom: 13.5,
+            tilt: 0,
           ),
+          minMaxZoomPreference: const MinMaxZoomPreference(12, 15),
           trackCameraPosition: true,
           onMapClick: (Point<double> point, LatLng coordinates) {
             setState(() {
@@ -406,57 +425,86 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           duration: const Duration(milliseconds: 200),
           left: 0,
           right: 0,
-          bottom: showMarkerDialog ? 15 : -150,
-          height: 120,
+          bottom: showMarkerDialog ? 30 : -150,
+          height: 145,
           child: PageView.builder(
             itemBuilder: (_, index) {
-              return Container(
-                margin: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                ),
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    20,
+              return Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        top: 20,
+                        bottom: 20,
+                      ),
+                      padding: const EdgeInsets.only(
+                        left: 25,
+                        right: 25,
+                        top: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          25,
+                        ),
+                        color: whiteColor,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.15),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(3, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            symbolData['title'].toString(),
+                            style: GoogleFonts.inter(
+                              fontSize: 20,
+                              fontWeight: black,
+                              color: blackColor,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                          Text(
+                            '${symbolData['height'].toString()} mdpl',
+                            style: GoogleFonts.inter(
+                              fontSize: 18,
+                              fontWeight: bold,
+                              color: primaryColor,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            'Contact Number : ${symbolData['contactNumber'] != '' ? symbolData['contactNumber'].toString() : '-'}',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: medium,
+                              color: blackColor,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  color: whiteColor,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      symbolData['title'].toString(),
-                      style: GoogleFonts.inter(
-                        fontSize: 22,
-                        fontWeight: black,
-                        color: blackColor,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Latitude : ${symbolData['latitude']}",
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        fontWeight: medium,
-                        color: blackColor,
-                      ),
-                    ),
-                    Text(
-                      "Longitude : ${symbolData['longitude']}",
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        fontWeight: medium,
-                        color: blackColor,
-                      ),
-                    ),
-                  ],
-                ),
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(),
+                  ),
+                ],
               );
             },
           ),

@@ -127,7 +127,7 @@ class _DestinationCardState extends State<DestinationCard> {
                 height: 20,
               ),
               Text(
-                'Tunggu sebentar...',
+                'Memulai perjalananmu!...',
                 style: GoogleFonts.inter(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

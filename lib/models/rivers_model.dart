@@ -5,12 +5,14 @@ class RiversModel extends Equatable {
   final String title;
   final String latitude;
   final String longitude;
+  final String contactNumber;
 
   const RiversModel({
     required this.id,
     this.title = '',
     this.latitude = '',
     this.longitude = '',
+    this.contactNumber = '',
   });
 
   factory RiversModel.fromJson(Map<String, dynamic> json) => RiversModel(
@@ -18,6 +20,7 @@ class RiversModel extends Equatable {
         title: json['title'],
         latitude: json['latitude'],
         longitude: json['longitude'],
+        contactNumber: json['contact_number'] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -28,5 +31,5 @@ class RiversModel extends Equatable {
       };
 
   @override
-  List<Object?> get props => [id, title, latitude, longitude];
+  List<Object?> get props => [id, title, latitude, longitude, contactNumber];
 }

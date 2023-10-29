@@ -5,12 +5,14 @@ class MarksModel extends Equatable {
   final String title;
   final String latitude;
   final String longitude;
+  final String contactNumber;
 
   const MarksModel({
     required this.id,
     this.title = '',
     this.latitude = '',
     this.longitude = '',
+    this.contactNumber = '',
   });
 
   factory MarksModel.fromJson(Map<String, dynamic> json) => MarksModel(
@@ -18,6 +20,7 @@ class MarksModel extends Equatable {
         title: json['title'] ?? '',
         latitude: json['latitude'] ?? '',
         longitude: json['longitude'] ?? '',
+        contactNumber: json['contact_number'] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -28,5 +31,5 @@ class MarksModel extends Equatable {
       };
 
   @override
-  List<Object?> get props => [id, title, latitude, longitude];
+  List<Object?> get props => [id, title, latitude, longitude, contactNumber];
 }
