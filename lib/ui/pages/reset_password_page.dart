@@ -48,7 +48,8 @@ class _ResetPasswordState extends State<ResetPassword> {
         );
       });
     } else {
-      _showDialog(response['message'], 'failed', () {
+      _showDialog("Confirmation password and password doesn't match!", 'failed',
+          () {
         Navigator.pop(context);
       });
     }
@@ -89,6 +90,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   fontWeight: FontWeight.bold,
                   color: blackColor,
                 ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(
                 height: 15,
@@ -197,6 +199,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             ),
             hintText: 'New password',
             controller: newPasswordController,
+            obsecureText: true,
             margin: EdgeInsets.only(
               top: 20,
               left: defaultSpace,
@@ -212,6 +215,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             ),
             hintText: 'Confirm password',
             controller: confirmPasswordController,
+            obsecureText: true,
             margin: EdgeInsets.only(
               left: defaultSpace,
               right: defaultSpace,

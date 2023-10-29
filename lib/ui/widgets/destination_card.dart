@@ -127,7 +127,7 @@ class _DestinationCardState extends State<DestinationCard> {
                 height: 20,
               ),
               Text(
-                'Memulai perjalananmu!...',
+                'Starting your journey...',
                 style: GoogleFonts.inter(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -248,7 +248,7 @@ class _DestinationCardState extends State<DestinationCard> {
               .remove('OFFLINE_DESTINATION_IMAGE_${widget.offlineMap.id}');
 
           _showDialog(
-            response['message'],
+            'Successfully cancel your schedule!',
             'success',
             () => {
               Navigator.push(

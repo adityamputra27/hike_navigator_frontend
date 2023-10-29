@@ -34,7 +34,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       await preferences.setString(
           'email_check', emailController.text.toString());
 
-      _showDialog('Email found!', 'success', () {
+      _showDialog('Your email is registered!', 'success', () {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => const ResetPassword(),
@@ -42,7 +42,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         );
       });
     } else {
-      _showDialog('Email not found!', 'success', () {
+      _showDialog('Your email is not registered!', 'failed', () {
         Navigator.pop(context);
       });
     }

@@ -65,7 +65,8 @@ class _SignInPageState extends State<SignInPage> {
         },
       );
     } else {
-      _showDialog(response['message'], 'error', () => Navigator.pop(context));
+      _showDialog("These credentials doesn't match our records", 'error',
+          () => Navigator.pop(context));
     }
   }
 

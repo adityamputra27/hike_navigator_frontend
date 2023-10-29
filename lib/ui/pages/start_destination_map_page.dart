@@ -3,11 +3,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/services/location_service.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:maplibre_gl/mapbox_gl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StartDestinationMapPage extends StatefulWidget {
   final DestinationsModel destination;
@@ -25,6 +27,7 @@ class StartDestinationMapPage extends StatefulWidget {
 
 class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
   MaplibreMapController? mapController;
+  String checkPointMarker = 'assets/images/check_point.png';
   String mountainMarker = 'assets/images/mountain_marker.png';
   String campMarker = 'assets/images/camp_marker.png';
   String markMarker = 'assets/images/mark_marker.png';
@@ -45,9 +48,27 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
   void _onStyleLoaded() {
     _loadImageAsset();
     _loadMarkerImage();
+    _loadMarkersFromStorage();
+  }
+
+  void _loadMarkersFromStorage() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    List<String>? checkPoints = preferences.getStringList('check_points');
+    if (checkPoints != null) {
+      for (String checkPoint in checkPoints) {
+        dynamic checkPointData = jsonDecode(checkPoint);
+        _addMarkerImage(
+          checkPointMarker,
+          LatLng(double.parse(checkPointData['latitude']),
+              checkPointData['longitude']),
+          checkPointData,
+        );
+      }
+    }
   }
 
   void _loadImageAsset() {
+    addImageFromAsset('assetImage', checkPointMarker);
     addImageFromAsset('assetImage', mountainMarker);
     addImageFromAsset('assetImage', campMarker);
     addImageFromAsset('assetImage', markMarker);
@@ -246,6 +267,108 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
     );
   }
 
+  void _saveCheckPoint(String locationTitle, LatLng markerLocation) async {
+    dynamic payload = {
+      'title': locationTitle,
+      'latitude': markerLocation.latitude.toString(),
+      'longitude': markerLocation.longitude.toString(),
+      'contactNumber': '-',
+      'height': '0',
+    };
+
+    _addMarkerImage(checkPointMarker, markerLocation, payload);
+    _saveCheckPointData(payload);
+  }
+
+  void _saveCheckPointData(dynamic data) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    List<String> checkPoints = preferences.getStringList('markers') ?? [];
+    checkPoints.add(jsonEncode(data));
+    await preferences.setStringList('check_points', checkPoints);
+  }
+
+  Future<String?> _showDialogCheckPoint(BuildContext context) async {
+    TextEditingController controller = TextEditingController();
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Add Check Point :',
+            style: GoogleFonts.inter(
+              fontSize: 18,
+              color: blackColor,
+              fontWeight: bold,
+            ),
+          ),
+          content: TextField(
+            controller: controller,
+            decoration: InputDecoration(
+                labelText: 'Title',
+                labelStyle: GoogleFonts.inter(
+                    fontSize: 14, color: blackColor, fontWeight: medium)),
+          ),
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: greyColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        10,
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    'Cancel',
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w700,
+                      color: whiteColor,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                TextButton(
+                  onPressed: () {
+                    String locationTitle = controller.text;
+                    Navigator.of(context).pop(locationTitle);
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    padding: const EdgeInsets.only(
+                      left: 15,
+                      right: 15,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        10,
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    'Save',
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w700,
+                      color: whiteColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Row floatingMap() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -259,8 +382,18 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
               margin: const EdgeInsets.only(left: 30),
               child: FloatingActionButton(
                 backgroundColor: primaryColor,
-                onPressed: () {
-                  mapController?.animateCamera(CameraUpdate.zoomIn());
+                onPressed: () async {
+                  Position position = await Geolocator.getCurrentPosition(
+                      desiredAccuracy: LocationAccuracy.high);
+                  if (position != null) {
+                    LatLng markerLocation =
+                        LatLng(position.latitude, position.longitude);
+                    String? locationTitle =
+                        await _showDialogCheckPoint(context);
+                    if (locationTitle != null && locationTitle.isNotEmpty) {
+                      _saveCheckPoint(locationTitle, markerLocation);
+                    }
+                  }
                 },
                 child: Icon(
                   Icons.add_location_alt_outlined,

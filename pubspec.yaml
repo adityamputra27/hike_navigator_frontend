@@ -120,6 +120,7 @@ flutter:
     - assets/images/mark_marker.png
     - assets/images/dot.png
     - assets/images/start.png
+    - assets/images/check_point.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
