@@ -260,6 +260,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: MediaQuery.of(context).viewInsets.bottom == 0,
       body: SafeArea(
         child: buildMap(),
       ),
@@ -294,6 +295,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: whiteColor,
           title: Text(
             'Add Check Point :',
             style: GoogleFonts.inter(
@@ -305,9 +307,13 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           content: TextField(
             controller: controller,
             decoration: InputDecoration(
-                labelText: 'Title',
-                labelStyle: GoogleFonts.inter(
-                    fontSize: 14, color: blackColor, fontWeight: medium)),
+              labelText: 'Title',
+              labelStyle: GoogleFonts.inter(
+                fontSize: 14,
+                color: blackColor,
+                fontWeight: medium,
+              ),
+            ),
           ),
           actions: <Widget>[
             Row(
@@ -369,80 +375,84 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
     );
   }
 
-  Row floatingMap() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 65,
-              height: 65,
-              margin: const EdgeInsets.only(left: 30),
-              child: FloatingActionButton(
-                backgroundColor: primaryColor,
-                onPressed: () async {
-                  Position position = await Geolocator.getCurrentPosition(
-                      desiredAccuracy: LocationAccuracy.high);
-                  if (position != null) {
-                    LatLng markerLocation =
-                        LatLng(position.latitude, position.longitude);
-                    String? locationTitle =
-                        await _showDialogCheckPoint(context);
-                    if (locationTitle != null && locationTitle.isNotEmpty) {
-                      _saveCheckPoint(locationTitle, markerLocation);
+  Positioned floatingMap() {
+    return Positioned(
+      bottom: 20.0,
+      right: 20.0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 65,
+                height: 65,
+                margin: const EdgeInsets.only(left: 30),
+                child: FloatingActionButton(
+                  backgroundColor: primaryColor,
+                  onPressed: () async {
+                    Position position = await Geolocator.getCurrentPosition(
+                        desiredAccuracy: LocationAccuracy.high);
+                    if (position != null) {
+                      LatLng markerLocation =
+                          LatLng(position.latitude, position.longitude);
+                      String? locationTitle =
+                          await _showDialogCheckPoint(context);
+                      if (locationTitle != null && locationTitle.isNotEmpty) {
+                        _saveCheckPoint(locationTitle, markerLocation);
+                      }
                     }
-                  }
-                },
-                child: Icon(
-                  Icons.add_location_alt_outlined,
-                  size: 30,
-                  color: whiteColor,
+                  },
+                  child: Icon(
+                    Icons.add_location_alt_outlined,
+                    size: 30,
+                    color: whiteColor,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 65,
-              height: 65,
-              child: FloatingActionButton(
-                backgroundColor: primaryColor,
-                onPressed: () {
-                  mapController?.animateCamera(CameraUpdate.zoomIn());
-                },
-                child: Icon(
-                  Icons.zoom_in,
-                  size: 30,
-                  color: whiteColor,
+            ],
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 65,
+                height: 65,
+                child: FloatingActionButton(
+                  backgroundColor: primaryColor,
+                  onPressed: () {
+                    mapController?.animateCamera(CameraUpdate.zoomIn());
+                  },
+                  child: Icon(
+                    Icons.zoom_in,
+                    size: 30,
+                    color: whiteColor,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            SizedBox(
-              width: 65,
-              height: 65,
-              child: FloatingActionButton(
-                backgroundColor: primaryColor,
-                onPressed: () {
-                  mapController?.animateCamera(CameraUpdate.zoomOut());
-                },
-                child: Icon(
-                  Icons.zoom_out,
-                  size: 30,
-                  color: whiteColor,
+              const SizedBox(
+                height: 15,
+              ),
+              SizedBox(
+                width: 65,
+                height: 65,
+                child: FloatingActionButton(
+                  backgroundColor: primaryColor,
+                  onPressed: () {
+                    mapController?.animateCamera(CameraUpdate.zoomOut());
+                  },
+                  child: Icon(
+                    Icons.zoom_out,
+                    size: 30,
+                    color: whiteColor,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 
