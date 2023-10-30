@@ -287,55 +287,6 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ),
           ),
-          // Container(
-          //   alignment: Alignment.center,
-          //   margin: EdgeInsets.only(
-          //     top: 20,
-          //     left: defaultSpace,
-          //     right: defaultSpace,
-          //   ),
-          //   child: Text(
-          //     'OR',
-          //     style: GoogleFonts.inter(
-          //       fontSize: 16,
-          //       color: blackColor,
-          //     ),
-          //   ),
-          // ),
-          // Container(
-          //   width: double.infinity,
-          //   height: 55,
-          //   margin: EdgeInsets.only(
-          //     top: 20,
-          //     left: defaultSpace,
-          //     right: defaultSpace,
-          //   ),
-          //   child: ElevatedButton.icon(
-          //     icon: const Image(
-          //       width: 20,
-          //       image: NetworkImage(
-          //           'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2008px-Google_%22G%22_Logo.svg.png'),
-          //     ),
-          //     label: Text(
-          //       'Google',
-          //       style: GoogleFonts.inter(
-          //         fontSize: 22,
-          //         fontWeight: FontWeight.bold,
-          //         color: Colors.white,
-          //         letterSpacing: 1,
-          //       ),
-          //     ),
-          //     onPressed: () {},
-          //     style: TextButton.styleFrom(
-          //       backgroundColor: redAccentColor,
-          //       shadowColor: Colors.grey.shade400,
-          //       elevation: 5,
-          //       shape: RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.circular(16),
-          //       ),
-          //     ),
-          //   ),
-          // ),
           GestureDetector(
             onTap: () {
               Navigator.push(
