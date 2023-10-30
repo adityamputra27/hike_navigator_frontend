@@ -394,14 +394,13 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
                   onPressed: () async {
                     Position position = await Geolocator.getCurrentPosition(
                         desiredAccuracy: LocationAccuracy.high);
-                    if (position != null) {
-                      LatLng markerLocation =
-                          LatLng(position.latitude, position.longitude);
-                      String? locationTitle =
-                          await _showDialogCheckPoint(context);
-                      if (locationTitle != null && locationTitle.isNotEmpty) {
-                        _saveCheckPoint(locationTitle, markerLocation);
-                      }
+                    LatLng markerLocation =
+                        LatLng(position.latitude, position.longitude);
+                    String? locationTitle =
+                        // ignore: use_build_context_synchronously
+                        await _showDialogCheckPoint(context);
+                    if (locationTitle != null && locationTitle.isNotEmpty) {
+                      _saveCheckPoint(locationTitle, markerLocation);
                     }
                   },
                   child: Icon(
