@@ -36,10 +36,28 @@ class _DestinationCardState extends State<DestinationCard> {
   int _seconds = 3;
   Timer? _timer;
 
+  @override
+  void initState() {
+    _seconds = 3;
+    loadOfflineSaveImage();
+    checkConnection();
+    locationService.requestPermission();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+    super.dispose();
+  }
+
   Future checkConnection() async {
     try {
       final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      if (result.isNotEmpty) {
         setState(() {
           isOnline = true;
         });
@@ -49,16 +67,6 @@ class _DestinationCardState extends State<DestinationCard> {
         isOnline = false;
       });
     }
-  }
-
-  @override
-  void initState() {
-    _seconds = 3;
-    loadOfflineSaveImage();
-    checkConnection();
-    locationService.requestPermission();
-
-    super.initState();
   }
 
   void startTimer() {
@@ -80,14 +88,6 @@ class _DestinationCardState extends State<DestinationCard> {
         }
       });
     });
-  }
-
-  @override
-  void dispose() {
-    if (_timer != null) {
-      _timer!.cancel();
-    }
-    super.dispose();
   }
 
   void loadOfflineSaveImage() async {

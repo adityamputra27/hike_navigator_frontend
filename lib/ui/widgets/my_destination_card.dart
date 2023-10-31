@@ -16,8 +16,13 @@ class MyDestinationCard extends StatelessWidget {
         ? API().baseURL + destination.mountain.mountainImages[0].url
         : 'https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/3/0/7/5/235703-6-eng-GB/CEM-CORP-SIC-Food-20142.jpg';
 
+    final scheduleDate = DateTime.parse(destination.scheduleDate);
+    final currentDate = DateTime.now();
+    Duration diff = scheduleDate.difference(currentDate);
+
     void showBottomModal() {
       showModalBottomSheet(
+        backgroundColor: whiteColor,
         elevation: 2,
         isScrollControlled: true,
         context: context,
@@ -64,8 +69,7 @@ class MyDestinationCard extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    DateFormat('dd MMMM yyyy')
-                        .format(DateTime.parse(destination.scheduleDate)),
+                    DateFormat('dd MMMM yyyy').format(scheduleDate),
                     style: GoogleFonts.inter(
                       fontSize: 18,
                       fontWeight: medium,
@@ -76,10 +80,12 @@ class MyDestinationCard extends StatelessWidget {
                     height: 25,
                   ),
                   Text(
-                    'Prepare yourself, it’s only 2 days left before your new adventure is started',
+                    diff.isNegative || diff.inDays.toString() == "0"
+                        ? 'Prepare yourself, today is your new adventure is started'
+                        : 'Prepare yourself, it’s only ${diff.inDays.toInt() + 1} days left before your new adventure is started',
                     style: GoogleFonts.inter(
                       fontSize: 14,
-                      fontWeight: normal,
+                      fontWeight: medium,
                       color: greyColor,
                     ),
                   ),
@@ -92,16 +98,7 @@ class MyDestinationCard extends StatelessWidget {
                   top: 35,
                 ),
                 child: TextButton(
-                  onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => StartDestinationMapPage(
-                    //       destination: destination,
-                    //     ),
-                    //   ),
-                    // );
-                  },
+                  onPressed: () {},
                   style: TextButton.styleFrom(
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
@@ -125,9 +122,7 @@ class MyDestinationCard extends StatelessWidget {
                   top: 20,
                 ),
                 child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: () {},
                   style: TextButton.styleFrom(
                     backgroundColor: greyColor,
                     shape: RoundedRectangleBorder(
@@ -140,6 +135,37 @@ class MyDestinationCard extends StatelessWidget {
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                height: 55,
+                margin: const EdgeInsets.only(
+                  top: 20,
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: transparentColor,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        width: 2,
+                        color: greyColor,
+                        style: BorderStyle.solid,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  child: Text(
+                    'Close',
+                    style: GoogleFonts.inter(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: greyColor,
                     ),
                   ),
                 ),
