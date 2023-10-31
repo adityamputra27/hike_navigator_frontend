@@ -462,6 +462,22 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 15,
+              ),
+              SizedBox(
+                width: 65,
+                height: 65,
+                child: FloatingActionButton(
+                  backgroundColor: primaryColor,
+                  onPressed: () {},
+                  child: Icon(
+                    Icons.check_circle_outline,
+                    size: 30,
+                    color: whiteColor,
+                  ),
+                ),
+              ),
             ],
           ),
         ],
