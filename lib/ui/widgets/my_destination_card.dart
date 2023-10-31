@@ -1,24 +1,284 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
+import 'package:hike_navigator/services/location_service.dart';
 import 'package:hike_navigator/ui/pages/detail/detail_add_destination_map_page.dart';
+import 'package:hike_navigator/ui/pages/main_page.dart';
+import 'package:hike_navigator/ui/pages/start_destination_map_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
+import 'package:maplibre_gl/mapbox_gl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MyDestinationCard extends StatelessWidget {
+class MyDestinationCard extends StatefulWidget {
   final DestinationsModel destination;
-  const MyDestinationCard({required this.destination, super.key});
+  final OfflineRegion offlineMap;
+  const MyDestinationCard({
+    required this.destination,
+    required this.offlineMap,
+    super.key,
+  });
+
+  @override
+  State<MyDestinationCard> createState() => _MyDestinationCardState();
+}
+
+class _MyDestinationCardState extends State<MyDestinationCard> {
+  LocationService locationService = LocationService();
+  File? offlineSaveImage;
+  bool isOnline = false;
+  int _seconds = 3;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    _seconds = 3;
+    loadOfflineSaveImage();
+    checkConnection();
+    locationService.requestPermission();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+    super.dispose();
+  }
+
+  Future checkConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty) {
+        setState(() {
+          isOnline = true;
+        });
+      }
+    } on SocketException catch (_) {
+      setState(() {
+        isOnline = false;
+      });
+    }
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_seconds > 0) {
+          _seconds--;
+        } else {
+          _timer?.cancel();
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => StartDestinationMapPage(
+                destination: widget.destination,
+                offlineMap: widget.offlineMap,
+              ),
+            ),
+          );
+        }
+      });
+    });
+  }
+
+  void loadOfflineSaveImage() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    final path = preferences
+        .getString('OFFLINE_DESTINATION_IMAGE_${widget.offlineMap.id}');
+    if (path != null) {
+      setState(() {
+        offlineSaveImage = File(path);
+      });
+    }
+  }
+
+  Future<void> _showTimerDialog() {
+    startTimer();
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: whiteColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              defaultRadius,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                height: 15,
+              ),
+              CircularProgressIndicator(
+                backgroundColor: primaryColor,
+                color: redColor,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Starting your journey...',
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: blackColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _showDialog(
+      String text, String status, Function() onPressed) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              defaultRadius,
+            ),
+          ),
+          icon: Image.asset(
+            status == 'success'
+                ? 'assets/images/check_icon.png'
+                : 'assets/images/failed_icon.png',
+            width: 45,
+            height: 45,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                text.toString(),
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: blackColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              TextButton(
+                onPressed: onPressed,
+                style: TextButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      10,
+                    ),
+                  ),
+                ),
+                child: Text(
+                  'OK',
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w700,
+                    color: whiteColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    String imageURL = destination.mountain.mountainImages.isNotEmpty
-        ? API().baseURL + destination.mountain.mountainImages[0].url
-        : 'https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/3/0/7/5/235703-6-eng-GB/CEM-CORP-SIC-Food-20142.jpg';
-
-    final scheduleDate = DateTime.parse(destination.scheduleDate);
+    final scheduleDate = DateTime.parse(widget.destination.scheduleDate);
     final currentDate = DateTime.now();
     Duration diff = scheduleDate.difference(currentDate);
+
+    void startDestination() async {
+      Navigator.pop(context);
+      if (diff.inDays.toInt() == 0) {
+        _showTimerDialog();
+      } else if (diff.isNegative) {
+        _showDialog(
+          'Your journey has been missed! ',
+          'failed',
+          () => Navigator.pop(context),
+        );
+      } else {
+        _showDialog(
+          "You can't start your journey today!",
+          'failed',
+          () => Navigator.pop(context),
+        );
+      }
+    }
+
+    void cancelDestination() async {
+      Navigator.pop(context);
+      if (isOnline == true) {
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        final result = await API().postRequestWithToken(
+          route: '/climbing-plans/${widget.destination.id}/cancel',
+          payload: {},
+        );
+
+        final response = jsonDecode(result.body);
+        if (response['status'] == 400) {
+          preferences.remove('OFFLINE_DESTINATION_${widget.offlineMap.id}');
+          preferences
+              .remove('OFFLINE_DESTINATION_IMAGE_${widget.offlineMap.id}');
+          preferences.remove('CHECK_POINTS_${widget.offlineMap.id}');
+
+          _showDialog(
+            'Successfully cancel your schedule!',
+            'success',
+            () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainPage(preferences: preferences),
+                ),
+              )
+            },
+          );
+        } else {
+          _showDialog(
+            response['message'],
+            'failed',
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MainPage(preferences: preferences),
+              ),
+            ),
+          );
+        }
+      } else {
+        _showDialog(
+          'No internet connection',
+          'failed',
+          () => Navigator.pop(context),
+        );
+      }
+    }
 
     void showBottomModal() {
       showModalBottomSheet(
@@ -58,7 +318,7 @@ class MyDestinationCard extends StatelessWidget {
                     height: 35,
                   ),
                   Text(
-                    '${destination.mountain.name} - ${destination.mountain.province.name}',
+                    '${widget.destination.mountain.name} - ${widget.destination.mountain.province.name}',
                     style: GoogleFonts.inter(
                       fontSize: 22,
                       fontWeight: bold,
@@ -98,7 +358,7 @@ class MyDestinationCard extends StatelessWidget {
                   top: 35,
                 ),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: startDestination,
                   style: TextButton.styleFrom(
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
@@ -122,7 +382,7 @@ class MyDestinationCard extends StatelessWidget {
                   top: 20,
                 ),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: cancelDestination,
                   style: TextButton.styleFrom(
                     backgroundColor: greyColor,
                     shape: RoundedRectangleBorder(
@@ -182,7 +442,7 @@ class MyDestinationCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => DetailAddDestinationMapPage(
-              mountain: destination.mountain,
+              mountain: widget.destination.mountain,
             ),
           ),
         );
@@ -191,10 +451,12 @@ class MyDestinationCard extends StatelessWidget {
         width: 300,
         height: 450,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(imageURL),
-            fit: BoxFit.cover,
-          ),
+          image: offlineSaveImage != null
+              ? DecorationImage(
+                  image: FileImage(offlineSaveImage!),
+                  fit: BoxFit.cover,
+                )
+              : null,
           borderRadius: BorderRadius.circular(
             25,
           ),
@@ -210,7 +472,7 @@ class MyDestinationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    destination.mountain.name,
+                    widget.destination.mountain.name,
                     style: GoogleFonts.inter(
                       fontSize: 24,
                       color: blackColor,
@@ -221,7 +483,7 @@ class MyDestinationCard extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    destination.mountain.height,
+                    widget.destination.mountain.height,
                     style: GoogleFonts.inter(
                       fontSize: 18,
                       color: blackColor,
@@ -278,8 +540,10 @@ class MyDestinationCard extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text:
-                              ' ${DateFormat('dd MMM yyyy').format(DateTime.parse(destination.scheduleDate))}',
+                          text: diff.isNegative || diff.inDays.toString() == "0"
+                              ? ' Today!'
+                              : DateFormat('dd MMM yyyy').format(DateTime.parse(
+                                  widget.destination.scheduleDate)),
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             color: whiteColor,

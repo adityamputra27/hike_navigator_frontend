@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,20 +11,53 @@ import 'package:hike_navigator/models/destinations_saved_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/my_destination_card.dart';
 import 'package:hike_navigator/ui/widgets/my_saved_destination_card.dart';
+import 'package:maplibre_gl/mapbox_gl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyDestinationPage extends StatefulWidget {
-  const MyDestinationPage({super.key});
+  final SharedPreferences? preferences;
+
+  const MyDestinationPage({Key? key, required this.preferences})
+      : super(key: key);
 
   @override
   State<MyDestinationPage> createState() => _MyDestinationPageState();
 }
 
 class _MyDestinationPageState extends State<MyDestinationPage> {
+  bool isOnline = false;
+  List<OfflineRegion>? offlineMaps;
+
   @override
   void initState() {
     context.read<DestinationsCubit>().fetchDestinations('', 0);
     context.read<DestinationsSavedCubit>().fetchDestinationsSaved();
+
+    _getOfflineMap();
+    checkConnection();
     super.initState();
+  }
+
+  _getOfflineMap() async {
+    List<OfflineRegion> regions = await getListOfRegions();
+    setState(() {
+      offlineMaps = regions;
+    });
+  }
+
+  Future checkConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isOnline = true;
+        });
+      }
+    } on SocketException catch (_) {
+      setState(() {
+        isOnline = false;
+      });
+    }
   }
 
   @override
@@ -66,53 +102,50 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
     }
 
     Widget destination() {
-      return BlocConsumer<DestinationsCubit, DestinationsState>(
-        builder: (context, state) {
-          if (state is DestinationsSuccess) {
-            return Container(
-              margin: EdgeInsets.only(
-                left: defaultSpace,
-              ),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children:
-                      state.destinations.map((DestinationsModel destination) {
-                    return Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 30),
-                          child: MyDestinationCard(
-                            destination: destination,
-                          ),
-                        ),
-                      ],
-                    );
-                  }).toList(),
-                ),
-              ),
-            );
-          }
-          return Center(
-            child: Container(
-              margin: const EdgeInsets.only(
-                top: 20,
-                bottom: 20,
-              ),
-              child: const CircularProgressIndicator(),
+      List<Widget> offlineDetinations = [];
+      if (offlineMaps != null && widget.preferences != null) {
+        offlineDetinations = offlineMaps!
+            .map<Widget>((offlineMap) {
+              var prefDestination = widget.preferences!
+                  .getString('OFFLINE_DESTINATION_${offlineMap.id}');
+
+              if (prefDestination != null) {
+                final offlineDestination =
+                    DestinationsModel.fromJsonWithPreferences(
+                        jsonDecode(prefDestination));
+
+                return Padding(
+                  padding: const EdgeInsets.only(right: 30),
+                  child: MyDestinationCard(
+                    destination: offlineDestination,
+                    offlineMap: offlineMap,
+                  ),
+                );
+              }
+              return const SizedBox();
+            })
+            .where((destinationCard) => destinationCard != const SizedBox())
+            .toList();
+      } else {
+        return Center(
+          child: Container(
+            margin: const EdgeInsets.only(
+              top: 20,
+              bottom: 20,
             ),
-          );
-        },
-        listener: (context, state) {
-          if (state is DestinationsFailed) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.redAccent,
-                content: Text(state.error),
-              ),
-            );
-          }
-        },
+            child: const CircularProgressIndicator(),
+          ),
+        );
+      }
+
+      return Container(
+        margin: EdgeInsets.only(
+          left: defaultSpace,
+        ),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(children: offlineDetinations),
+        ),
       );
     }
 
@@ -211,7 +244,7 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
           children: [
             header(),
             destination(),
-            bookmark(),
+            if (isOnline == true) bookmark(),
           ],
         ),
       ),

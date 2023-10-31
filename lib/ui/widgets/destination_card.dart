@@ -246,6 +246,7 @@ class _DestinationCardState extends State<DestinationCard> {
           preferences.remove('OFFLINE_DESTINATION_${widget.offlineMap.id}');
           preferences
               .remove('OFFLINE_DESTINATION_IMAGE_${widget.offlineMap.id}');
+          preferences.remove('CHECK_POINTS_${widget.offlineMap.id}');
 
           _showDialog(
             'Successfully cancel your schedule!',

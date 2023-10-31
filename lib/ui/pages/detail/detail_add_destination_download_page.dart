@@ -47,7 +47,7 @@ class _DetailAddDestinationDownloadPageState
         await _saveOfflineDestination(region);
 
         _showDialog(
-          'Peta Offline Berhasil Di unduh!',
+          'Downloaded successfully!',
           'success',
           0,
           () => Navigator.pushAndRemoveUntil(
@@ -69,7 +69,8 @@ class _DetailAddDestinationDownloadPageState
       setState(() {
         isDownloading = false;
         _showDialog(
-            'Gagal mengunduh Peta Offline. Silahkan coba lagi', 'error', 0, () {
+            'Failed to download offline maps. Please try again!', 'error', 0,
+            () {
           Navigator.pop(context);
           _downloadRegion();
         });
@@ -228,7 +229,7 @@ class _DetailAddDestinationDownloadPageState
                   height: 5,
                 ),
                 Text(
-                  'Mengunduh Peta Offline ${(progress * 100).round()}%',
+                  'Downloading offline maps ${(progress * 100).round()}%',
                   style: GoogleFonts.inter(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -386,7 +387,7 @@ class _DetailAddDestinationDownloadPageState
                       height: 5,
                     ),
                     Text(
-                      'Offline map',
+                      'Offline Map',
                       style: GoogleFonts.inter(
                         fontSize: 24,
                         fontWeight: black,
@@ -481,7 +482,7 @@ class _DetailAddDestinationDownloadPageState
           child: Column(
             children: [
               Text(
-                'Mengunduh Peta Offline ${(downloadProgress * 100).round()}%',
+                'Download offline maps ${(downloadProgress * 100).round()}%',
                 style: GoogleFonts.inter(
                   fontSize: 18,
                   fontWeight: bold,

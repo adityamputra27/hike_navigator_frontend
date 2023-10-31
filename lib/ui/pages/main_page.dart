@@ -215,7 +215,9 @@ class _MainPageState extends State<MainPage> {
             preferences: widget.preferences,
           );
         case 1:
-          return const MyDestinationPage();
+          return MyDestinationPage(
+            preferences: widget.preferences,
+          );
         case 2:
           return MyProfilePage(
             preferences: widget.preferences,

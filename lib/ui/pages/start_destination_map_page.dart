@@ -53,15 +53,17 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
 
   void _loadMarkersFromStorage() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    List<String>? checkPoints = preferences.getStringList('check_points');
+    List<String>? checkPoints =
+        preferences.getStringList('CHECK_POINTS_${widget.offlineMap.id}');
     if (checkPoints != null) {
       for (String checkPoint in checkPoints) {
         dynamic checkPointData = jsonDecode(checkPoint);
         _addMarkerImage(
           checkPointMarker,
           LatLng(double.parse(checkPointData['latitude']),
-              checkPointData['longitude']),
+              double.parse(checkPointData['longitude'])),
           checkPointData,
+          0.25,
         );
       }
     }
@@ -92,6 +94,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
         'contactNumber': '-',
         'height': '0',
       },
+      0.5,
     );
     _addMarkerImage(
       mountainMarker,
@@ -106,6 +109,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
         'contactNumber': '-',
         'height': widget.destination.mountain.height,
       },
+      0.5,
     );
     _addMarkerImage(
       mountainMarker,
@@ -120,6 +124,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
         'contactNumber': '-',
         'height': widget.destination.mountainPeak.peak.height,
       },
+      0.5,
     );
     for (var camp in widget.destination.mountain.mountainPosts) {
       _addMarkerImage(
@@ -135,6 +140,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'contactNumber': camp.contactNumber,
           'height': '0',
         },
+        0.5,
       );
     }
     for (var mark in widget.destination.mountain.mountainMarks) {
@@ -151,6 +157,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'contactNumber': mark.contactNumber,
           'height': '0',
         },
+        0.5,
       );
     }
     for (var waterfall in widget.destination.mountain.mountainWaterfalls) {
@@ -167,6 +174,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'contactNumber': waterfall.contactNumber,
           'height': '0',
         },
+        0.5,
       );
     }
     for (var waterspring in widget.destination.mountain.mountainWatersprings) {
@@ -183,6 +191,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'contactNumber': waterspring.contactNumber,
           'height': '0',
         },
+        0.5,
       );
     }
     for (var river in widget.destination.mountain.mountainRivers) {
@@ -199,6 +208,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'contactNumber': river.contactNumber,
           'height': '0',
         },
+        0.5,
       );
     }
     for (var track in widget.destination.mountain.mountainTracks) {
@@ -215,9 +225,10 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
     return mapController?.addImage(name, list);
   }
 
-  void _addMarkerImage(String iconImage, LatLng location, dynamic data) {
+  void _addMarkerImage(
+      String iconImage, LatLng location, dynamic data, double size) {
     mapController?.addSymbol(
-      _getImageSymbolOptions(iconImage, location),
+      _getImageSymbolOptions(iconImage, location, size),
       data,
     );
   }
@@ -238,11 +249,12 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
     super.initState();
   }
 
-  SymbolOptions _getImageSymbolOptions(String iconImage, LatLng location) {
+  SymbolOptions _getImageSymbolOptions(
+      String iconImage, LatLng location, double size) {
     return SymbolOptions(
       geometry: location,
       iconImage: iconImage,
-      iconSize: 0.5,
+      iconSize: size,
     );
   }
 
@@ -277,15 +289,17 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
       'height': '0',
     };
 
-    _addMarkerImage(checkPointMarker, markerLocation, payload);
+    _addMarkerImage(checkPointMarker, markerLocation, payload, 0.25);
     _saveCheckPointData(payload);
   }
 
   void _saveCheckPointData(dynamic data) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    List<String> checkPoints = preferences.getStringList('markers') ?? [];
+    List<String> checkPoints =
+        preferences.getStringList('CHECK_POINTS_${widget.offlineMap.id}') ?? [];
     checkPoints.add(jsonEncode(data));
-    await preferences.setStringList('check_points', checkPoints);
+    await preferences.setStringList(
+        'CHECK_POINTS_${widget.offlineMap.id}', checkPoints);
   }
 
   Future<String?> _showDialogCheckPoint(BuildContext context) async {
