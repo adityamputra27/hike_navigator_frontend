@@ -540,7 +540,7 @@ class _MyDestinationCardState extends State<MyDestinationCard> {
                           ),
                         ),
                         TextSpan(
-                          text: diff.isNegative || diff.inDays.toString() == "0"
+                          text: diff.inDays.toString() == "0"
                               ? ' Today!'
                               : DateFormat('dd MMM yyyy').format(DateTime.parse(
                                   widget.destination.scheduleDate)),

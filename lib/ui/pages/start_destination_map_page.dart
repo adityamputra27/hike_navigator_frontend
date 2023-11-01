@@ -1,12 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/services/location_service.dart';
+import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:maplibre_gl/mapbox_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,6 +42,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
   dynamic symbolData;
   bool showMarkerDialog = false;
   LocationService locationService = LocationService();
+  bool isOnline = false;
 
   void _onMapCreated(MaplibreMapController controller) async {
     mapController = controller;
@@ -246,7 +250,23 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
   @override
   void initState() {
     locationService.requestPermission();
+    checkConnection();
     super.initState();
+  }
+
+  Future checkConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty) {
+        setState(() {
+          isOnline = true;
+        });
+      }
+    } on SocketException catch (_) {
+      setState(() {
+        isOnline = false;
+      });
+    }
   }
 
   SymbolOptions _getImageSymbolOptions(
@@ -300,6 +320,120 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
     checkPoints.add(jsonEncode(data));
     await preferences.setStringList(
         'CHECK_POINTS_${widget.offlineMap.id}', checkPoints);
+  }
+
+  Future<void> _showDialog(
+      String text, String status, Function() onPressed) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              defaultRadius,
+            ),
+          ),
+          icon: Image.asset(
+            status == 'success'
+                ? 'assets/images/check_icon.png'
+                : 'assets/images/failed_icon.png',
+            width: 45,
+            height: 45,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                text.toString(),
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: blackColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              TextButton(
+                onPressed: onPressed,
+                style: TextButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      10,
+                    ),
+                  ),
+                ),
+                child: Text(
+                  'OK',
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w700,
+                    color: whiteColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void finishDestination() async {
+    if (isOnline == true) {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      final result = await API().postRequestWithToken(
+        route: '/climbing-plans/${widget.destination.id}/finish',
+        payload: {},
+      );
+
+      final response = jsonDecode(result.body);
+
+      if (response['status'] == 400) {
+        preferences.remove('OFFLINE_DESTINATION_${widget.offlineMap.id}');
+        preferences.remove('OFFLINE_DESTINATION_IMAGE_${widget.offlineMap.id}');
+        preferences.remove('CHECK_POINTS_${widget.offlineMap.id}');
+
+        _showDialog(
+          response['message'],
+          'success',
+          () => {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => MainPage(
+                  preferences: preferences,
+                ),
+              ),
+              (Route route) => false,
+            ),
+          },
+        );
+      } else {
+        _showDialog(
+          response['message'],
+          'failed',
+          () => Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => MainPage(
+                preferences: preferences,
+              ),
+            ),
+            (Route route) => false,
+          ),
+        );
+      }
+    } else {
+      _showDialog(
+        'No internet connection',
+        'failed',
+        () => Navigator.pop(context),
+      );
+    }
   }
 
   Future<String?> _showDialogCheckPoint(BuildContext context) async {
@@ -470,7 +604,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
                 height: 65,
                 child: FloatingActionButton(
                   backgroundColor: primaryColor,
-                  onPressed: () {},
+                  onPressed: finishDestination,
                   child: Icon(
                     Icons.check_circle_outline,
                     size: 30,
