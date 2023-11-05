@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hike_navigator/constans/ad_helper.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
@@ -38,9 +40,34 @@ class DetailReviewDestinationPage extends StatefulWidget {
 
 class _DetailReviewDestinationPageState
     extends State<DetailReviewDestinationPage> {
+  BannerAd? _bannerAd;
+
   @override
   void initState() {
+    BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          print('Failed to load a banner ad : ${error.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
   }
 
   void createPlan() async {
@@ -423,6 +450,21 @@ class _DetailReviewDestinationPageState
                 fontWeight: medium,
               ),
             ),
+            if (_bannerAd != null)
+              const SizedBox(
+                height: 25,
+              ),
+            if (_bannerAd != null)
+              Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  width: _bannerAd!.size.width.toDouble(),
+                  height: _bannerAd!.size.height.toDouble(),
+                  child: AdWidget(
+                    ad: _bannerAd!,
+                  ),
+                ),
+              ),
           ],
         ),
       );
