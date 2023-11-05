@@ -255,7 +255,8 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                   CarouselSlider.builder(
                     itemCount: urlImages.length,
                     itemBuilder: (context, index, realIndex) {
-                      final image = urlImages[index];
+                      final image =
+                          urlImages[index] != null ? urlImages[index] : '';
                       return buildCarousel(image, index);
                     },
                     options: CarouselOptions(

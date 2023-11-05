@@ -467,18 +467,13 @@ class _MyProfilePageState extends State<MyProfilePage> {
               ],
             ),
           ),
-        ],
-      );
-    }
-
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: Stack(
-        children: [
+          const SizedBox(
+            height: 20,
+          ),
           if (_bannerAd != null)
             Align(
               alignment: Alignment.topCenter,
-              child: Container(
+              child: SizedBox(
                 width: _bannerAd!.size.width.toDouble(),
                 height: _bannerAd!.size.height.toDouble(),
                 child: AdWidget(
@@ -487,16 +482,20 @@ class _MyProfilePageState extends State<MyProfilePage> {
               ),
             ),
         ],
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      body: Column(
+        children: [
+          image(),
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(child: action()),
+        ],
       ),
-      // body: Column(
-      //   children: [
-      //     image(),
-      //     const SizedBox(
-      //       height: 20,
-      //     ),
-      //     Expanded(child: action()),
-      //   ],
-      // ),
     );
   }
 }
