@@ -23,7 +23,6 @@ class MyProfilePage extends StatefulWidget {
 
 class _MyProfilePageState extends State<MyProfilePage> {
   bool isOnline = false;
-  BannerAd? _bannerAd;
 
   Future checkConnection() async {
     try {
@@ -44,29 +43,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
   void initState() {
     checkConnection();
 
-    BannerAd(
-      adUnitId: AdHelper.bannerAdUnitId,
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          setState(() {
-            _bannerAd = ad as BannerAd;
-          });
-        },
-        onAdFailedToLoad: (ad, error) {
-          print('Failed to load a banner ad : ${error.message}');
-          ad.dispose();
-        },
-      ),
-    ).load();
-
     super.initState();
   }
 
   @override
   void dispose() {
-    _bannerAd?.dispose();
     super.dispose();
   }
 
@@ -470,17 +451,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
           const SizedBox(
             height: 20,
           ),
-          if (_bannerAd != null)
-            Align(
-              alignment: Alignment.topCenter,
-              child: SizedBox(
-                width: _bannerAd!.size.width.toDouble(),
-                height: _bannerAd!.size.height.toDouble(),
-                child: AdWidget(
-                  ad: _bannerAd!,
-                ),
-              ),
-            ),
         ],
       );
     }
