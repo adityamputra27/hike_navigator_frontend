@@ -58,10 +58,10 @@ dependencies:
   #   git:
   #     url: https://github.com/srmanc/maps.git
   #     ref: 7eead7c3fa4b59f553ee15a33ab12e8c564e60ac
-  # maplibre_gl:
-  #   git:
-  #     url: https://github.com/maplibre/flutter-maplibre-gl.git
-  #     ref: main
+  maplibre_gl:
+     git:
+       url: https://github.com/maplibre/flutter-maplibre-gl.git
+       ref: main
   geolocator: ^10.1.0
   path_provider: ^2.1.1
   path: ^1.8.3
@@ -70,7 +70,8 @@ dependencies:
   package_info_plus: ^4.1.0
   url_launcher: ^6.1.14
   flutter_launcher_icons: ^0.13.1
-  maplibre_gl: ^0.16.0
+  google_mobile_ads: ^3.1.0
+#  maplibre_gl: ^0.16.0
 
 dev_dependencies:
   flutter_test:

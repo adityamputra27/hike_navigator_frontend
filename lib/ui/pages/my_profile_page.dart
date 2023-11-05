@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hike_navigator/constans/ad_helper.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/ui/pages/sign_in_page.dart';
 import 'package:hike_navigator/ui/pages/static/privacy_and_policy.dart';
@@ -21,6 +23,7 @@ class MyProfilePage extends StatefulWidget {
 
 class _MyProfilePageState extends State<MyProfilePage> {
   bool isOnline = false;
+  BannerAd? _bannerAd;
 
   Future checkConnection() async {
     try {
@@ -40,7 +43,31 @@ class _MyProfilePageState extends State<MyProfilePage> {
   @override
   void initState() {
     checkConnection();
+
+    BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          print('Failed to load a banner ad : ${error.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
   }
 
   @override
@@ -446,15 +473,30 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: Column(
+      body: Stack(
         children: [
-          image(),
-          const SizedBox(
-            height: 20,
-          ),
-          Expanded(child: action()),
+          if (_bannerAd != null)
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                width: _bannerAd!.size.width.toDouble(),
+                height: _bannerAd!.size.height.toDouble(),
+                child: AdWidget(
+                  ad: _bannerAd!,
+                ),
+              ),
+            ),
         ],
       ),
+      // body: Column(
+      //   children: [
+      //     image(),
+      //     const SizedBox(
+      //       height: 20,
+      //     ),
+      //     Expanded(child: action()),
+      //   ],
+      // ),
     );
   }
 }

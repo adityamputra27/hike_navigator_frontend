@@ -8,7 +8,7 @@ import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
-import 'package:maplibre_gl/mapbox_gl.dart';
+import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -17,6 +17,7 @@ import 'package:path/path.dart' as path;
 class DetailAddDestinationDownloadPage extends StatefulWidget {
   final DestinationsModel destination;
   final MountainsModel mountain;
+
   const DetailAddDestinationDownloadPage({
     required this.mountain,
     required this.destination,
