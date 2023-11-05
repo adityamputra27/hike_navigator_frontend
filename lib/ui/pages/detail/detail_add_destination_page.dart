@@ -441,16 +441,17 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                   const SizedBox(
                     height: 25,
                   ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: SizedBox(
-                    width: _bannerAd!.size.width.toDouble(),
-                    height: _bannerAd!.size.height.toDouble(),
-                    child: AdWidget(
-                      ad: _bannerAd!,
+                if (_bannerAd != null)
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: SizedBox(
+                      width: _bannerAd!.size.width.toDouble(),
+                      height: _bannerAd!.size.height.toDouble(),
+                      child: AdWidget(
+                        ad: _bannerAd!,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ],
