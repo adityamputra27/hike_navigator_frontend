@@ -205,6 +205,7 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                   child: Container(
                     width: 50,
                     height: 50,
+                    margin: const EdgeInsets.only(right: 14),
                     decoration: BoxDecoration(
                       color: redAccentColor,
                       borderRadius: BorderRadius.circular(defaultRadius),
@@ -215,35 +216,42 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                     ),
                   ),
                 ),
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      widget.mountain.name,
-                      style: GoogleFonts.inter(
-                        fontSize: 24,
-                        fontWeight: black,
-                        color: blackColor,
+                Expanded(
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 5,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 7.5,
-                    ),
-                    Text(
-                      '${widget.mountain.city.name}, ${widget.mountain.province.name}',
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal,
-                        color: greyColor,
+                      Text(
+                        widget.mountain.name,
+                        style: GoogleFonts.inter(
+                          fontSize: 24,
+                          fontWeight: black,
+                          color: blackColor,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
-                    ),
-                  ],
+                      const SizedBox(
+                        height: 7.5,
+                      ),
+                      Text(
+                        '${widget.mountain.city.name}, ${widget.mountain.province.name}',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          color: greyColor,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(
+                Container(
                   width: 50,
                   height: 50,
+                  margin: const EdgeInsets.only(left: 14),
                 ),
               ],
             ),
@@ -255,8 +263,7 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                   CarouselSlider.builder(
                     itemCount: urlImages.length,
                     itemBuilder: (context, index, realIndex) {
-                      final image =
-                          urlImages[index] != null ? urlImages[index] : '';
+                      final image = urlImages[index] ?? '';
                       return buildCarousel(image, index);
                     },
                     options: CarouselOptions(
