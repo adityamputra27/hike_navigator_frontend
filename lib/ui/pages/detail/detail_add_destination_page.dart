@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hike_navigator/constans/ad_helper.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/mountain_peaks_model.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
@@ -33,6 +35,8 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
   int campTotal = 0;
   int waterspringTotal = 0;
 
+  BannerAd? _bannerAd;
+
   @override
   void initState() {
     _isMounted = true;
@@ -56,12 +60,31 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
         }
       }
     }
+
+    BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          print('Failed to load a banner ad : ${error.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
+
     super.initState();
   }
 
   @override
   void dispose() {
     _isMounted = false;
+    _bannerAd?.dispose();
     super.dispose();
   }
 
@@ -414,6 +437,20 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                       );
                     }).toList(),
                   ),
+                if (_bannerAd != null)
+                  const SizedBox(
+                    height: 25,
+                  ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: SizedBox(
+                    width: _bannerAd!.size.width.toDouble(),
+                    height: _bannerAd!.size.height.toDouble(),
+                    child: AdWidget(
+                      ad: _bannerAd!,
+                    ),
+                  ),
+                ),
               ],
             ),
           ],
