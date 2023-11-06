@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hike_navigator/constans/ad_helper.dart';
 import 'package:hike_navigator/cubit/mountains_cubit.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/models/province_model.dart';
@@ -22,6 +24,9 @@ class _AddDestinationPageState extends State<AddDestinationPage> {
 
   ValueNotifier<int> activeProvinceFilterIndexNotifier = ValueNotifier<int>(-1);
   List<ProvinceModel> provinces = [];
+
+  NativeAd? _bannerAd;
+  static const _kBannerAdIndex = 5;
 
   void fetchProvinces() async {
     try {
@@ -47,6 +52,19 @@ class _AddDestinationPageState extends State<AddDestinationPage> {
     context.read<MountainsCubit>().fetchMountains(searchQuery, searchProvince);
     fetchProvinces();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
+
+  int _getDestinationItemIndex(int rawIndex) {
+    if (rawIndex >= _kBannerAdIndex && _bannerAd != null) {
+      return rawIndex - 1;
+    }
+    return rawIndex;
   }
 
   void startSearch() {
@@ -360,32 +378,52 @@ class _AddDestinationPageState extends State<AddDestinationPage> {
       );
     }
 
+    Widget ads() {
+      BannerAdListener bannerAdListener =
+          BannerAdListener(onAdWillDismissScreen: (ad) {
+        ad.dispose();
+      }, onAdClosed: (ad) {
+        debugPrint('Ad Got Closed');
+      });
+      BannerAd bannerAd = BannerAd(
+        size: AdSize.banner,
+        adUnitId: AdHelper.bannerAdUnitId,
+        listener: bannerAdListener,
+        request: const AdRequest(),
+      );
+
+      bannerAd.load();
+
+      return Container(
+        margin: const EdgeInsets.only(bottom: 24),
+        height: 50,
+        child: AdWidget(ad: bannerAd),
+      );
+    }
+
     Widget destination() {
       return BlocConsumer<MountainsCubit, MountainsState>(
         builder: (context, state) {
           if (state is MountainsSuccess) {
+            List<Widget> destinationWidgets = [];
             if (state.mountains.isNotEmpty) {
-              return Container(
-                margin: EdgeInsets.only(
-                  top: 40,
-                  left: defaultSpace,
-                  right: defaultSpace,
-                ),
-                child: Column(
-                  children: state.mountains.map((MountainsModel mountain) {
-                    return Column(
-                      children: [
-                        AddDestinationCard(
-                          mountain: mountain,
-                        ),
-                        const SizedBox(
-                          height: 35,
-                        ),
-                      ],
-                    );
-                  }).toList(),
-                ),
-              );
+              for (var i = 0; i < state.mountains.length; i++) {
+                if (i > 0 && i % _kBannerAdIndex == 0) {
+                  destinationWidgets.add(ads());
+                }
+                MountainsModel mountain =
+                    state.mountains[_getDestinationItemIndex(i)];
+                destinationWidgets.add(
+                  Column(
+                    children: [
+                      AddDestinationCard(mountain: mountain),
+                      const SizedBox(
+                        height: 25,
+                      )
+                    ],
+                  ),
+                );
+              }
             } else {
               return Container(
                 margin: EdgeInsets.only(
@@ -403,6 +441,14 @@ class _AddDestinationPageState extends State<AddDestinationPage> {
                 ),
               );
             }
+            return Container(
+              margin: EdgeInsets.only(
+                top: 40,
+                left: defaultSpace,
+                right: defaultSpace,
+              ),
+              child: Column(children: destinationWidgets),
+            );
           }
           return Center(
             child: Container(
