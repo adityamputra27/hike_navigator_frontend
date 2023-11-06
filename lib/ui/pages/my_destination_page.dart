@@ -1,12 +1,9 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:hike_navigator/constans/ad_helper.dart';
 import 'package:hike_navigator/cubit/destinations_cubit.dart';
 import 'package:hike_navigator/cubit/destinations_saved_cubit.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
@@ -30,14 +27,9 @@ class MyDestinationPage extends StatefulWidget {
 class _MyDestinationPageState extends State<MyDestinationPage> {
   bool isOnline = false;
   List<OfflineRegion>? offlineMaps;
-  NativeAd? _nativeAd;
-  bool _nativeAdIsLoaded = false;
-  final double _nativeAdAspectRatioSmall = (91 / 355);
-  final double _nativeAdAspectRatioMedium = (370 / 355);
 
   @override
   void dispose() {
-    _nativeAd?.dispose();
     super.dispose();
   }
 
@@ -48,7 +40,6 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
 
     _getOfflineMap();
     checkConnection();
-    _loadAd();
     super.initState();
   }
 
@@ -57,69 +48,6 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
     setState(() {
       offlineMaps = regions;
     });
-  }
-
-  void _loadAd() {
-    setState(() {
-      _nativeAdIsLoaded = false;
-    });
-    _nativeAd = NativeAd(
-      adUnitId: AdHelper.nativeAdUnitId,
-      listener: NativeAdListener(
-        onAdLoaded: (ad) {
-          print('$NativeAd loaded.');
-          setState(() {
-            _nativeAdIsLoaded = true;
-          });
-        },
-        onAdFailedToLoad: (ad, error) {
-          // Dispose the ad here to free resources.
-          print('$NativeAd failedToLoad: $error');
-          ad.dispose();
-        },
-        // Called when a click is recorded for a NativeAd.
-        onAdClicked: (ad) {},
-        // Called when an impression occurs on the ad.
-        onAdImpression: (ad) {},
-        // Called when an ad removes an overlay that covers the screen.
-        onAdClosed: (ad) {},
-        // Called when an ad opens an overlay that covers the screen.
-        onAdOpened: (ad) {},
-        // For iOS only. Called before dismissing a full screen view
-        onAdWillDismissScreen: (ad) {},
-        // Called when an ad receives revenue value.
-        onPaidEvent: (ad, valueMicros, precision, currencyCode) {},
-      ),
-      request: const AdRequest(),
-      // Styling
-      nativeTemplateStyle: NativeTemplateStyle(
-        // Required: Choose a template.
-        templateType: TemplateType.medium,
-        // Optional: Customize the ad's style.
-        mainBackgroundColor: Colors.purple,
-        cornerRadius: 10.0,
-        callToActionTextStyle: NativeTemplateTextStyle(
-            textColor: Colors.cyan,
-            backgroundColor: Colors.red,
-            style: NativeTemplateFontStyle.monospace,
-            size: 16.0),
-        primaryTextStyle: NativeTemplateTextStyle(
-            textColor: Colors.red,
-            backgroundColor: Colors.cyan,
-            style: NativeTemplateFontStyle.italic,
-            size: 16.0),
-        secondaryTextStyle: NativeTemplateTextStyle(
-            textColor: Colors.green,
-            backgroundColor: Colors.black,
-            style: NativeTemplateFontStyle.bold,
-            size: 16.0),
-        tertiaryTextStyle: NativeTemplateTextStyle(
-            textColor: Colors.brown,
-            backgroundColor: Colors.amber,
-            style: NativeTemplateFontStyle.normal,
-            size: 16.0),
-      ),
-    )..load();
   }
 
   Future checkConnection() async {
@@ -322,16 +250,6 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
             header(),
             destination(),
             if (isOnline == true) bookmark(),
-            if (_nativeAdIsLoaded && _nativeAd != null)
-              ConstrainedBox(
-                constraints: const BoxConstraints(
-                  minWidth: 320, // minimum recommended width
-                  minHeight: 90, // minimum recommended height
-                  maxWidth: 400,
-                  maxHeight: 200,
-                ),
-                child: AdWidget(ad: _nativeAd!),
-              ),
           ],
         ),
       ),

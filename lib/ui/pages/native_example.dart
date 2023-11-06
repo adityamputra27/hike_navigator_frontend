@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hike_navigator/constans/ad_helper.dart';
@@ -24,11 +22,7 @@ class NativeExampleState extends State<NativeExample> {
   static const _kNativeAdIndex = 4;
 
   // final double _adAspectRatioSmall = (91 / 355);
-  final double _adAspectRatioMedium = (370 / 355);
-
-  final String _adUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/2247696110'
-      : 'ca-app-pub-3940256099942544/3986624511';
+  // final double _adAspectRatioMedium = (370 / 355);
 
   @override
   void initState() {
@@ -54,6 +48,26 @@ class NativeExampleState extends State<NativeExample> {
     ).load();
   }
 
+  Widget getAd() {
+    BannerAdListener bannerAdListener =
+        BannerAdListener(onAdWillDismissScreen: (ad) {
+      ad.dispose();
+    }, onAdClosed: (ad) {
+      debugPrint('Ad Got Closed');
+    });
+    BannerAd bannerAd = BannerAd(
+      size: AdSize.banner,
+      adUnitId: AdHelper.bannerAdUnitId,
+      listener: bannerAdListener,
+      request: const AdRequest(),
+    );
+    bannerAd.load();
+    return SizedBox(
+      height: 50,
+      child: AdWidget(ad: bannerAd),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -62,33 +76,26 @@ class NativeExampleState extends State<NativeExample> {
         appBar: AppBar(
           title: const Text('AdMob Native Inline Ad'),
         ),
-        body: ListView.builder(
-          // COMPLETE: Adjust itemCount based on the ad load state
-          itemCount: widget.destination.length + (_nativeAd != null ? 1 : 0),
+        body: ListView.separated(
+          separatorBuilder: (context, index) {
+            return const SizedBox();
+          },
+          itemCount: widget.destination.length,
           itemBuilder: (context, index) {
-            // COMPLETE: Render a native ad
-            if (_ad != null && index == _kNativeAdIndex) {
-              return Container(
-                height: 72.0,
-                alignment: Alignment.center,
-                child: AdWidget(ad: _nativeAd!),
-              );
-            } else {
-              // COMPLETE: Get adjusted item index from _getDestinationItemIndex()
-              final item = widget.destination[_getDestinationItemIndex(index)];
-
-              return ListTile(
-
-                title: Text(item.name),
-                subtitle: Text(item.duration),
-                onTap: () {
-                  debugPrint('Clicked ${item.name}');
-                },
-              );
+            if (index % 2 == 0) {
+              return getAd();
             }
+            final item = widget.destination[index];
+            return ListTile(
+              title: Text(item.name),
+              subtitle: Text(item.duration),
+              onTap: () {
+                debugPrint('Clicked ${item.name}');
+              },
+            );
           },
         ),
-      );
+      ),
     );
   }
 
