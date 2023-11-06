@@ -40,23 +40,24 @@ class DetailReviewDestinationPage extends StatefulWidget {
 
 class _DetailReviewDestinationPageState
     extends State<DetailReviewDestinationPage> {
-  BannerAd? _bannerAd;
+  NativeAd? _nativeAd;
 
   @override
   void initState() {
-    BannerAd(
-      adUnitId: AdHelper.bannerAdUnitId,
+    NativeAd(
+      adUnitId: AdHelper.nativeAdUnitId,
+      factoryId: 'listTile',
       request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
+      listener: NativeAdListener(
         onAdLoaded: (ad) {
           setState(() {
-            _bannerAd = ad as BannerAd;
+            _nativeAd = ad as NativeAd;
           });
         },
         onAdFailedToLoad: (ad, error) {
-          print('Failed to load a banner ad : ${error.message}');
           ad.dispose();
+          debugPrint(
+              'Ad load failed (code=${error.code} message=${error.message})');
         },
       ),
     ).load();
@@ -66,7 +67,7 @@ class _DetailReviewDestinationPageState
 
   @override
   void dispose() {
-    _bannerAd?.dispose();
+    _nativeAd?.dispose();
     super.dispose();
   }
 
@@ -450,24 +451,21 @@ class _DetailReviewDestinationPageState
                 fontWeight: medium,
               ),
             ),
-            if (_bannerAd != null)
-              const SizedBox(
-                height: 25,
-              ),
-            if (_bannerAd != null)
-              Align(
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  width: _bannerAd!.size.width.toDouble(),
-                  height: _bannerAd!.size.height.toDouble(),
-                  child: AdWidget(
-                    ad: _bannerAd!,
-                  ),
-                ),
-              ),
           ],
         ),
       );
+    }
+
+    Widget ads() {
+      return _nativeAd != null
+          ? Container(
+              margin: const EdgeInsets.only(
+                bottom: 24,
+              ),
+              height: 72,
+              child: AdWidget(ad: _nativeAd!),
+            )
+          : const SizedBox();
     }
 
     return Scaffold(
@@ -482,6 +480,7 @@ class _DetailReviewDestinationPageState
                   destination(),
                   stepper(),
                   detail(),
+                  ads(),
                 ],
               ),
             ),
