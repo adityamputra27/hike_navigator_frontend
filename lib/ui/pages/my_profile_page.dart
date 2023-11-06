@@ -3,9 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hike_navigator/constans/destination.dart';
 import 'package:hike_navigator/methods/api.dart';
-import 'package:hike_navigator/ui/pages/native_example.dart';
 import 'package:hike_navigator/ui/pages/sign_in_page.dart';
 import 'package:hike_navigator/ui/pages/static/privacy_and_policy.dart';
 import 'package:hike_navigator/ui/pages/static/terms_and_condition.dart';
@@ -430,37 +428,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   tileColor: whiteColor,
                   title: Text(
                     'Sign Out',
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: blackColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  leading: Icon(
-                    Icons.logout,
-                    color: blackColor,
-                  ),
-                ),
-                Container(
-                  height: 0.5,
-                  color: blackColor,
-                ),
-              ],
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) =>  NativeExample(destination: Destination.samples,)),
-              );
-            },
-            child: Column(
-              children: [
-                ListTile(
-                  tileColor: whiteColor,
-                  title: Text(
-                    'Test Ad',
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       color: blackColor,

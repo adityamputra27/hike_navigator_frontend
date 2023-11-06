@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hike_navigator/constans/ad_helper.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
@@ -35,6 +37,36 @@ class _DetailAddDestinationDownloadPageState
   bool isDownloading = false;
   String? message;
   OfflineRegion? region;
+  NativeAd? _nativeAd;
+
+  @override
+  void initState() {
+    NativeAd(
+      adUnitId: AdHelper.nativeAdUnitId,
+      factoryId: 'listTile',
+      request: const AdRequest(),
+      listener: NativeAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _nativeAd = ad as NativeAd;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          debugPrint(
+              'Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    ).load();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _nativeAd?.dispose();
+    super.dispose();
+  }
 
   void _onDowloadEvent(DownloadRegionStatus status) async {
     if (!mounted) return;
@@ -505,6 +537,19 @@ class _DetailAddDestinationDownloadPageState
       );
     }
 
+    Widget ads() {
+      return _nativeAd != null
+          ? Container(
+              margin: const EdgeInsets.only(
+                top: 24,
+                bottom: 24,
+              ),
+              height: 72,
+              child: AdWidget(ad: _nativeAd!),
+            )
+          : const SizedBox();
+    }
+
     return Scaffold(
       backgroundColor: whiteColor,
       body: SafeArea(
@@ -516,6 +561,7 @@ class _DetailAddDestinationDownloadPageState
                   header(),
                   illustration(),
                   progress(),
+                  ads(),
                 ],
               ),
             ),
