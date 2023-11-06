@@ -145,6 +145,7 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                   fontWeight: FontWeight.bold,
                   color: blackColor,
                 ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(
                 height: 15,
