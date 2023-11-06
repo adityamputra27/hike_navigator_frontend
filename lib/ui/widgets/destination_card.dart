@@ -450,6 +450,7 @@ class _DestinationCardState extends State<DestinationCard> {
       },
       child: Container(
         width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 32),
         height: 200,
         decoration: BoxDecoration(
           image: offlineSaveImage != null
