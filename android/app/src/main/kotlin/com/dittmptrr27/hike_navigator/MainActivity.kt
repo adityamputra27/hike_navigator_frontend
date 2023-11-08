@@ -1,4 +1,4 @@
-package com.example.hike_navigator
+package com.dittmptrr27.hike_navigator
 
 import io.flutter.embedding.android.FlutterActivity
 
