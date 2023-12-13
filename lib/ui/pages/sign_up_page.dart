@@ -35,6 +35,7 @@ class _SignUpPageState extends State<SignUpPage> {
       'email': emailController.text.toString(),
       'password': passwordController.text.toString(),
       'name': nameController.text.toString(),
+      'register_type': 'MOBILE'
     };
     final result =
         await API().postRequest(route: '/register', payload: payload);
