@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>959140282321-1bdt4kuak0qulef3nec2ncldj7cqpjhd.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.959140282321-1bdt4kuak0qulef3nec2ncldj7cqpjhd</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCetw9H1lWV5v-CHdMQkSOkznfIEmG8Cz8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>959140282321</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.hikeNavigator.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>hike-navigator</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hike-navigator.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:959140282321:ios:563140a2b9103971346af0</string>
+</dict>
+</plist>

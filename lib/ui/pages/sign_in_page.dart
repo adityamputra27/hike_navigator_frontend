@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/cubit/page_cubit.dart';
 import 'package:hike_navigator/methods/api.dart';
+import 'package:hike_navigator/services/firebase_service.dart';
 import 'package:hike_navigator/ui/pages/forgot_password_page.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/pages/sign_up_page.dart';
@@ -283,6 +284,58 @@ class _SignInPageState extends State<SignInPage> {
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                   letterSpacing: 1,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(
+              top: 20,
+              left: defaultSpace,
+              right: defaultSpace,
+            ),
+            child: Text(
+              'OR',
+              style: GoogleFonts.inter(
+                fontSize: 16,
+                color: blackColor,
+              ),
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            height: 55,
+            margin: EdgeInsets.only(
+              top: 20,
+              left: defaultSpace,
+              right: defaultSpace,
+            ),
+            child: ElevatedButton.icon(
+              icon: const Image(
+                width: 20,
+                image: AssetImage(
+                  'assets/images/google_logo.png',
+                ),
+              ),
+              label: Text(
+                'Google',
+                style: GoogleFonts.inter(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 1,
+                ),
+              ),
+              onPressed: () {
+                context.read<FirebaseService>().signInWithGoogle(context);
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: redAccentColor,
+                shadowColor: Colors.grey.shade400,
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
               ),
             ),

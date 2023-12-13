@@ -71,6 +71,11 @@ dependencies:
   url_launcher: ^6.1.14
   flutter_launcher_icons: ^0.13.1
   maplibre_gl: ^0.16.0
+  firebase_core: ^2.22.0
+  firebase_auth: ^4.13.0
+  google_sign_in: ^6.1.6
+  flutter_facebook_auth: ^6.0.2
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:
@@ -123,6 +128,7 @@ flutter:
     - assets/images/dot.png
     - assets/images/start.png
     - assets/images/check_point.png
+    - assets/images/google_logo.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
