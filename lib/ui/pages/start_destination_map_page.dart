@@ -11,7 +11,7 @@ import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/services/location_service.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
-import 'package:maplibre_gl/maplibre_gl.dart';
+import 'package:maplibre_gl/mapbox_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StartDestinationMapPage extends StatefulWidget {
@@ -539,10 +539,10 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
                   Position position = await Geolocator.getCurrentPosition(
                       desiredAccuracy: LocationAccuracy.high);
                   LatLng markerLocation =
-                  LatLng(position.latitude, position.longitude);
+                      LatLng(position.latitude, position.longitude);
                   String? locationTitle =
-                  // ignore: use_build_context_synchronously
-                  await _showDialogCheckPoint(context);
+                      // ignore: use_build_context_synchronously
+                      await _showDialogCheckPoint(context);
                   if (locationTitle != null && locationTitle.isNotEmpty) {
                     _saveCheckPoint(locationTitle, markerLocation);
                   }

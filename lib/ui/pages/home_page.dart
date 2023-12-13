@@ -6,7 +6,7 @@ import 'package:hike_navigator/models/province_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/chip_filter_item.dart';
 import 'package:hike_navigator/ui/widgets/destination_card.dart';
-import 'package:maplibre_gl/maplibre_gl.dart';
+import 'package:maplibre_gl/mapbox_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
