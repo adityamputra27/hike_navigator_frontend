@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "959140282321",
+    "project_id": "hike-navigator",
+    "storage_bucket": "hike-navigator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959140282321:android:a49129e695254cf8346af0",
+        "android_client_info": {
+          "package_name": "com.hike_navigator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959140282321-i1mt6lsqk0glb0bg83oqsjj2m6ilam7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM4v9i2_wKlk9KuSNEsJZb56ocFjs52go"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "959140282321-i1mt6lsqk0glb0bg83oqsjj2m6ilam7a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

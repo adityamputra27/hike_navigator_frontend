@@ -1,8 +1,12 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.hike_navigator">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    
     <application
-        android:label="hike_navigator"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Hike Navigator"
+        android:icon="@mipmap/launcher_icon"
+        android:name="${applicationName}">
         <activity
             android:name=".MainActivity"
             android:exported="true"

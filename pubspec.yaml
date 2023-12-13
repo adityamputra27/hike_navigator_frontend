@@ -35,6 +35,47 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   google_fonts: ^5.1.0
+  bloc: ^8.1.0
+  flutter_bloc: ^8.1.1
+  carousel_slider: ^4.2.1
+  smooth_page_indicator: ^1.1.0
+  syncfusion_flutter_datepicker: ^22.2.8
+  syncfusion_flutter_calendar: ^22.2.8
+  table_calendar: ^3.0.9
+  intl: ^0.18.1
+  flutter_map: ^5.0.0
+  flutter_svg: ^2.0.7
+  compass_icon: ^1.0.4
+  http: ^1.1.0
+  shared_preferences: ^2.2.0
+  equatable: ^2.0.5
+  flutter_staggered_grid_view: ^0.7.0
+  flutter_polyline_points: ^2.0.0
+  flutter_map_marker_popup: ^5.2.0
+  location: ^5.0.3
+  permission_handler: ^11.0.0
+  # mapbox_gl:
+  #   git:
+  #     url: https://github.com/srmanc/maps.git
+  #     ref: 7eead7c3fa4b59f553ee15a33ab12e8c564e60ac
+  # maplibre_gl:
+  #   git:
+  #     url: https://github.com/maplibre/flutter-maplibre-gl.git
+  #     ref: main
+  geolocator: ^10.1.0
+  path_provider: ^2.1.1
+  path: ^1.8.3
+  logger: ^2.0.2+1
+  connectivity_plus: ^5.0.0
+  package_info_plus: ^4.1.0
+  url_launcher: ^6.1.14
+  flutter_launcher_icons: ^0.13.1
+  maplibre_gl: ^0.16.0
+  firebase_core: ^2.22.0
+  firebase_auth: ^4.13.0
+  google_sign_in: ^6.1.6
+  flutter_facebook_auth: ^6.0.2
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +101,34 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/logo.png
+    - assets/images/filter.png
+    - assets/images/date.png
+    - assets/images/home.png
+    - assets/images/destination.png
+    - assets/images/profile.png
+    - assets/images/camp.png
+    - assets/images/water_fall_round.png
+    - assets/images/mountain_round.png
+    - assets/images/camp_round.png
+    - assets/images/river_round.png
+    - assets/images/water_springs_round.png
+    - assets/images/mountain_round.png
+    - assets/images/track_round.png
+    - assets/images/check_icon.png
+    - assets/images/failed_icon.png
+    - assets/images/download_illustration.png
+    - assets/images/default.jpg
+    - assets/images/mountain_marker.png
+    - assets/images/waterfall_marker.png
+    - assets/images/water_marker.png
+    - assets/images/wave_marker.png
+    - assets/images/camp_marker.png
+    - assets/images/user_marker.png
+    - assets/images/mark_marker.png
+    - assets/images/dot.png
+    - assets/images/start.png
+    - assets/images/check_point.png
+    - assets/images/google_logo.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

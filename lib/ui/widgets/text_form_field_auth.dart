@@ -8,6 +8,7 @@ class TextFormFieldAuth extends StatelessWidget {
   final bool obsecureText;
   final EdgeInsets margin;
   final TextEditingController controller;
+  final String? errorText;
 
   const TextFormFieldAuth({
     Key? key,
@@ -16,6 +17,7 @@ class TextFormFieldAuth extends StatelessWidget {
     this.obsecureText = false,
     this.margin = EdgeInsets.zero,
     required this.controller,
+    required this.errorText,
   }) : super(key: key);
 
   @override
@@ -35,6 +37,11 @@ class TextFormFieldAuth extends StatelessWidget {
               fontWeight: normal,
             ),
             decoration: InputDecoration(
+              errorText: errorText,
+              errorStyle: GoogleFonts.inter(
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+              ),
               hintText: hintText,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(
