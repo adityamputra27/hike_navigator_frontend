@@ -15,14 +15,16 @@ class _MainSplashPageState extends State<MainSplashPage> {
   @override
   void initState() {
     Timer(
-        const Duration(
-          seconds: 3,
-        ), () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const SignInPage()),
-      );
-    });
+      const Duration(seconds: 3),
+      () {
+        if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SignInPage()),
+          );
+        }
+      },
+    );
     super.initState();
   }
 

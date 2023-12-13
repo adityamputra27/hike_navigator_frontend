@@ -361,12 +361,9 @@ class _HomePageState extends State<HomePage> {
                         (int.parse(offlineDestination.mountain.province.id) ==
                             searchProvince) ||
                     searchProvince == 0) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 30),
-                    child: DestinationCard(
-                      destination: offlineDestination,
-                      offlineMap: offlineMap,
-                    ),
+                  return DestinationCard(
+                    destination: offlineDestination,
+                    offlineMap: offlineMap,
                   );
                 }
               }

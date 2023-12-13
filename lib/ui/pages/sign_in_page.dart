@@ -29,6 +29,10 @@ class _SignInPageState extends State<SignInPage> {
   bool emailValidate = false;
   bool passwordValidate = false;
 
+  void loginWithGoogle() {
+    context.read<FirebaseService>().signInWithGoogle(context);
+  }
+
   void login() async {
     context.read<PageCubit>().setPage(0);
 
@@ -330,7 +334,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
               onPressed: () {
-                context.read<FirebaseService>().signInWithGoogle(context);
+                loginWithGoogle();
               },
               style: TextButton.styleFrom(
                 backgroundColor: redAccentColor,

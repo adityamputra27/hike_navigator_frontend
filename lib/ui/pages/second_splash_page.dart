@@ -6,7 +6,6 @@ import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-
 class SecondSplashPage extends StatefulWidget {
   final SharedPreferences? preferences;
 
@@ -21,18 +20,20 @@ class _SecondSplashPageState extends State<SecondSplashPage> {
   @override
   void initState() {
     Timer(
-        const Duration(
-          seconds: 3,
-        ), () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MainPage(
-            preferences: widget.preferences,
-          ),
-        ),
-      );
-    });
+      const Duration(seconds: 3),
+      () {
+        if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MainPage(
+                preferences: widget.preferences,
+              ),
+            ),
+          );
+        }
+      },
+    );
     super.initState();
   }
 

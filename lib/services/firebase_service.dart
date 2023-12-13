@@ -29,6 +29,7 @@ class FirebaseService {
         );
         UserCredential userCredential =
             await _auth.signInWithCredential(credential);
+
         if (userCredential.user != null) {
           final payload = {
             'email': userCredential.user!.email,
@@ -53,20 +54,13 @@ class FirebaseService {
 
             context.read<PageCubit>().setPage(0);
 
-            Timer(
-              const Duration(
-                seconds: 2,
-              ),
-              () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (context) => MainPage(
-                        preferences: preferences,
-                      ),
-                    ),
-                    (Route route) => false);
-              },
-            );
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => MainPage(
+                    preferences: preferences,
+                  ),
+                ),
+                (Route route) => false);
           }
         }
       }

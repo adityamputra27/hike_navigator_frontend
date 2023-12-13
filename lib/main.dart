@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hike_navigator/cubit/auth_cubit.dart';
 import 'package:hike_navigator/cubit/destinations_cubit.dart';
 import 'package:hike_navigator/cubit/destinations_saved_cubit.dart';
 import 'package:hike_navigator/cubit/mountains_cubit.dart';
@@ -46,6 +47,9 @@ class _MyAppState extends State<MyApp> {
           create: (context) => PageCubit(),
         ),
         BlocProvider(
+          create: (context) => AuthCubit(),
+        ),
+        BlocProvider(
           create: (context) => MountainsCubit(),
         ),
         BlocProvider(
@@ -62,8 +66,22 @@ class _MyAppState extends State<MyApp> {
           initialData: null,
         ),
       ],
-      child: BuildApp(
-        preferences: _preferences,
+      child: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, state) {
+          print(state);
+          if (state is AuthLoading && state.loading) {
+            return Container(
+              color: Colors.black.withOpacity(0.5),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            return BuildApp(
+              preferences: _preferences,
+            );
+          }
+        },
       ),
     );
   }
