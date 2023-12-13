@@ -104,6 +104,7 @@ class _SignInPageState extends State<SignInPage> {
                   fontWeight: FontWeight.bold,
                   color: blackColor,
                 ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(
                 height: 15,
