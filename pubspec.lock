@@ -480,6 +480,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.0"
+  google_mobile_ads:
+    dependency: "direct main"
+    description:
+      name: google_mobile_ads
+      sha256: "7b8915f0ad358f49ba7d547b5187204cfe72ca668fb83aa303f96a2eacdc4033"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   google_identity_services_web:
     dependency: transitive
     description:
@@ -635,19 +643,30 @@ packages:
   maplibre_gl:
     dependency: "direct main"
     description:
-      name: maplibre_gl
-      sha256: "825154b717ea6fda2802e95e2fb39c16356d8802d98bfc090e732e6678e42b99"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.16.0"
+      path: "."
+      ref: main
+      resolved-ref: "81e35d7e8950ff06fcbf8a63c2324502b915d0cb"
+      url: "https://github.com/maplibre/flutter-maplibre-gl.git"
+    source: git
+    version: "0.17.0"
   maplibre_gl_platform_interface:
     dependency: transitive
     description:
-      name: maplibre_gl_platform_interface
-      sha256: fe80e69346275fc8e0b027d01b3b766781beb15eb2fff2c067fb453d94898b7e
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.16.0"
+      path: maplibre_gl_platform_interface
+      ref: main
+      resolved-ref: "81e35d7e8950ff06fcbf8a63c2324502b915d0cb"
+      url: "https://github.com/maplibre/flutter-maplibre-gl.git"
+    source: git
+    version: "0.17.0"
+  maplibre_gl_web:
+    dependency: transitive
+    description:
+      path: maplibre_gl_web
+      ref: main
+      resolved-ref: "81e35d7e8950ff06fcbf8a63c2324502b915d0cb"
+      url: "https://github.com/maplibre/flutter-maplibre-gl.git"
+    source: git
+    version: "0.17.0"
   matcher:
     dependency: transitive
     description:
@@ -1189,6 +1208,16 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+<<<<<<< HEAD
+  visibility_detector:
+    dependency: transitive
+    description:
+      name: visibility_detector
+      sha256: dd5cc11e13494f432d15939c3aa8ae76844c42b723398643ce9addb88a5ed420
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0+2"
+=======
   watcher:
     dependency: transitive
     description:
@@ -1197,6 +1226,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+>>>>>>> main
   web:
     dependency: transitive
     description:
@@ -1205,6 +1235,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.2-beta"
+  webview_flutter:
+    dependency: transitive
+    description:
+      name: webview_flutter
+      sha256: "42393b4492e629aa3a88618530a4a00de8bb46e50e7b3993fedbfdc5352f0dbf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.4.2"
+  webview_flutter_android:
+    dependency: transitive
+    description:
+      name: webview_flutter_android
+      sha256: "8326ee235f87605a2bfc444a4abc897f4abc78d83f054ba7d3d1074ce82b4fbf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.12.1"
+  webview_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: webview_flutter_platform_interface
+      sha256: "6d9213c65f1060116757a7c473247c60f3f7f332cac33dc417c9e362a9a13e4f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.6.0"
+  webview_flutter_wkwebview:
+    dependency: transitive
+    description:
+      name: webview_flutter_wkwebview
+      sha256: af6f5ab05918070b33507b0d453ba9fb7d39338a3256c23cf9433dc68100774a
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.9.3"
   win32:
     dependency: transitive
     description:

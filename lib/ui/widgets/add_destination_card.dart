@@ -12,10 +12,6 @@ class AddDestinationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String imageURL = mountain.mountainImages.isNotEmpty
-        ? API().baseURL + mountain.mountainImages[0].url
-        : 'https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/3/0/7/5/235703-6-eng-GB/CEM-CORP-SIC-Food-20142.jpg';
-
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -32,7 +28,10 @@ class AddDestinationCard extends StatelessWidget {
         height: 200,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage(imageURL),
+            image: mountain.mountainImages.isNotEmpty
+                ? NetworkImage(API().baseURL + (mountain.mountainImages[0].url))
+                : const AssetImage('assets/images/image-not-available.jpg')
+                    as ImageProvider,
             fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.circular(

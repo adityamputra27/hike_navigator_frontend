@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 
 class SecondSplashPage extends StatefulWidget {
   final SharedPreferences? preferences;
@@ -34,25 +36,34 @@ class _SecondSplashPageState extends State<SecondSplashPage> {
     super.initState();
   }
 
+  Future<InitializationStatus> _initGoogleMobileAds() {
+    return MobileAds.instance.initialize();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 275,
-              height: 275,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/logo.png'),
+      body: FutureBuilder<void>(
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 275,
+                  height: 275,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/logo.png'),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
+        future: _initGoogleMobileAds(),
       ),
     );
   }

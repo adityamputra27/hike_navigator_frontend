@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hike_navigator/constans/ad_helper.dart';
 import 'package:hike_navigator/models/mountain_peaks_model.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
 import 'package:hike_navigator/models/tracks_model.dart';
@@ -37,6 +39,35 @@ class _DetailAddDestinationRoutePageState
   String peakNameSelected = '-';
   String pointNameSelected = '-';
 
+  InterstitialAd? _interstitialAd;
+
+  @override
+  void initState() {
+    InterstitialAd.load(
+        adUnitId: AdHelper.interstitialAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (ad) {
+          ad.fullScreenContentCallback =
+              FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+            _detailReviewPage();
+          });
+
+          setState(() {
+            _interstitialAd = ad;
+          });
+        }, onAdFailedToLoad: (err) {
+          print('Failed to load an interstitial ad : ${err.message}');
+        }));
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _interstitialAd?.dispose();
+    super.dispose();
+  }
+
   void setActivePeakIndex(int index) {
     setState(() {
       activePeakIndex = index;
@@ -53,6 +84,33 @@ class _DetailAddDestinationRoutePageState
       pointNameSelected = trackLists[index].title;
       trackId = trackLists[index].id;
     });
+  }
+
+  void _detailReviewPage() {
+    if (peakId == null || trackId == null) {
+      _showDialog(
+        'Please select peak and route!',
+        'failed',
+        () => {
+          Navigator.pop(context),
+        },
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailReviewDestinationPage(
+            scheduleDate: widget.scheduleDate,
+            mountain: widget.mountain,
+            mountainPeakId: mountainPeakId.toString(),
+            peakId: peakId.toString(),
+            peakName: peakNameSelected,
+            trackId: trackId.toString(),
+            trackName: pointNameSelected,
+          ),
+        ),
+      );
+    }
   }
 
   Future<void> _showDialog(
@@ -200,29 +258,18 @@ class _DetailAddDestinationRoutePageState
                 ),
               ),
               onPressed: () {
-                if (peakId == null || trackId == null) {
-                  _showDialog(
-                    'Please select peak and route!',
-                    'failed',
-                    () => {
-                      Navigator.pop(context),
-                    },
-                  );
+                if (_interstitialAd != null) {
+                  _interstitialAd?.show();
+                  _interstitialAd!.fullScreenContentCallback =
+                      FullScreenContentCallback(
+                          onAdDismissedFullScreenContent: (ad) {
+                    setState(() {
+                      _interstitialAd = null;
+                    });
+                    _detailReviewPage();
+                  });
                 } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailReviewDestinationPage(
-                        scheduleDate: widget.scheduleDate,
-                        mountain: widget.mountain,
-                        mountainPeakId: mountainPeakId.toString(),
-                        peakId: peakId.toString(),
-                        peakName: peakNameSelected,
-                        trackId: trackId.toString(),
-                        trackName: pointNameSelected,
-                      ),
-                    ),
-                  );
+                  _detailReviewPage();
                 }
               },
               child: Text(

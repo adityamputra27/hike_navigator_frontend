@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hike_navigator/constans/ad_helper.dart';
 import 'package:hike_navigator/cubit/destinations_cubit.dart';
 import 'package:hike_navigator/cubit/destinations_saved_cubit.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
@@ -11,7 +13,7 @@ import 'package:hike_navigator/models/destinations_saved_model.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:hike_navigator/ui/widgets/my_destination_card.dart';
 import 'package:hike_navigator/ui/widgets/my_saved_destination_card.dart';
-import 'package:maplibre_gl/mapbox_gl.dart';
+import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyDestinationPage extends StatefulWidget {
@@ -27,6 +29,13 @@ class MyDestinationPage extends StatefulWidget {
 class _MyDestinationPageState extends State<MyDestinationPage> {
   bool isOnline = false;
   List<OfflineRegion>? offlineMaps;
+  NativeAd? _nativeAd;
+
+  @override
+  void dispose() {
+    _nativeAd?.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -35,6 +44,25 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
 
     _getOfflineMap();
     checkConnection();
+
+    NativeAd(
+      adUnitId: AdHelper.nativeAdUnitId,
+      factoryId: 'listTile',
+      request: const AdRequest(),
+      listener: NativeAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _nativeAd = ad as NativeAd;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          debugPrint(
+              'Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    ).load();
+
     super.initState();
   }
 
@@ -237,6 +265,19 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
       );
     }
 
+    Widget ads() {
+      return _nativeAd != null
+          ? Container(
+              margin: const EdgeInsets.only(
+                top: 24,
+                bottom: 24,
+              ),
+              height: 72,
+              child: AdWidget(ad: _nativeAd!),
+            )
+          : const SizedBox();
+    }
+
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SafeArea(
@@ -245,6 +286,7 @@ class _MyDestinationPageState extends State<MyDestinationPage> {
             header(),
             destination(),
             if (isOnline == true) bookmark(),
+            ads(),
           ],
         ),
       ),
