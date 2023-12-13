@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:hike_navigator/models/city_model.dart';
+import 'package:hike_navigator/models/cross_roads_model.dart';
 import 'package:hike_navigator/models/marks_model.dart';
 import 'package:hike_navigator/models/mountain_images_model.dart';
 import 'package:hike_navigator/models/mountain_peaks_model.dart';
@@ -29,6 +30,7 @@ class MountainsModel extends Equatable {
   final List<WaterspringsModel> mountainWatersprings;
   final List<RiversModel> mountainRivers;
   final List<PostsModel> mountainPosts;
+  final List<CrossRoadsModel> mountainCrossRoads;
 
   const MountainsModel({
     required this.id,
@@ -49,6 +51,7 @@ class MountainsModel extends Equatable {
     required this.mountainWatersprings,
     required this.mountainRivers,
     required this.mountainPosts,
+    required this.mountainCrossRoads,
   });
 
   factory MountainsModel.fromJson(Map<String, dynamic> json) {
@@ -60,6 +63,7 @@ class MountainsModel extends Equatable {
     List<WaterspringsModel> mountainWatersprings = [];
     List<RiversModel> mountainRivers = [];
     List<PostsModel> mountainPosts = [];
+    List<CrossRoadsModel> mountainCrossRoads = [];
 
     if (json['mountain_images'] != null) {
       mountainImages = (json['mountain_images'] as List)
@@ -125,6 +129,14 @@ class MountainsModel extends Equatable {
       mountainPosts = [];
     }
 
+    if (json['mountain_cross_roads'] != null) {
+      mountainCrossRoads = (json['mountain_cross_roads'] as List)
+          .map((post) => CrossRoadsModel.fromJson(post))
+          .toList();
+    } else {
+      mountainCrossRoads = [];
+    }
+
     CityModel city;
     if (json['city'] != null) {
       city = CityModel.fromJson(json['city']);
@@ -158,6 +170,7 @@ class MountainsModel extends Equatable {
       mountainWatersprings: mountainWatersprings,
       mountainRivers: mountainRivers,
       mountainPosts: mountainPosts,
+      mountainCrossRoads: mountainCrossRoads,
     );
   }
 
@@ -170,6 +183,7 @@ class MountainsModel extends Equatable {
     List<WaterspringsModel> mountainWatersprings = [];
     List<RiversModel> mountainRivers = [];
     List<PostsModel> mountainPosts = [];
+    List<CrossRoadsModel> mountainCrossRoads = [];
 
     if (json['mountainImages'] != null) {
       mountainImages = (json['mountainImages'] as List)
@@ -235,6 +249,14 @@ class MountainsModel extends Equatable {
       mountainPosts = [];
     }
 
+    if (json['mountainCrossRoads'] != null) {
+      mountainCrossRoads = (json['mountainCrossRoads'] as List)
+          .map((post) => CrossRoadsModel.fromJson(post))
+          .toList();
+    } else {
+      mountainPosts = [];
+    }
+
     CityModel city;
     if (json['city'] != null) {
       city = CityModel.fromJson(json['city']);
@@ -268,6 +290,7 @@ class MountainsModel extends Equatable {
       mountainWatersprings: mountainWatersprings,
       mountainRivers: mountainRivers,
       mountainPosts: mountainPosts,
+      mountainCrossRoads: mountainCrossRoads,
     );
   }
 
@@ -290,6 +313,7 @@ class MountainsModel extends Equatable {
       'mountainWaterfalls': mountainWaterfalls.map((e) => e.toJson()).toList(),
       'mountainRivers': mountainRivers.map((e) => e.toJson()).toList(),
       'mountainPosts': mountainPosts.map((e) => e.toJson()).toList(),
+      'mountainCrossRoads': mountainCrossRoads.map((e) => e.toJson()).toList(),
       'mountainWatersprings':
           mountainWatersprings.map((e) => e.toJson()).toList(),
     };
@@ -313,5 +337,6 @@ class MountainsModel extends Equatable {
         mountainWaterfalls,
         mountainRivers,
         mountainPosts,
+        mountainCrossRoads,
       ];
 }

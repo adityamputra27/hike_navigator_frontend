@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/constans/maps/main.dart';
+import 'package:hike_navigator/models/cross_roads_model.dart';
 import 'package:hike_navigator/models/marks_model.dart';
 import 'package:hike_navigator/models/mountain_peaks_model.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
@@ -60,6 +61,8 @@ class _DetailAddDestinationMapPageState
         widget.mountain.mountainWatersprings;
     List<RiversModel> mountainRivers = widget.mountain.mountainRivers;
     List<PostsModel> mountainPosts = widget.mountain.mountainPosts;
+    List<CrossRoadsModel> mountainCrossRoads =
+        widget.mountain.mountainCrossRoads;
 
     List<Marker> peakMarkers = [];
     List<Marker> markMarkers = [];
@@ -67,6 +70,7 @@ class _DetailAddDestinationMapPageState
     List<Marker> waterspringMarkers = [];
     List<Marker> riverMarkers = [];
     List<Marker> postMarkers = [];
+    List<Marker> crossRoadMarkers = [];
 
     for (var peak in mountainPeaks) {
       Marker peakMarker = Marker(
@@ -144,6 +148,20 @@ class _DetailAddDestinationMapPageState
         builder: (context) => Image.asset('assets/images/camp_marker.png'),
       );
       postMarkers.add(postMarker);
+    }
+
+    for (var crossRoad in mountainCrossRoads) {
+      Marker crossRoadMarker = Marker(
+        width: 35,
+        height: 35,
+        point: LatLng(
+          double.parse(crossRoad.latitude),
+          double.parse(crossRoad.longitude),
+        ),
+        builder: (context) =>
+            Image.asset('assets/images/cross_road_marker.png'),
+      );
+      crossRoadMarkers.add(crossRoadMarker);
     }
 
     return Scaffold(

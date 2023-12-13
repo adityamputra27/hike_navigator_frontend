@@ -11,7 +11,7 @@ import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/services/location_service.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
-import 'package:maplibre_gl/mapbox_gl.dart';
+import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StartDestinationMapPage extends StatefulWidget {
@@ -38,6 +38,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
   String waterspringMarker = 'assets/images/water_marker.png';
   String riverMarker = 'assets/images/wave_marker.png';
   String startMarker = 'assets/images/start.png';
+  String crossRoadMarker = 'assets/images/cross_road_marker.png';
 
   dynamic symbolData;
   bool showMarkerDialog = false;
@@ -82,6 +83,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
     addImageFromAsset('assetImage', waterspringMarker);
     addImageFromAsset('assetImage', riverMarker);
     addImageFromAsset('assetImage', startMarker);
+    addImageFromAsset('assetImage', crossRoadMarker);
   }
 
   void _loadMarkerImage() {
@@ -159,6 +161,23 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'latitude': mark.latitude,
           'longitude': mark.longitude,
           'contactNumber': mark.contactNumber,
+          'height': '0',
+        },
+        0.25,
+      );
+    }
+    for (var crossRoad in widget.destination.mountain.mountainCrossRoads) {
+      _addMarkerImage(
+        crossRoadMarker,
+        LatLng(
+          double.parse(crossRoad.latitude),
+          double.parse(crossRoad.longitude),
+        ),
+        {
+          'title': crossRoad.title,
+          'latitude': crossRoad.latitude,
+          'longitude': crossRoad.longitude,
+          'contactNumber': crossRoad.contactNumber,
           'height': '0',
         },
         0.25,
@@ -801,7 +820,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
                       ),
                     ),
                   ),
-                  Expanded(
+                  const Expanded(
                     flex: 1,
                     child: SizedBox(),
                   ),
