@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hike_navigator/methods/api.dart';
+import 'package:hike_navigator/services/firebase_service.dart';
 import 'package:hike_navigator/ui/pages/sign_in_page.dart';
 import 'package:hike_navigator/ui/pages/static/privacy_and_policy.dart';
 import 'package:hike_navigator/ui/pages/static/terms_and_condition.dart';
@@ -45,7 +47,21 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    void logout() {
+    void logout() async {
+      final String? authType = widget.preferences!.getString('auth_type');
+
+      if (authType == 'FIREBASE') {
+        context.read<FirebaseService>().signOut(context);
+      }
+
+      widget.preferences!.remove('user_id');
+      widget.preferences!.remove('name');
+      widget.preferences!.remove('email');
+      widget.preferences!.remove('role');
+      widget.preferences!.remove('token');
+      widget.preferences!.remove('version');
+      widget.preferences!.remove('register_type');
+
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const SignInPage(),

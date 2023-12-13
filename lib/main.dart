@@ -79,7 +79,6 @@ class BuildApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User?>();
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: FutureBuilder(
