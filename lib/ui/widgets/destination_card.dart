@@ -12,7 +12,7 @@ import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/pages/start_destination_map_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:intl/intl.dart';
-import 'package:maplibre_gl/mapbox_gl.dart';
+import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DestinationCard extends StatefulWidget {
@@ -450,6 +450,7 @@ class _DestinationCardState extends State<DestinationCard> {
       },
       child: Container(
         width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 32),
         height: 200,
         decoration: BoxDecoration(
           image: offlineSaveImage != null

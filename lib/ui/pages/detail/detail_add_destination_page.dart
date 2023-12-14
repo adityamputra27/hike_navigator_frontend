@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hike_navigator/constans/ad_helper.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/mountain_peaks_model.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
@@ -33,6 +35,8 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
   int campTotal = 0;
   int waterspringTotal = 0;
 
+  BannerAd? _bannerAd;
+
   @override
   void initState() {
     _isMounted = true;
@@ -56,12 +60,31 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
         }
       }
     }
+
+    BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          print('Failed to load a banner ad : ${error.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
+
     super.initState();
   }
 
   @override
   void dispose() {
     _isMounted = false;
+    _bannerAd?.dispose();
     super.dispose();
   }
 
@@ -122,6 +145,7 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                   fontWeight: FontWeight.bold,
                   color: blackColor,
                 ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(
                 height: 15,
@@ -205,6 +229,7 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                   child: Container(
                     width: 50,
                     height: 50,
+                    margin: const EdgeInsets.only(right: 14),
                     decoration: BoxDecoration(
                       color: redAccentColor,
                       borderRadius: BorderRadius.circular(defaultRadius),
@@ -215,35 +240,42 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                     ),
                   ),
                 ),
-                Column(
-                  children: [
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      widget.mountain.name,
-                      style: GoogleFonts.inter(
-                        fontSize: 24,
-                        fontWeight: black,
-                        color: blackColor,
+                Expanded(
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 5,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 7.5,
-                    ),
-                    Text(
-                      '${widget.mountain.city.name}, ${widget.mountain.province.name}',
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal,
-                        color: greyColor,
+                      Text(
+                        widget.mountain.name,
+                        style: GoogleFonts.inter(
+                          fontSize: 24,
+                          fontWeight: black,
+                          color: blackColor,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
-                    ),
-                  ],
+                      const SizedBox(
+                        height: 7.5,
+                      ),
+                      Text(
+                        '${widget.mountain.city.name}, ${widget.mountain.province.name}',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                          color: greyColor,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(
+                Container(
                   width: 50,
                   height: 50,
+                  margin: const EdgeInsets.only(left: 14),
                 ),
               ],
             ),
@@ -255,7 +287,7 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                   CarouselSlider.builder(
                     itemCount: urlImages.length,
                     itemBuilder: (context, index, realIndex) {
-                      final image = urlImages[index];
+                      final image = urlImages[index] ?? '';
                       return buildCarousel(image, index);
                     },
                     options: CarouselOptions(
@@ -405,6 +437,21 @@ class _DetailAddDestinationPageState extends State<DetailAddDestinationPage> {
                         children: trackWidgets,
                       );
                     }).toList(),
+                  ),
+                if (_bannerAd != null)
+                  const SizedBox(
+                    height: 25,
+                  ),
+                if (_bannerAd != null)
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: SizedBox(
+                      width: _bannerAd!.size.width.toDouble(),
+                      height: _bannerAd!.size.height.toDouble(),
+                      child: AdWidget(
+                        ad: _bannerAd!,
+                      ),
+                    ),
                   ),
               ],
             ),

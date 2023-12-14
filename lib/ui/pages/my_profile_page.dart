@@ -42,7 +42,13 @@ class _MyProfilePageState extends State<MyProfilePage> {
   @override
   void initState() {
     checkConnection();
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -455,6 +461,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 ),
               ],
             ),
+          ),
+          const SizedBox(
+            height: 20,
           ),
         ],
       );

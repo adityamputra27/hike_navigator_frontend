@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hike_navigator/constans/ad_helper.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/models/mountains_model.dart';
@@ -38,9 +40,35 @@ class DetailReviewDestinationPage extends StatefulWidget {
 
 class _DetailReviewDestinationPageState
     extends State<DetailReviewDestinationPage> {
+  NativeAd? _nativeAd;
+
   @override
   void initState() {
+    NativeAd(
+      adUnitId: AdHelper.nativeAdUnitId,
+      factoryId: 'listTile',
+      request: const AdRequest(),
+      listener: NativeAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _nativeAd = ad as NativeAd;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          debugPrint(
+              'Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    ).load();
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _nativeAd?.dispose();
+    super.dispose();
   }
 
   void createPlan() async {
@@ -428,6 +456,18 @@ class _DetailReviewDestinationPageState
       );
     }
 
+    Widget ads() {
+      return _nativeAd != null
+          ? Container(
+              margin: const EdgeInsets.only(
+                bottom: 24,
+              ),
+              height: 72,
+              child: AdWidget(ad: _nativeAd!),
+            )
+          : const SizedBox();
+    }
+
     return Scaffold(
       backgroundColor: whiteColor,
       body: SafeArea(
@@ -440,6 +480,7 @@ class _DetailReviewDestinationPageState
                   destination(),
                   stepper(),
                   detail(),
+                  ads(),
                 ],
               ),
             ),

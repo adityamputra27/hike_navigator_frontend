@@ -11,7 +11,7 @@ import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/services/location_service.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
-import 'package:maplibre_gl/mapbox_gl.dart';
+import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StartDestinationMapPage extends StatefulWidget {
@@ -161,7 +161,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'contactNumber': mark.contactNumber,
           'height': '0',
         },
-        0.5,
+        0.25,
       );
     }
     for (var waterfall in widget.destination.mountain.mountainWaterfalls) {
@@ -292,7 +292,6 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: MediaQuery.of(context).viewInsets.bottom == 0,
       body: SafeArea(
         child: buildMap(),
       ),
@@ -523,99 +522,95 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
     );
   }
 
-  Positioned floatingMap() {
-    return Positioned(
-      bottom: 20.0,
-      right: 20.0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 65,
-                height: 65,
-                margin: const EdgeInsets.only(left: 30),
-                child: FloatingActionButton(
-                  backgroundColor: primaryColor,
-                  onPressed: () async {
-                    Position position = await Geolocator.getCurrentPosition(
-                        desiredAccuracy: LocationAccuracy.high);
-                    LatLng markerLocation =
-                        LatLng(position.latitude, position.longitude);
-                    String? locationTitle =
-                        // ignore: use_build_context_synchronously
-                        await _showDialogCheckPoint(context);
-                    if (locationTitle != null && locationTitle.isNotEmpty) {
-                      _saveCheckPoint(locationTitle, markerLocation);
-                    }
-                  },
-                  child: Icon(
-                    Icons.add_location_alt_outlined,
-                    size: 30,
-                    color: whiteColor,
-                  ),
+  Row floatingMap() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 65,
+              height: 65,
+              margin: const EdgeInsets.only(left: 30),
+              child: FloatingActionButton(
+                backgroundColor: primaryColor,
+                onPressed: () async {
+                  Position position = await Geolocator.getCurrentPosition(
+                      desiredAccuracy: LocationAccuracy.high);
+                  LatLng markerLocation =
+                  LatLng(position.latitude, position.longitude);
+                  String? locationTitle =
+                  // ignore: use_build_context_synchronously
+                  await _showDialogCheckPoint(context);
+                  if (locationTitle != null && locationTitle.isNotEmpty) {
+                    _saveCheckPoint(locationTitle, markerLocation);
+                  }
+                },
+                child: Icon(
+                  Icons.add_location_alt_outlined,
+                  size: 30,
+                  color: whiteColor,
                 ),
               ),
-            ],
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 65,
-                height: 65,
-                child: FloatingActionButton(
-                  backgroundColor: primaryColor,
-                  onPressed: () {
-                    mapController?.animateCamera(CameraUpdate.zoomIn());
-                  },
-                  child: Icon(
-                    Icons.zoom_in,
-                    size: 30,
-                    color: whiteColor,
-                  ),
+            ),
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 65,
+              height: 65,
+              child: FloatingActionButton(
+                backgroundColor: primaryColor,
+                onPressed: () {
+                  mapController?.animateCamera(CameraUpdate.zoomIn());
+                },
+                child: Icon(
+                  Icons.zoom_in,
+                  size: 30,
+                  color: whiteColor,
                 ),
               ),
-              const SizedBox(
-                height: 15,
-              ),
-              SizedBox(
-                width: 65,
-                height: 65,
-                child: FloatingActionButton(
-                  backgroundColor: primaryColor,
-                  onPressed: () {
-                    mapController?.animateCamera(CameraUpdate.zoomOut());
-                  },
-                  child: Icon(
-                    Icons.zoom_out,
-                    size: 30,
-                    color: whiteColor,
-                  ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            SizedBox(
+              width: 65,
+              height: 65,
+              child: FloatingActionButton(
+                backgroundColor: primaryColor,
+                onPressed: () {
+                  mapController?.animateCamera(CameraUpdate.zoomOut());
+                },
+                child: Icon(
+                  Icons.zoom_out,
+                  size: 30,
+                  color: whiteColor,
                 ),
               ),
-              const SizedBox(
-                height: 15,
-              ),
-              SizedBox(
-                width: 65,
-                height: 65,
-                child: FloatingActionButton(
-                  backgroundColor: primaryColor,
-                  onPressed: finishDestination,
-                  child: Icon(
-                    Icons.check_circle_outline,
-                    size: 30,
-                    color: whiteColor,
-                  ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            SizedBox(
+              width: 65,
+              height: 65,
+              child: FloatingActionButton(
+                backgroundColor: primaryColor,
+                onPressed: finishDestination,
+                child: Icon(
+                  Icons.check_circle_outline,
+                  size: 30,
+                  color: whiteColor,
                 ),
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
