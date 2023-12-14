@@ -11,7 +11,7 @@ import 'package:hike_navigator/models/destinations_model.dart';
 import 'package:hike_navigator/services/location_service.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
 import 'package:hike_navigator/ui/shared/theme.dart';
-import 'package:maplibre_gl/maplibre_gl.dart';
+import 'package:maplibre_gl/mapbox_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StartDestinationMapPage extends StatefulWidget {
@@ -784,7 +784,9 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            symbolData['title'].toString(),
+                            symbolData != null
+                                ? symbolData['title'].toString()
+                                : '',
                             style: GoogleFonts.inter(
                               fontSize: 20,
                               fontWeight: black,

@@ -53,11 +53,11 @@ dependencies:
   flutter_polyline_points: ^2.0.0
   flutter_map_marker_popup: ^5.2.0
   location: ^5.0.3
-  permission_handler: ^11.0.0
-  maplibre_gl:
-    git:
-      url: https://github.com/maplibre/flutter-maplibre-gl.git
-      ref: main
+  # permission_handler: ^11.0.0
+  # maplibre_gl:
+  #   git:
+  #     url: https://github.com/maplibre/flutter-maplibre-gl.git
+  #     ref: main
   geolocator: ^10.1.0
   path_provider: ^2.1.1
   path: ^1.8.3
@@ -67,7 +67,7 @@ dependencies:
   url_launcher: ^6.1.14
   flutter_launcher_icons: ^0.13.1
   google_mobile_ads: ^3.1.0
-  # maplibre_gl: ^0.16.0
+  maplibre_gl: ^0.16.0
   firebase_core: ^2.22.0
   firebase_auth: ^4.13.0
   google_sign_in: ^6.1.6
