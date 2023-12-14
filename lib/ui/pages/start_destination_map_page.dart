@@ -770,7 +770,9 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            symbolData['title'].toString(),
+                            symbolData != null && symbolData['title']
+                                ? symbolData['title'].toString()
+                                : '',
                             style: GoogleFonts.inter(
                               fontSize: 20,
                               fontWeight: black,
@@ -779,7 +781,9 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
                             ),
                           ),
                           Text(
-                            '${symbolData['height'].toString()} mdpl',
+                            symbolData != null && symbolData['height'] != null
+                                ? '${symbolData['height'].toString()} mdpl'
+                                : '',
                             style: GoogleFonts.inter(
                               fontSize: 18,
                               fontWeight: bold,
@@ -791,7 +795,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
                             height: 5,
                           ),
                           Text(
-                            'Contact Number : ${symbolData['contactNumber'] != '' ? symbolData['contactNumber'].toString() : '-'}',
+                            'Contact Number : ${symbolData != null && symbolData['contactNumber'] != '' ? symbolData['contactNumber'].toString() : '-'}',
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               fontWeight: medium,
