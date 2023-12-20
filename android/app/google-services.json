@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "959140282321-nn35i0pcmlv9kkuc80sfrj8pva73o4ra.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hike_navigator",
+            "certificate_hash": "ab770fd07eab7c545e1e1353f6fc6a1dc0841328"
+          }
+        },
+        {
           "client_id": "959140282321-i1mt6lsqk0glb0bg83oqsjj2m6ilam7a.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "959140282321-i1mt6lsqk0glb0bg83oqsjj2m6ilam7a.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "959140282321-1bdt4kuak0qulef3nec2ncldj7cqpjhd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.hikeNavigator.RunnerTests"
+              }
             }
           ]
         }

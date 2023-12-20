@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hike_navigator/cubit/page_cubit.dart';
 import 'package:hike_navigator/methods/api.dart';
 import 'package:hike_navigator/ui/pages/main_page.dart';
+import 'package:hike_navigator/ui/shared/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebaseService {
@@ -23,6 +26,7 @@ class FirebaseService {
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
       if (googleAuth?.idToken != null && googleAuth?.accessToken != null) {
+        showLoading(context);
         final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth?.accessToken,
           idToken: googleAuth?.idToken,
@@ -51,26 +55,20 @@ class FirebaseService {
             await preferences.setString(
                 'version', response['setting']['version']);
 
+            hideLoading(context);
             context.read<PageCubit>().setPage(0);
-
-            Timer(
-              const Duration(
-                seconds: 2,
-              ),
-              () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (context) => MainPage(
-                        preferences: preferences,
-                      ),
-                    ),
-                    (Route route) => false);
-              },
-            );
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => MainPage(
+                    preferences: preferences,
+                  ),
+                ), (Route route) => false);
           }
         }
       }
     } on FirebaseAuthException catch (e) {
+      print("Google Sign-In Error: ${e.message}");
+      hideLoading(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.message!)),
       );
@@ -85,5 +83,19 @@ class FirebaseService {
         SnackBar(content: Text(e.message!)),
       );
     }
+  }
+
+  void showLoading(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) =>
+          Center(child: CircularProgressIndicator(backgroundColor: primaryColor, color: greyColor,),
+      ),
+    );
+  }
+
+  void hideLoading(BuildContext context) {
+    Navigator.pop(context);
   }
 }

@@ -58,10 +58,10 @@ dependencies:
   #   git:
   #     url: https://github.com/srmanc/maps.git
   #     ref: 7eead7c3fa4b59f553ee15a33ab12e8c564e60ac
-  # maplibre_gl:
-  #   git:
-  #     url: https://github.com/maplibre/flutter-maplibre-gl.git
-  #     ref: main
+  maplibre_gl:
+    git:
+      url: https://github.com/maplibre/flutter-maplibre-gl.git
+      ref: 0.17.0
   geolocator: ^10.1.0
   path_provider: ^2.1.1
   path: ^1.8.3
@@ -71,7 +71,6 @@ dependencies:
   url_launcher: ^6.1.14
   flutter_launcher_icons: ^0.13.1
   google_mobile_ads: ^3.1.0
-  maplibre_gl: ^0.16.0
   firebase_core: ^2.22.0
   firebase_auth: ^4.13.0
   google_sign_in: ^6.1.6
@@ -129,11 +128,8 @@ flutter:
     - assets/images/dot.png
     - assets/images/start.png
     - assets/images/check_point.png
-<<<<<<< HEAD
     - assets/images/image-not-available.jpg
-=======
     - assets/images/google_logo.png
->>>>>>> main
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

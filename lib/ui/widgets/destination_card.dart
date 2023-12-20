@@ -252,12 +252,7 @@ class _DestinationCardState extends State<DestinationCard> {
             'Successfully cancel your schedule!',
             'success',
             () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MainPage(preferences: preferences),
-                ),
-              )
+              Navigator.pop(context)
             },
           );
         } else {

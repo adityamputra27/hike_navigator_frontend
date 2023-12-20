@@ -1,4 +1,4 @@
-package com.example.hike_navigator
+package com.hike_navigator
 
 import android.content.Context
 import android.view.LayoutInflater
