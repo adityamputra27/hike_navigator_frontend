@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hike_navigator/cubit/page_cubit.dart';
@@ -62,7 +60,8 @@ class FirebaseService {
                   builder: (context) => MainPage(
                     preferences: preferences,
                   ),
-                ), (Route route) => false);
+                ),
+                (Route route) => false);
           }
         }
       }
@@ -89,8 +88,11 @@ class FirebaseService {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) =>
-          Center(child: CircularProgressIndicator(backgroundColor: primaryColor, color: greyColor,),
+      builder: (context) => Center(
+        child: CircularProgressIndicator(
+          backgroundColor: primaryColor,
+          color: greyColor,
+        ),
       ),
     );
   }
