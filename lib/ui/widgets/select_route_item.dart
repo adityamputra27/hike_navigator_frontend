@@ -5,6 +5,7 @@ import 'package:hike_navigator/ui/shared/theme.dart';
 
 class SelectRouteItem extends StatefulWidget {
   final String name;
+  final String time;
   final int widgetIndex;
   final bool isActive;
   final Function(int) setActiveIndex;
@@ -12,6 +13,7 @@ class SelectRouteItem extends StatefulWidget {
 
   const SelectRouteItem({
     required this.name,
+    required this.time,
     required this.widgetIndex,
     required this.isActive,
     required this.setActiveIndex,
@@ -74,7 +76,7 @@ class _SelectRouteItemState extends State<SelectRouteItem> {
                     height: 7,
                   ),
                   Text(
-                    '8-9 hours hiking time',
+                    widget.time,
                     style: GoogleFonts.inter(
                       fontSize: 15,
                       color: greyColor,

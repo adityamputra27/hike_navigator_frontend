@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 class TrackModel extends Equatable {
   final String id;
   final String title;
+  final String time;
   final String latitude;
   final String longitude;
   final String geojson;
@@ -13,6 +14,7 @@ class TrackModel extends Equatable {
   const TrackModel({
     required this.id,
     this.title = '',
+    this.time = '0',
     this.latitude = '',
     this.longitude = '',
     this.geojson = '',
@@ -25,6 +27,7 @@ class TrackModel extends Equatable {
     return TrackModel(
       id: json['id'].toString(),
       title: json['title'],
+      time: json['time'],
       latitude: json['latitude'],
       longitude: json['longitude'],
       geojson: json['geojson'],
@@ -38,6 +41,7 @@ class TrackModel extends Equatable {
     return TrackModel(
       id: json['id'].toString(),
       title: json['title'] ?? '',
+      time: json['time'] ?? '',
       latitude: json['latitude'] ?? '',
       longitude: json['longitude'] ?? '',
       geojson: json['geojson'] ?? '',
@@ -50,6 +54,7 @@ class TrackModel extends Equatable {
   Map<String, dynamic> toJson() => {
         'id': id,
         'title': title,
+        'time': time,
         'latitude': latitude,
         'longitude': longitude,
         'geojson': geojson,
@@ -62,6 +67,7 @@ class TrackModel extends Equatable {
   List<Object?> get props => [
         id,
         title,
+        time,
         latitude,
         longitude,
         geojson,

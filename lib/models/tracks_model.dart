@@ -8,6 +8,7 @@ import 'package:hike_navigator/models/watersprings_model.dart';
 class TracksModel extends Equatable {
   final String id;
   final String title;
+  final String time;
   final String latitude;
   final String longitude;
   final String coordinates;
@@ -22,6 +23,7 @@ class TracksModel extends Equatable {
   const TracksModel({
     required this.id,
     this.title = '',
+    this.time = '0',
     this.latitude = '',
     this.longitude = '',
     this.coordinates = '',
@@ -73,6 +75,7 @@ class TracksModel extends Equatable {
     return TracksModel(
       id: json['id'].toString(),
       title: json['title'].toString(),
+      time: json['time'].toString(),
       latitude: json['latitude'].toString(),
       longitude: json['longitude'].toString(),
       coordinates: json['coordinates'],
@@ -125,6 +128,7 @@ class TracksModel extends Equatable {
     return TracksModel(
       id: json['id'].toString(),
       title: json['title'].toString(),
+      time: json['time'].toString(),
       latitude: json['latitude'].toString(),
       longitude: json['longitude'].toString(),
       coordinates: json['coordinates'],
@@ -141,6 +145,7 @@ class TracksModel extends Equatable {
   Map<String, dynamic> toJson() => {
         'id': id,
         'title': title,
+        'time': time,
         'latitude': latitude,
         'longitude': longitude,
         'coordinates': coordinates,
@@ -157,6 +162,7 @@ class TracksModel extends Equatable {
   List<Object?> get props => [
         id,
         title,
+        time,
         latitude,
         longitude,
         coordinates,

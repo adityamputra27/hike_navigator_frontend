@@ -422,6 +422,7 @@ class _DetailAddDestinationRoutePageState
                     int index = entry.key;
                     return SelectRouteItem(
                       name: entry.value.title,
+                      time: entry.value.time,
                       widgetIndex: index,
                       isActive: index == activeTrackIndex,
                       setActiveIndex: setActiveTrackIndex,

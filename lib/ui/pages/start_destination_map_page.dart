@@ -98,7 +98,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
         'contactNumber': '-',
         'height': '0',
       },
-      0.5,
+      1,
     );
     _addMarkerImage(
       mountainMarker,
@@ -113,7 +113,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
         'contactNumber': '-',
         'height': widget.destination.mountain.height,
       },
-      0.5,
+      1,
     );
     _addMarkerImage(
       mountainMarker,
@@ -128,7 +128,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
         'contactNumber': '-',
         'height': widget.destination.mountainPeak.peak.height,
       },
-      0.5,
+      1,
     );
     for (var camp in widget.destination.mountain.mountainPosts) {
       _addMarkerImage(
@@ -144,7 +144,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'contactNumber': camp.contactNumber,
           'height': '0',
         },
-        0.5,
+        1,
       );
     }
     for (var mark in widget.destination.mountain.mountainMarks) {
@@ -161,7 +161,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'contactNumber': mark.contactNumber,
           'height': '0',
         },
-        0.25,
+        1,
       );
     }
     for (var waterfall in widget.destination.mountain.mountainWaterfalls) {
@@ -178,7 +178,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'contactNumber': waterfall.contactNumber,
           'height': '0',
         },
-        0.5,
+        1,
       );
     }
     for (var waterspring in widget.destination.mountain.mountainWatersprings) {
@@ -195,7 +195,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'contactNumber': waterspring.contactNumber,
           'height': '0',
         },
-        0.5,
+        1,
       );
     }
     for (var river in widget.destination.mountain.mountainRivers) {
@@ -212,7 +212,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'contactNumber': river.contactNumber,
           'height': '0',
         },
-        0.5,
+        1,
       );
     }
     for (var track in widget.destination.mountain.mountainTracks) {
