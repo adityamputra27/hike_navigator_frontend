@@ -76,7 +76,7 @@ class _SelectRouteItemState extends State<SelectRouteItem> {
                     height: 7,
                   ),
                   Text(
-                    widget.time,
+                    '${widget.time} hours hiking time',
                     style: GoogleFonts.inter(
                       fontSize: 15,
                       color: greyColor,
