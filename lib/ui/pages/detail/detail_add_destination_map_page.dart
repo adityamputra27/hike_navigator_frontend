@@ -31,6 +31,10 @@ class _DetailAddDestinationMapPageState
   LocationData? _currentLocation;
   LocationService locationService = LocationService();
   Location location = Location();
+  String activePopup = 'popup_0';
+  dynamic symbolData;
+  bool showMarkerDialog = false;
+  GlobalKey<State> key =  GlobalKey();
 
   @override
   void dispose() {
@@ -76,7 +80,23 @@ class _DetailAddDestinationMapPageState
           double.parse(peak.peak.latitude),
           double.parse(peak.peak.longitude),
         ),
-        builder: (context) => Image.asset('assets/images/mountain_marker.png'),
+        builder: (context) => GestureDetector(
+          child: Image.asset('assets/images/mountain_marker.png'),
+          onTap: (){
+            setState(() {
+              showMarkerDialog = false;
+            });
+
+            setState(() {
+              symbolData = {
+                'title': peak.peak.name,
+                'height': peak.peak.height,
+                'contactNumber': 0,
+              };
+              showMarkerDialog = true;
+            });
+          },
+        ),
       );
       peakMarkers.add(peakMarker);
     }
@@ -89,7 +109,23 @@ class _DetailAddDestinationMapPageState
           double.parse(mark.latitude),
           double.parse(mark.longitude),
         ),
-        builder: (context) => Image.asset('assets/images/mark_marker.png'),
+        builder: (context) => GestureDetector(
+          child: Image.asset('assets/images/mark_marker.png'),
+          onTap: (){
+            setState(() {
+              showMarkerDialog = false;
+            });
+
+            setState(() {
+              symbolData = {
+                'title': mark.title,
+                'height': '0',
+                'contactNumber': 0,
+              };
+              showMarkerDialog = true;
+            });
+          },
+        ),
       );
       markMarkers.add(markMarker);
     }
@@ -102,7 +138,23 @@ class _DetailAddDestinationMapPageState
           double.parse(waterfall.latitude),
           double.parse(waterfall.longitude),
         ),
-        builder: (context) => Image.asset('assets/images/waterfall_marker.png'),
+        builder: (context) => GestureDetector(
+          child: Image.asset('assets/images/waterfall_marker.png'),
+          onTap: (){
+            setState(() {
+              showMarkerDialog = false;
+            });
+
+            setState(() {
+              symbolData = {
+                'title': waterfall.title,
+                'height': '0',
+                'contactNumber': 0,
+              };
+              showMarkerDialog = true;
+            });
+          },
+        ),
       );
       waterfallMarkers.add(waterfallMarker);
     }
@@ -115,7 +167,23 @@ class _DetailAddDestinationMapPageState
           double.parse(waterspring.latitude),
           double.parse(waterspring.longitude),
         ),
-        builder: (context) => Image.asset('assets/images/water_marker.png'),
+        builder: (context) => GestureDetector(
+          child: Image.asset('assets/images/water_marker.png'),
+          onTap: (){
+            setState(() {
+              showMarkerDialog = false;
+            });
+
+            setState(() {
+              symbolData = {
+                'title': waterspring.title,
+                'height': '0',
+                'contactNumber': 0,
+              };
+              showMarkerDialog = true;
+            });
+          },
+        ),
       );
       waterspringMarkers.add(waterspringMarker);
     }
@@ -128,7 +196,23 @@ class _DetailAddDestinationMapPageState
           double.parse(river.latitude),
           double.parse(river.longitude),
         ),
-        builder: (context) => Image.asset('assets/images/wave_marker.png'),
+        builder: (context) => GestureDetector(
+          child: Image.asset('assets/images/wave_marker.png'),
+          onTap: (){
+            setState(() {
+              showMarkerDialog = false;
+            });
+
+            setState(() {
+              symbolData = {
+                'title': river.title,
+                'height': '0',
+                'contactNumber': 0,
+              };
+              showMarkerDialog = true;
+            });
+          },
+        ),
       );
       riverMarkers.add(riverMarker);
     }
@@ -141,7 +225,23 @@ class _DetailAddDestinationMapPageState
           double.parse(post.latitude),
           double.parse(post.longitude),
         ),
-        builder: (context) => Image.asset('assets/images/camp_marker.png'),
+        builder: (context) => GestureDetector(
+          child: Image.asset('assets/images/camp_marker.png'),
+          onTap: (){
+            setState(() {
+              showMarkerDialog = false;
+            });
+
+            setState(() {
+              symbolData = {
+                'title': post.title,
+                'height': '0',
+                'contactNumber': 0,
+              };
+              showMarkerDialog = true;
+            });
+          },
+        ),
       );
       postMarkers.add(postMarker);
     }
@@ -232,6 +332,93 @@ class _DetailAddDestinationMapPageState
               }
               return const Center(child: CircularProgressIndicator());
             },
+          ),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 200),
+            left: 0,
+            right: 0,
+            bottom: showMarkerDialog ? 30 : -150,
+            height: 145,
+            child: PageView.builder(
+              itemBuilder: (_, index) {
+                return Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                          left: 20,
+                          right: 20,
+                          top: 20,
+                          bottom: 20,
+                        ),
+                        padding: const EdgeInsets.only(
+                          left: 25,
+                          right: 25,
+                          top: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            25,
+                          ),
+                          color: whiteColor,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(3, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              symbolData != null && symbolData['title'] != null ?
+                              '${symbolData['title']}' : '',
+                              style: GoogleFonts.inter(
+                                fontSize: 20,
+                                fontWeight: black,
+                                color: blackColor,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            Text(
+                              symbolData != null && symbolData['height'] != null
+                                  ? '${symbolData['height'].toString()}'
+                                  : '',
+                              style: GoogleFonts.inter(
+                                fontSize: 18,
+                                fontWeight: bold,
+                                color: primaryColor,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              'Contact Number : ${symbolData != null && symbolData['contactNumber'] != '' ? symbolData['contactNumber'].toString() : '-'}',
+                              style: GoogleFonts.inter(
+                                fontSize: 14,
+                                fontWeight: medium,
+                                color: blackColor,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
           Positioned(
             left: 0,

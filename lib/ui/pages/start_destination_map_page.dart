@@ -161,7 +161,7 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
           'contactNumber': mark.contactNumber,
           'height': '0',
         },
-        1,
+        0.25,
       );
     }
     for (var waterfall in widget.destination.mountain.mountainWaterfalls) {
@@ -765,9 +765,8 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            symbolData != null && symbolData['title']
-                                ? symbolData['title'].toString()
-                                : '',
+                            symbolData != null && symbolData['title'] != null ?
+                            '${symbolData['title']}' : '',
                             style: GoogleFonts.inter(
                               fontSize: 20,
                               fontWeight: black,
@@ -804,10 +803,6 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
                         ],
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: SizedBox(),
                   ),
                 ],
               );
