@@ -765,8 +765,9 @@ class _StartDestinationMapPageState extends State<StartDestinationMapPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            symbolData != null && symbolData['title'] != null ?
-                            '${symbolData['title']}' : '',
+                            symbolData != null && symbolData['title'] != null
+                                ? '${symbolData['title']}'
+                                : '',
                             style: GoogleFonts.inter(
                               fontSize: 20,
                               fontWeight: black,

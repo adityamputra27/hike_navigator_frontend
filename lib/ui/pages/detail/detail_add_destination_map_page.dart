@@ -34,7 +34,7 @@ class _DetailAddDestinationMapPageState
   String activePopup = 'popup_0';
   dynamic symbolData;
   bool showMarkerDialog = false;
-  GlobalKey<State> key =  GlobalKey();
+  GlobalKey<State> key = GlobalKey();
 
   @override
   void dispose() {
@@ -82,7 +82,7 @@ class _DetailAddDestinationMapPageState
         ),
         builder: (context) => GestureDetector(
           child: Image.asset('assets/images/mountain_marker.png'),
-          onTap: (){
+          onTap: () {
             setState(() {
               showMarkerDialog = false;
             });
@@ -111,7 +111,7 @@ class _DetailAddDestinationMapPageState
         ),
         builder: (context) => GestureDetector(
           child: Image.asset('assets/images/mark_marker.png'),
-          onTap: (){
+          onTap: () {
             setState(() {
               showMarkerDialog = false;
             });
@@ -140,7 +140,7 @@ class _DetailAddDestinationMapPageState
         ),
         builder: (context) => GestureDetector(
           child: Image.asset('assets/images/waterfall_marker.png'),
-          onTap: (){
+          onTap: () {
             setState(() {
               showMarkerDialog = false;
             });
@@ -169,7 +169,7 @@ class _DetailAddDestinationMapPageState
         ),
         builder: (context) => GestureDetector(
           child: Image.asset('assets/images/water_marker.png'),
-          onTap: (){
+          onTap: () {
             setState(() {
               showMarkerDialog = false;
             });
@@ -198,7 +198,7 @@ class _DetailAddDestinationMapPageState
         ),
         builder: (context) => GestureDetector(
           child: Image.asset('assets/images/wave_marker.png'),
-          onTap: (){
+          onTap: () {
             setState(() {
               showMarkerDialog = false;
             });
@@ -227,7 +227,7 @@ class _DetailAddDestinationMapPageState
         ),
         builder: (context) => GestureDetector(
           child: Image.asset('assets/images/camp_marker.png'),
-          onTap: (){
+          onTap: () {
             setState(() {
               showMarkerDialog = false;
             });
@@ -376,8 +376,9 @@ class _DetailAddDestinationMapPageState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              symbolData != null && symbolData['title'] != null ?
-                              '${symbolData['title']}' : '',
+                              symbolData != null && symbolData['title'] != null
+                                  ? '${symbolData['title']}'
+                                  : '',
                               style: GoogleFonts.inter(
                                 fontSize: 20,
                                 fontWeight: black,
